@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess Game</title>
+  <link rel="stylesheet" href="chess.css">
+</head>
+<body>
+  <main class="app">
+    <section class="panel">
+      <h1>Chess</h1>
+      <p id="turnText" class="turn-text">White to move</p>
+      <button id="resetBtn" class="reset-btn">New Game</button>
+      <p class="hint">Click a piece, then click a highlighted square.</p>
+    </section>
+
+    <section class="board-wrap">
+      <div id="board" class="board" aria-label="Chess Board"></div>
+    </section>
+  </main>
+
+  <script src="chess.js"></script>
+</body>
+</html>
