@@ -13,6 +13,7 @@ body {
 .glass-card {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: linear-gradient(180deg, rgba(20, 27, 44, 0.92), rgba(13, 19, 33, 0.96));
+  color: #f3f7ff;
 }
 
 .player-card {
@@ -20,6 +21,7 @@ body {
   border-radius: 12px;
   padding: 0.8rem 0.9rem;
   background: rgba(255, 255, 255, 0.03);
+  color: #f3f7ff;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -37,11 +39,22 @@ body {
 
 .status-line {
   font-weight: 700;
+  color: #ffffff;
 }
 
 .status-subline {
-  opacity: 0.9;
+  color: rgba(243, 247, 255, 0.95);
   font-size: 0.95rem;
+}
+
+.player-card .small {
+  color: rgba(243, 247, 255, 0.9);
+}
+
+.group-badge {
+  background: linear-gradient(180deg, #cbd5e1, #94a3b8);
+  color: #0f172a;
+  border: 1px solid rgba(15, 23, 42, 0.25);
 }
 
 .table-container {
