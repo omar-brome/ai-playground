@@ -231,6 +231,9 @@ function drawBoard() {
       }
 
       const piece = board[r][c];
+      if (piece) {
+        square.classList.add(piece[0] === "w" ? "piece-white" : "piece-black");
+      }
       square.textContent = piece ? PIECES[piece] : "";
       square.addEventListener("click", () => handleSquareClick(r, c));
       boardEl.appendChild(square);
