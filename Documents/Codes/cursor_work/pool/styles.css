@@ -1,0 +1,74 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1d253f 0%, #101525 55%, #090d18 100%);
+  color: #e8edf9;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.glass-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(20, 27, 44, 0.92), rgba(13, 19, 33, 0.96));
+}
+
+.player-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 0.8rem 0.9rem;
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.active-player {
+  border-color: rgba(59, 130, 246, 0.9);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35) inset;
+}
+
+.status-wrap {
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.status-line {
+  font-weight: 700;
+}
+
+.status-subline {
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+.table-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 18px;
+  padding: 0.75rem;
+  background: linear-gradient(145deg, #4b2d14, #2e1b0d);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.45);
+}
+
+#poolCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  background: #0f6d41;
+}
+
+.power-progress {
+  height: 16px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 768px) {
+  .status-subline {
+    font-size: 0.9rem;
+  }
+}
