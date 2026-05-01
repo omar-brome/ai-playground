@@ -151,6 +151,12 @@ class GameController {
     this.firstHit = null;
     this.shotInProgress = false;
     this.cueBallInHand = false;
+    this.ghostCuePos = null;
+    this.railContactsThisShot = new Set();
+    this.anyRailContactThisShot = false;
+    this.isBreakShot = true;
+    this.audioCtx = null;
+    this.lastCollisionSoundTime = 0;
 
     this.initBalls();
     this.bindEvents();
@@ -223,6 +229,10 @@ class GameController {
   }
 
   onPointerMove(e) {
+    if (this.cueBallInHand && !this.dragging) {
+      const p = this.getPointer(e);
+      this.ghostCuePos = this.clampCueBallPosition(p.x, p.y);
+    }
     if (!this.dragging) return;
     this.dragCurrent = this.getPointer(e);
     const pull = Math.min(150, Math.hypot(this.dragCurrent.x - this.cueBall.x, this.dragCurrent.y - this.cueBall.y));
@@ -246,20 +256,24 @@ class GameController {
     this.shotInProgress = true;
     this.firstHit = null;
     this.turnPocketed = [];
+    this.railContactsThisShot = new Set();
+    this.anyRailContactThisShot = false;
+    this.playSound("cue", 0.55);
   }
 
   placeCueBall(x, y) {
-    const margin = this.table.rail + this.ballRadius + 2;
-    const minX = margin;
-    const maxX = this.table.width / 2 - this.ballRadius;
-    const minY = margin;
-    const maxY = this.table.height - margin;
-    this.cueBall.x = Math.min(maxX, Math.max(minX, x));
-    this.cueBall.y = Math.min(maxY, Math.max(minY, y));
+    const pos = this.clampCueBallPosition(x, y);
+    if (!this.isCuePlacementValid(pos.x, pos.y)) {
+      this.updateUI(this.turnTitle(), "Invalid cue-ball placement: too close to another ball.");
+      return;
+    }
+    this.cueBall.x = pos.x;
+    this.cueBall.y = pos.y;
     this.cueBall.pocketed = false;
     this.cueBall.vx = 0;
     this.cueBall.vy = 0;
     this.cueBallInHand = false;
+    this.ghostCuePos = null;
     this.updateUI(this.turnTitle(), "Cue ball placed. Take your shot.");
   }
 
@@ -274,7 +288,11 @@ class GameController {
     this.shotInProgress = false;
     this.gameOver = false;
     this.cueBallInHand = false;
+    this.ghostCuePos = null;
     this.dragging = false;
+    this.railContactsThisShot = new Set();
+    this.anyRailContactThisShot = false;
+    this.isBreakShot = true;
     this.setPowerBar(0);
     this.initBalls();
     this.updateUI("Player 1's turn", "Break shot: pocket a ball to claim solids/stripes.");
@@ -309,6 +327,9 @@ class GameController {
     for (const ball of this.balls) {
       ball.draw(this.ctx);
     }
+    if (this.cueBallInHand && this.ghostCuePos) {
+      this.drawCueGhost();
+    }
     if (this.dragging && !this.gameOver) {
       this.drawAimLine();
     }
@@ -323,14 +344,40 @@ class GameController {
     const ny = dy / dist;
 
     ctx.save();
+    const guide = this.predictShotGuide(nx, ny);
+
     ctx.strokeStyle = "rgba(255,255,255,0.9)";
     ctx.setLineDash([8, 6]);
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 2.5;
     ctx.beginPath();
     ctx.moveTo(this.cueBall.x, this.cueBall.y);
-    ctx.lineTo(this.cueBall.x + nx * 250, this.cueBall.y + ny * 250);
+    ctx.lineTo(guide.primaryEnd.x, guide.primaryEnd.y);
     ctx.stroke();
     ctx.setLineDash([]);
+
+    if (guide.hitObject) {
+      ctx.beginPath();
+      ctx.arc(guide.contactPoint.x, guide.contactPoint.y, this.ballRadius * 0.55, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(255, 222, 89, 0.85)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 5]);
+      ctx.beginPath();
+      ctx.moveTo(guide.objectBall.x, guide.objectBall.y);
+      ctx.lineTo(guide.objectPathEnd.x, guide.objectPathEnd.y);
+      ctx.stroke();
+
+      if (guide.cuePathEnd) {
+        ctx.strokeStyle = "rgba(140, 220, 255, 0.85)";
+        ctx.beginPath();
+        ctx.moveTo(guide.contactPoint.x, guide.contactPoint.y);
+        ctx.lineTo(guide.cuePathEnd.x, guide.cuePathEnd.y);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+    }
 
     ctx.strokeStyle = "rgba(220,190,120,0.8)";
     ctx.lineWidth = 5;
@@ -347,20 +394,36 @@ class GameController {
     const right = this.table.playX + this.table.playWidth - ball.radius;
     const top = this.table.playY + ball.radius;
     const bottom = this.table.playY + this.table.playHeight - ball.radius;
+    let hitRail = false;
+    const preSpeed = ball.speed();
 
     if (ball.x < left) {
       ball.x = left;
       ball.vx *= -0.95;
+      hitRail = true;
     } else if (ball.x > right) {
       ball.x = right;
       ball.vx *= -0.95;
+      hitRail = true;
     }
     if (ball.y < top) {
       ball.y = top;
       ball.vy *= -0.95;
+      hitRail = true;
     } else if (ball.y > bottom) {
       ball.y = bottom;
       ball.vy *= -0.95;
+      hitRail = true;
+    }
+
+    if (hitRail && preSpeed > 18) {
+      this.playSound("rail", Math.min(1, preSpeed / 420));
+      if (this.shotInProgress) {
+        this.anyRailContactThisShot = true;
+        if (ball.id !== "cue") {
+          this.railContactsThisShot.add(ball.id);
+        }
+      }
     }
   }
 
@@ -398,6 +461,7 @@ class GameController {
         a.vy -= iy;
         b.vx += ix;
         b.vy += iy;
+        this.playCollisionSound(Math.abs(velAlongNormal));
 
         if (!this.firstHit && this.shotInProgress && (a.id === "cue" || b.id === "cue")) {
           const objectBall = a.id === "cue" ? b : a;
@@ -418,6 +482,7 @@ class GameController {
           ball.vy = 0;
           if (ball.id !== "cue") this.turnPocketed.push(ball);
           if (ball.id === "cue") this.cueBallInHand = true;
+          this.playSound("pocket", ball.id === "cue" ? 0.65 : 0.85);
           break;
         }
       }
@@ -436,6 +501,7 @@ class GameController {
     const other = this.players[opponent];
     let foul = false;
     let message = "";
+    const pocketedAny = this.turnPocketed.length > 0;
 
     if (!this.firstHit) {
       foul = true;
@@ -449,6 +515,11 @@ class GameController {
         foul = true;
         message = "Foul! 8-ball hit too early.";
       }
+    }
+
+    if (!foul && this.firstHit && !pocketedAny && !this.anyRailContactThisShot) {
+      foul = true;
+      message = "Foul! No ball reached a rail after contact.";
     }
 
     const pocketedEight = this.turnPocketed.some((b) => b.type === "eight");
@@ -483,6 +554,15 @@ class GameController {
       return;
     }
 
+    if (this.isBreakShot) {
+      const legalBreak = pocketedAny || this.railContactsThisShot.size >= 4;
+      if (!legalBreak) {
+        foul = true;
+        message = "Foul on break! Pocket a ball or drive at least 4 object balls to rails.";
+      }
+      this.isBreakShot = false;
+    }
+
     if (this.cueBallInHand) {
       foul = true;
       message = "Foul! Cue ball scratched. Ball in hand for opponent.";
@@ -507,6 +587,8 @@ class GameController {
     this.updateUI(this.turnTitle(), message);
     this.turnPocketed = [];
     this.firstHit = null;
+    this.railContactsThisShot.clear();
+    this.anyRailContactThisShot = false;
   }
 
   resetCueBallForNextTurn() {
@@ -515,6 +597,7 @@ class GameController {
     this.cueBall.vy = 0;
     this.cueBall.x = this.table.playX + this.table.playWidth * 0.25;
     this.cueBall.y = this.table.playY + this.table.playHeight * 0.5;
+    this.ghostCuePos = { x: this.cueBall.x, y: this.cueBall.y };
   }
 
   remainingFor(playerNum) {
@@ -546,6 +629,185 @@ class GameController {
     this.gameOver = true;
     this.setPowerBar(0);
     this.updateUI("Game Over", message);
+    this.playSound("win", 0.9);
+  }
+
+  clampCueBallPosition(x, y) {
+    const margin = this.table.rail + this.ballRadius + 2;
+    const minX = margin;
+    const maxX = this.table.width / 2 - this.ballRadius;
+    const minY = margin;
+    const maxY = this.table.height - margin;
+    return {
+      x: Math.min(maxX, Math.max(minX, x)),
+      y: Math.min(maxY, Math.max(minY, y))
+    };
+  }
+
+  isCuePlacementValid(x, y) {
+    for (const ball of this.balls) {
+      if (ball.id === "cue" || ball.pocketed) continue;
+      if (Math.hypot(x - ball.x, y - ball.y) < this.ballRadius * 2 + 1) return false;
+    }
+    return true;
+  }
+
+  drawCueGhost() {
+    const ctx = this.ctx;
+    const valid = this.isCuePlacementValid(this.ghostCuePos.x, this.ghostCuePos.y);
+    ctx.save();
+    ctx.globalAlpha = 0.45;
+    ctx.beginPath();
+    ctx.arc(this.ghostCuePos.x, this.ghostCuePos.y, this.ballRadius, 0, Math.PI * 2);
+    ctx.fillStyle = valid ? "#d9f4ff" : "#ff9b9b";
+    ctx.fill();
+    ctx.globalAlpha = 0.95;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = valid ? "#b7e7ff" : "#ff6b6b";
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  predictShotGuide(nx, ny) {
+    const origin = { x: this.cueBall.x, y: this.cueBall.y };
+    let bestT = Infinity;
+    let hitObject = null;
+    const combinedRadius = this.ballRadius * 2;
+
+    for (const ball of this.balls) {
+      if (ball.id === "cue" || ball.pocketed) continue;
+      const ox = origin.x - ball.x;
+      const oy = origin.y - ball.y;
+      const b = 2 * (ox * nx + oy * ny);
+      const c = ox * ox + oy * oy - combinedRadius * combinedRadius;
+      const disc = b * b - 4 * c;
+      if (disc < 0) continue;
+      const t = (-b - Math.sqrt(disc)) / 2;
+      if (t > 0 && t < bestT) {
+        bestT = t;
+        hitObject = ball;
+      }
+    }
+
+    const wallT = this.distanceToWallAlongRay(origin.x, origin.y, nx, ny);
+    const primaryT = Math.min(bestT, wallT);
+    const primaryEnd = {
+      x: origin.x + nx * primaryT,
+      y: origin.y + ny * primaryT
+    };
+
+    if (!hitObject || wallT <= bestT) {
+      return { primaryEnd, hitObject: null };
+    }
+
+    const cueAtImpact = primaryEnd;
+    const toObjectX = hitObject.x - cueAtImpact.x;
+    const toObjectY = hitObject.y - cueAtImpact.y;
+    const nLen = Math.hypot(toObjectX, toObjectY) || 1;
+    const cnx = toObjectX / nLen;
+    const cny = toObjectY / nLen;
+
+    const objectPathEnd = {
+      x: hitObject.x + cnx * 130,
+      y: hitObject.y + cny * 130
+    };
+
+    const dot = nx * cnx + ny * cny;
+    const tx = nx - dot * cnx;
+    const ty = ny - dot * cny;
+    const tLen = Math.hypot(tx, ty);
+    let cuePathEnd = null;
+    if (tLen > 0.08) {
+      cuePathEnd = {
+        x: cueAtImpact.x + (tx / tLen) * 90,
+        y: cueAtImpact.y + (ty / tLen) * 90
+      };
+    }
+
+    return {
+      primaryEnd,
+      hitObject,
+      contactPoint: cueAtImpact,
+      objectBall: { x: hitObject.x, y: hitObject.y },
+      objectPathEnd,
+      cuePathEnd
+    };
+  }
+
+  distanceToWallAlongRay(x, y, nx, ny) {
+    const minX = this.table.playX + this.ballRadius;
+    const maxX = this.table.playX + this.table.playWidth - this.ballRadius;
+    const minY = this.table.playY + this.ballRadius;
+    const maxY = this.table.playY + this.table.playHeight - this.ballRadius;
+    const ts = [];
+
+    if (nx > 0) ts.push((maxX - x) / nx);
+    if (nx < 0) ts.push((minX - x) / nx);
+    if (ny > 0) ts.push((maxY - y) / ny);
+    if (ny < 0) ts.push((minY - y) / ny);
+
+    const positive = ts.filter((t) => t > 0);
+    return positive.length ? Math.min(...positive) : 250;
+  }
+
+  ensureAudio() {
+    if (this.audioCtx) return this.audioCtx;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    this.audioCtx = new Ctx();
+    return this.audioCtx;
+  }
+
+  playSound(type, intensity = 0.6) {
+    const ctx = this.ensureAudio();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume();
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    let freqStart = 220;
+    let freqEnd = 120;
+    let duration = 0.08;
+    if (type === "cue") {
+      freqStart = 140;
+      freqEnd = 80;
+      duration = 0.05;
+    } else if (type === "rail") {
+      freqStart = 380;
+      freqEnd = 200;
+      duration = 0.06;
+    } else if (type === "pocket") {
+      freqStart = 180;
+      freqEnd = 90;
+      duration = 0.11;
+    } else if (type === "win") {
+      freqStart = 440;
+      freqEnd = 660;
+      duration = 0.18;
+    }
+
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(freqStart, now);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(40, freqEnd), now + duration);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, 0.05 * intensity), now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    osc.start(now);
+    osc.stop(now + duration + 0.01);
+  }
+
+  playCollisionSound(impactSpeed) {
+    const nowMs = performance.now();
+    if (nowMs - this.lastCollisionSoundTime < 35) return;
+    this.lastCollisionSoundTime = nowMs;
+    const intensity = Math.max(0.2, Math.min(1, impactSpeed / 450));
+    this.playSound("rail", intensity);
   }
 }
 
