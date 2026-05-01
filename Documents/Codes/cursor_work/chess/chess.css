@@ -55,10 +55,27 @@ body {
 }
 
 .board-wrap {
+  position: relative;
   background: rgba(15, 23, 42, 0.45);
   border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: 16px;
   padding: 1rem;
+}
+
+.game-over-banner {
+  position: absolute;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(252, 211, 77, 0.55);
+  background: rgba(120, 53, 15, 0.9);
+  color: #fef3c7;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .board {
@@ -76,6 +93,10 @@ body {
   font-size: clamp(1.3rem, 2.5vw, 2.2rem);
   user-select: none;
   cursor: pointer;
+}
+
+.board.game-over .square {
+  cursor: default;
 }
 
 .light {

@@ -1,6 +1,7 @@
 const boardEl = document.getElementById("board");
 const turnText = document.getElementById("turnText");
 const resetBtn = document.getElementById("resetBtn");
+const gameOverBannerEl = document.getElementById("gameOverBanner");
 
 const PIECES = {
   wk: "♔", wq: "♕", wr: "♖", wb: "♗", wn: "♘", wp: "♙",
@@ -22,12 +23,16 @@ let board = [];
 let turn = "w";
 let selected = null;
 let legalMoves = [];
+let gameOver = false;
 
 function resetGame() {
   board = START_BOARD.map((row) => [...row]);
   turn = "w";
   selected = null;
   legalMoves = [];
+  gameOver = false;
+  gameOverBannerEl.hidden = true;
+  gameOverBannerEl.textContent = "";
   drawBoard();
   updateTurnText();
 }
@@ -153,6 +158,7 @@ function pieceMoves(r, c) {
 }
 
 function handleSquareClick(r, c) {
+  if (gameOver) return;
   const clickedPiece = board[r][c];
 
   if (selected) {
@@ -182,17 +188,30 @@ function promoteIfNeeded(r, c) {
 }
 
 function makeMove(fromR, fromC, toR, toC) {
+  const capturedPiece = board[toR][toC];
   board[toR][toC] = board[fromR][fromC];
   board[fromR][fromC] = "";
   promoteIfNeeded(toR, toC);
-  turn = turn === "w" ? "b" : "w";
   selected = null;
   legalMoves = [];
   drawBoard();
+
+  if (capturedPiece && capturedPiece[1] === "k") {
+    gameOver = true;
+    const winnerText = turn === "w" ? "White wins!" : "Black wins!";
+    turnText.textContent = winnerText;
+    gameOverBannerEl.textContent = `Game Over - ${winnerText}`;
+    gameOverBannerEl.hidden = false;
+    drawBoard();
+    return;
+  }
+
+  turn = turn === "w" ? "b" : "w";
   updateTurnText();
 }
 
 function drawBoard() {
+  boardEl.classList.toggle("game-over", gameOver);
   boardEl.innerHTML = "";
 
   for (let r = 0; r < 8; r += 1) {
