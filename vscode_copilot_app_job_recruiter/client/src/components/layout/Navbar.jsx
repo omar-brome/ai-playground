@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import MobileNav from './MobileNav'
+import useAuthStore from '../../store/authStore'
 
 const navItems = [
   { label: 'Dashboard', to: '/dashboard' },
@@ -11,6 +12,16 @@ const navItems = [
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const navigate = useNavigate()
+  const user = useAuthStore((state) => state.user)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const logout = useAuthStore((state) => state.logout)
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   return (
     <>
@@ -40,15 +51,30 @@ function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link to="/login" className="hidden md:inline text-sm text-text-secondary hover:text-white transition">
-              Sign in
-            </Link>
-            <Link
-              to="/register"
-              className="hidden md:inline rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-hover"
-            >
-              Get started
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <span className="hidden md:inline text-sm text-text-secondary">Hello, {user?.name || 'Recruiter'}</span>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="hidden md:inline rounded-xl bg-secondary px-4 py-2 text-sm font-semibold text-white transition hover:bg-secondary-hover"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="hidden md:inline text-sm text-text-secondary hover:text-white transition">
+                  Sign in
+                </Link>
+                <Link
+                  to="/register"
+                  className="hidden md:inline rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-hover"
+                >
+                  Get started
+                </Link>
+              </>
+            )}
 
             <button
               type="button"

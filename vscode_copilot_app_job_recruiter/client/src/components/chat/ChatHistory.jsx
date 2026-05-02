@@ -1,4 +1,4 @@
-function ChatHistory({ conversations, onSelect }) {
+function ChatHistory({ conversations, onSelect, onNewChat }) {
   return (
     <div className="rounded-3xl border border-border bg-bg-card p-5 shadow-sm">
       <div className="mb-5 flex items-center justify-between gap-3">
@@ -6,7 +6,11 @@ function ChatHistory({ conversations, onSelect }) {
           <p className="text-sm uppercase tracking-[0.25em] text-text-muted">Chat history</p>
           <h3 className="text-lg font-semibold text-text-primary">Recent conversations</h3>
         </div>
-        <button className="rounded-2xl border border-border px-3 py-2 text-sm text-text-secondary hover:bg-bg-secondary transition">
+        <button
+          type="button"
+          onClick={onNewChat}
+          className="rounded-2xl border border-border px-3 py-2 text-sm text-text-secondary hover:bg-bg-secondary transition"
+        >
           New Chat
         </button>
       </div>
