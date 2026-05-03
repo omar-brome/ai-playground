@@ -52,11 +52,11 @@ function Search() {
 
   return (
     <DashboardLayout>
-      <div className="rounded-3xl border border-border bg-bg-card p-8 shadow-sm">
+      <div className="animate-fade-in rounded-3xl border-2 border-neutral-200 dark:border-neutral-700 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-800 p-8 shadow-soft hover:shadow-medium transition-all duration-300">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-text-primary">LinkedIn Search</h1>
-            <p className="mt-2 text-text-secondary">Search candidate profiles, apply filters, and export results from one place.</p>
+          <div className="animate-slide-in">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">LinkedIn Search</h1>
+            <p className="mt-2 text-neutral-600 dark:text-neutral-400">Search candidate profiles, apply filters, and export results from one place.</p>
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
             <Input
@@ -73,8 +73,8 @@ function Search() {
 
         <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
           <div className="space-y-5">
-            <div className="rounded-3xl border border-border bg-bg-primary p-6">
-              <h2 className="text-lg font-semibold text-text-primary">Filters</h2>
+            <div className="animate-scale-in rounded-3xl border-2 border-neutral-200 dark:border-neutral-700 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-700 p-6 shadow-soft hover:shadow-medium transition-all duration-300">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Filters</h2>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <Input
                   label="Title"
@@ -112,16 +112,16 @@ function Search() {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-border bg-bg-primary p-6">
-              <h2 className="text-lg font-semibold text-text-primary">Search insights</h2>
-              <p className="mt-3 text-text-secondary">Use recruiting prompts like “find senior engineers in Seattle” to get better LinkedIn matches.</p>
+            <div className="animate-scale-in rounded-3xl border-2 border-neutral-200 dark:border-neutral-700 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-700 p-6 shadow-soft hover:shadow-medium transition-all duration-300">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Search insights</h2>
+              <p className="mt-3 text-neutral-600 dark:text-neutral-400">Use recruiting prompts like "find senior engineers in Seattle" to get better LinkedIn matches.</p>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-border bg-bg-primary p-6">
-            <h2 className="text-lg font-semibold text-text-primary">Status</h2>
-            <p className="mt-3 text-text-secondary">{pagination.total} profiles found</p>
-            <p className="mt-2 text-sm text-text-muted">{isSearching ? 'Searching profiles...' : 'Search and filter results from LinkedIn-style candidate data.'}</p>
+          <div className="animate-bounce-in rounded-3xl border-2 border-neutral-200 dark:border-neutral-700 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-700 p-6 shadow-soft hover:shadow-medium transition-all duration-300">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Status</h2>
+            <p className="mt-3 text-neutral-600 dark:text-neutral-400">{pagination.total} profiles found</p>
+            <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-500">{isSearching ? 'Searching profiles...' : 'Search and filter results from LinkedIn-style candidate data.'}</p>
           </div>
         </div>
       </div>

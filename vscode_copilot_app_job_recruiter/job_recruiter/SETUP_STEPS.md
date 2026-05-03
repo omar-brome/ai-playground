@@ -354,8 +354,566 @@ Expected: `Local: http://localhost:5173/`
 6. **Connect LinkedIn API** in backend
 7. **Add Tailwind styling** to components
 8. **Implement Framer Motion** animations
+9. **Add theme switching** (dark/light mode)
 
 ---
+
+## 🎨 Step 13: Add Theme Switching (Dark/Light Mode)
+
+### Create Theme Store
+```javascript
+// client/src/store/themeStore.js
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+const useThemeStore = create(
+  persist(
+    (set, get) => ({
+      theme: 'dark',
+      setTheme: (theme) => {
+        set({ theme })
+        document.documentElement.classList.toggle('dark', theme === 'dark')
+        document.documentElement.classList.toggle('light', theme === 'light')
+      },
+      toggleTheme: () => {
+        const currentTheme = get().theme
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark'
+        get().setTheme(newTheme)
+      },
+      initializeTheme: () => {
+        const theme = get().theme
+        document.documentElement.classList.toggle('dark', theme === 'dark')
+        document.documentElement.classList.toggle('light', theme === 'light')
+      },
+    }),
+    {
+      name: 'theme-storage',
+      partialize: (state) => ({ theme: state.theme }),
+    }
+  )
+)
+
+export default useThemeStore
+```
+
+### Update CSS Variables for Light Theme
+```css
+/* client/src/styles/globals.css */
+.light {
+  /* Colors */
+  --color-primary: #4F46E5;
+  --color-primary-hover: #4338CA;
+  --color-secondary: #7C3AED;
+  --color-accent: #0891B2;
+
+  /* Background Colors */
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F8FAFC;
+  --color-bg-card: #FFFFFF;
+  --color-bg-hover: #F1F5F9;
+
+  /* Text Colors */
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748B;
+
+  /* Border Colors */
+  --color-border: #E2E8F0;
+  --color-border-light: #CBD5E1;
+}
+```
+
+### Update Tailwind Config for CSS Variables
+```javascript
+// client/tailwind.config.js
+colors: {
+  primary: 'rgb(var(--color-primary) / <alpha-value>)',
+  'bg-primary': 'rgb(var(--color-bg-primary) / <alpha-value>)',
+  // ... other colors
+}
+```
+
+### Create Theme Toggle Component
+```javascript
+// client/src/components/ui/ThemeToggle.jsx
+import { Moon, Sun } from 'lucide-react'
+import { Button } from './Button'
+import useThemeStore from '../../store/themeStore'
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useThemeStore()
+
+  return (
+    <Button variant="ghost" size="sm" onClick={toggleTheme}>
+      {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+    </Button>
+  )
+}
+```
+
+### Add Theme Toggle to Navbar
+```javascript
+// client/src/components/layout/Navbar.jsx
+import { ThemeToggle } from '../ui'
+
+// Add to navbar JSX:
+<div className="flex items-center gap-3">
+  <ThemeToggle />
+  {/* existing user actions */}
+</div>
+```
+
+### Initialize Theme on App Start
+```javascript
+// client/src/main.jsx
+import useThemeStore from './store/themeStore'
+
+// Initialize theme on app start
+useThemeStore.getState().initializeTheme()
+```
+
+### Update Settings Page
+```javascript
+// client/src/pages/Settings.jsx
+import useThemeStore from '../store/themeStore'
+
+function Settings() {
+  const { theme, toggleTheme } = useThemeStore()
+
+  // Replace local darkMode state with theme store
+  <Button variant={theme === 'dark' ? 'secondary' : 'outline'} onClick={toggleTheme}>
+    {theme === 'dark' ? 'On' : 'Off'}
+  </Button>
+}
+```
+
+**Expected Result:**
+- ✅ Theme toggle button in navbar
+- ✅ Theme persists across sessions
+- ✅ Settings page shows current theme state
+- ✅ Smooth transitions between dark/light modes
+- ✅ All components adapt to theme changes
+
+---
+
+## 🔄 Step 14: Add Authentication Guards
+
+### Create Auth Context/Provider
+```javascript
+// client/src/contexts/AuthContext.jsx
+import { createContext, useContext, useEffect } from 'react'
+import useAuthStore from '../store/authStore'
+
+const AuthContext = createContext()
+
+export function AuthProvider({ children }) {
+  const { isAuthenticated, initializeAuth } = useAuthStore()
+
+  useEffect(() => {
+    initializeAuth()
+  }, [])
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export const useAuth = () => useContext(AuthContext)
+```
+
+### Create Protected Route Component
+```javascript
+// client/src/components/auth/ProtectedRoute.jsx
+import { Navigate, useLocation } from 'react-router-dom'
+import useAuthStore from '../../store/authStore'
+
+function ProtectedRoute({ children }) {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const location = useLocation()
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  return children
+}
+```
+
+### Update App.jsx with Route Protection
+```javascript
+// client/src/App.jsx
+import { AuthProvider } from './contexts/AuthContext'
+import ProtectedRoute from './components/auth/ProtectedRoute'
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          {/* Protect other authenticated routes */}
+        </Routes>
+      </Router>
+    </AuthProvider>
+  )
+}
+```
+
+**Expected Result:**
+- ✅ Unauthenticated users redirected to login
+- ✅ Auth state persists across browser sessions
+- ✅ Protected routes only accessible when logged in
+
+---
+
+## 📱 Step 15: Add Responsive Design & Mobile Optimization
+
+### Update Navbar for Mobile
+```javascript
+// client/src/components/layout/Navbar.jsx
+const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+// Add mobile menu button and MobileNav component
+<button
+  className="md:hidden"
+  onClick={() => setIsMenuOpen(true)}
+>
+  ☰
+</button>
+
+<MobileNav isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+```
+
+### Create Mobile Navigation Component
+```javascript
+// client/src/components/layout/MobileNav.jsx
+function MobileNav({ isOpen, onClose }) {
+  return (
+    <div className={`fixed inset-0 z-50 md:hidden ${isOpen ? 'block' : 'hidden'}`}>
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="absolute right-0 top-0 h-full w-80 bg-bg-card p-6">
+        {/* Mobile navigation content */}
+      </div>
+    </div>
+  )
+}
+```
+
+### Add Responsive Grid Layouts
+```javascript
+// Update components with responsive classes
+<div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+  {/* Responsive grid items */}
+</div>
+```
+
+**Expected Result:**
+- ✅ Mobile-friendly navigation
+- ✅ Responsive layouts for all screen sizes
+- ✅ Touch-friendly buttons and interactions
+
+---
+
+## 🎭 Step 16: Add Loading States & Error Handling
+
+### Create Loading Spinner Component
+```javascript
+// client/src/components/ui/Spinner.jsx
+function Spinner({ size = 'md' }) {
+  const sizeClasses = {
+    sm: 'h-4 w-4',
+    md: 'h-6 w-6',
+    lg: 'h-8 w-8'
+  }
+
+  return (
+    <div className={`${sizeClasses[size]} animate-spin rounded-full border-2 border-primary border-t-transparent`} />
+  )
+}
+```
+
+### Add Error Boundary
+```javascript
+// client/src/components/ErrorBoundary.jsx
+import { Component } from 'react'
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <div className="p-8 text-center">Something went wrong. Please refresh the page.</div>
+    }
+
+    return this.props.children
+  }
+}
+```
+
+### Update Stores with Loading States
+```javascript
+// Update Zustand stores to include loading/error states
+const useSearchStore = create((set, get) => ({
+  isSearching: false,
+  error: null,
+  search: async (query) => {
+    set({ isSearching: true, error: null })
+    try {
+      // API call
+      set({ results: data, isSearching: false })
+    } catch (error) {
+      set({ error: error.message, isSearching: false })
+    }
+  }
+}))
+```
+
+**Expected Result:**
+- ✅ Loading spinners during async operations
+- ✅ Error messages for failed requests
+- ✅ Graceful error handling with fallbacks
+
+---
+
+## 🚀 Step 17: Add Animations & Transitions
+
+### Install Framer Motion
+```bash
+npm install framer-motion
+```
+
+### Add Page Transitions
+```javascript
+// client/src/components/animations/PageTransition.jsx
+import { motion } from 'framer-motion'
+
+const pageVariants = {
+  initial: { opacity: 0, y: 20 },
+  in: { opacity: 1, y: 0 },
+  out: { opacity: 0, y: -20 }
+}
+
+const pageTransition = {
+  type: 'tween',
+  ease: 'anticipate',
+  duration: 0.4
+}
+
+function PageTransition({ children }) {
+  return (
+    <motion.div
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={pageTransition}
+    >
+      {children}
+    </motion.div>
+  )
+}
+```
+
+### Add Hover Animations
+```javascript
+// Update components with motion
+import { motion } from 'framer-motion'
+
+<motion.div
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+  className="card-class"
+>
+  {/* Card content */}
+</motion.div>
+```
+
+**Expected Result:**
+- ✅ Smooth page transitions
+- ✅ Interactive hover effects
+- ✅ Loading animations
+- ✅ Micro-interactions for better UX
+
+---
+
+## 🔍 Step 18: Add Search & Filtering Enhancements
+
+### Add Advanced Filters
+```javascript
+// client/src/components/search/AdvancedFilters.jsx
+function AdvancedFilters({ filters, onChange }) {
+  return (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <Input
+        label="Location"
+        value={filters.location}
+        onChange={(e) => onChange({ location: e.target.value })}
+      />
+      <Input
+        label="Experience (years)"
+        type="number"
+        value={filters.experience}
+        onChange={(e) => onChange({ experience: e.target.value })}
+      />
+      {/* More filter inputs */}
+    </div>
+  )
+}
+```
+
+### Add Search Suggestions
+```javascript
+// client/src/components/search/SearchSuggestions.jsx
+function SearchSuggestions({ suggestions, onSelect }) {
+  return (
+    <div className="absolute top-full left-0 right-0 bg-bg-card border border-border rounded-xl shadow-lg z-10">
+      {suggestions.map((suggestion, index) => (
+        <button
+          key={index}
+          onClick={() => onSelect(suggestion)}
+          className="w-full text-left px-4 py-2 hover:bg-bg-hover"
+        >
+          {suggestion}
+        </button>
+      ))}
+    </div>
+  )
+}
+```
+
+**Expected Result:**
+- ✅ Advanced filtering options
+- ✅ Search suggestions/autocomplete
+- ✅ Saved search queries
+- ✅ Filter presets
+
+---
+
+## 📊 Step 19: Add Data Visualization
+
+### Install Chart Library
+```bash
+npm install recharts
+```
+
+### Create Analytics Dashboard
+```javascript
+// client/src/pages/Analytics.jsx
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts'
+
+function Analytics() {
+  const data = [
+    { name: 'Jan', candidates: 65 },
+    { name: 'Feb', candidates: 78 },
+    // ... more data
+  ]
+
+  return (
+    <div className="h-80">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={data}>
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Bar dataKey="candidates" fill="var(--color-primary)" />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+```
+
+**Expected Result:**
+- ✅ Charts for candidate analytics
+- ✅ Search performance metrics
+- ✅ Hiring pipeline visualization
+- ✅ Interactive data exploration
+
+---
+
+## 🔒 Step 20: Add Security & Performance Optimizations
+
+### Add Rate Limiting
+```javascript
+// server/middleware/rateLimiter.js
+import rateLimit from 'express-rate-limit'
+
+export const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.'
+})
+```
+
+### Add Input Validation
+```javascript
+// server/middleware/validation.js
+import { body, validationResult } from 'express-validator'
+
+export const validateLogin = [
+  body('email').isEmail().normalizeEmail(),
+  body('password').isLength({ min: 8 }),
+  (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+    next()
+  }
+]
+```
+
+### Add Performance Monitoring
+```javascript
+// client/src/utils/performance.js
+export const measurePerformance = (name, fn) => {
+  const start = performance.now()
+  const result = fn()
+  const end = performance.now()
+  console.log(`${name} took ${end - start} milliseconds`)
+  return result
+}
+```
+
+**Expected Result:**
+- ✅ Rate limiting for API endpoints
+- ✅ Input validation and sanitization
+- ✅ Performance monitoring
+- ✅ Error logging and reporting
+
+---
+
+## 🎯 Final Steps
+
+1. **Testing:** Add unit tests with Jest and React Testing Library
+2. **Documentation:** Complete API documentation with Swagger
+3. **Deployment:** Set up CI/CD pipeline with Vercel/Netlify
+4. **Monitoring:** Add error tracking with Sentry
+5. **SEO:** Add meta tags and structured data
+6. **PWA:** Make app installable with service worker
+7. **Internationalization:** Add i18n support for multiple languages
+8. **Accessibility:** Ensure WCAG compliance
+
+**Congratulations!** 🎉 You now have a fully-featured AI-powered job recruiter application!
 
 ## 🐛 Common Issues & Fixes
 

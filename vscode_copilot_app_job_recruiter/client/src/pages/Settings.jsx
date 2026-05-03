@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import { Button } from '../components/ui'
+import useThemeStore from '../store/themeStore'
 
 function Settings() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true)
-  const [darkMode, setDarkMode] = useState(true)
+  const { theme, toggleTheme } = useThemeStore()
 
   return (
     <DashboardLayout>
@@ -32,8 +33,8 @@ function Settings() {
                     <p className="text-sm text-text-muted">Dark mode</p>
                     <p className="mt-1 text-text-secondary">Switch the app theme for evening usage.</p>
                   </div>
-                  <Button variant={darkMode ? 'secondary' : 'outline'} size="sm" onClick={() => setDarkMode((value) => !value)}>
-                    {darkMode ? 'On' : 'Off'}
+                  <Button variant={theme === 'dark' ? 'secondary' : 'outline'} size="sm" onClick={toggleTheme}>
+                    {theme === 'dark' ? 'On' : 'Off'}
                   </Button>
                 </div>
               </div>

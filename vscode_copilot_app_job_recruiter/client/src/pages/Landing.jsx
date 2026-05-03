@@ -3,24 +3,24 @@ import { Button } from '../components/ui'
 
 function Landing() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary">
+    <div className="min-h-screen bg-corporate-gradient dark:bg-dark-gradient">
       {/* Navigation */}
-      <nav className="flex items-center justify-between p-6">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+      <nav className="flex items-center justify-between p-6 bg-white/10 dark:bg-neutral-900/10 backdrop-blur-md border-b border-white/20 dark:border-neutral-700/50">
+        <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-all duration-300 hover:scale-105 cursor-pointer">
+          <div className="w-8 h-8 bg-primary-600 hover:bg-primary-700 rounded-xl flex items-center justify-center shadow-glow-primary hover:shadow-glow transition-all duration-300">
             <span className="text-white font-bold text-sm">B</span>
           </div>
-          <span className="text-xl font-bold text-text-primary">Bond AI</span>
-        </div>
+          <span className="text-xl font-bold text-white dark:text-white drop-shadow-lg">Bond AI</span>
+        </Link>
 
         <div className="flex items-center space-x-4">
           <Link to="/login">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="backdrop-blur-sm bg-white/10 hover:bg-white/20 border-white/30 text-white">
               Sign In
             </Button>
           </Link>
           <Link to="/register">
-            <Button variant="primary" size="sm">
+            <Button variant="primary" size="sm" className="shadow-glow-primary hover:shadow-glow">
               Get Started
             </Button>
           </Link>
@@ -29,15 +29,28 @@ function Landing() {
 
       {/* Hero Section */}
       <main className="container mx-auto px-6 py-20">
-        <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-bold text-text-primary mb-6">
+        <div className="text-center max-w-4xl mx-auto animate-fade-in">
+          <h1 className="text-5xl md:text-6xl font-bold text-white dark:text-white mb-6 drop-shadow-2xl">
             Find Your Perfect
-            <span className="text-primary"> Candidates</span>
+            <span className="text-primary-300 dark:text-primary-400 drop-shadow-lg"> Candidates</span>
             <br />
             with AI Power
           </h1>
 
-          <p className="text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 dark:text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-lg">
+            Revolutionize your recruiting process with AI-driven LinkedIn search.
+            Find, analyze, and connect with top talent in minutes, not hours.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-bounce-in">
+            <Link to="/register">
+              <Button size="lg" className="shadow-glow-primary hover:shadow-glow hover:scale-105 transition-all duration-300">
+                Start Recruiting Today
+              </Button>
+            </Link>
+          </div>
+
+          <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 animate-fade-in">
             Revolutionize your recruiting process with AI-driven LinkedIn search.
             Find, analyze, and connect with top talent in minutes, not hours.
           </p>

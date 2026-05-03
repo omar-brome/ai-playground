@@ -14,11 +14,11 @@ const Button = forwardRef(({
   const baseClasses = 'inline-flex items-center justify-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-bg-primary disabled:opacity-50 disabled:cursor-not-allowed'
 
   const variantClasses = {
-    primary: 'bg-primary hover:bg-primary-hover text-text-primary focus:ring-primary border border-primary',
-    secondary: 'bg-secondary hover:bg-secondary-hover text-text-primary focus:ring-secondary border border-secondary',
-    outline: 'bg-transparent hover:bg-bg-hover text-text-primary focus:ring-primary border border-border',
-    ghost: 'bg-transparent hover:bg-bg-hover text-text-secondary focus:ring-primary border border-transparent',
-    danger: 'bg-error hover:bg-red-600 text-white focus:ring-red-500 border border-red-500',
+    primary: 'bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-400 focus:ring-primary-500 border-2 border-primary-600 dark:border-primary-500 shadow-soft hover:shadow-medium dark:shadow-glow-primary transition-all duration-200 hover:scale-105 active:scale-95',
+    secondary: 'bg-secondary-600 text-white hover:bg-secondary-700 dark:bg-secondary-500 dark:hover:bg-secondary-400 focus:ring-secondary-500 border-2 border-secondary-600 dark:border-secondary-500 shadow-soft hover:shadow-medium dark:shadow-glow transition-all duration-200 hover:scale-105 active:scale-95',
+    outline: 'bg-transparent text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 focus:ring-primary-500 border-2 border-neutral-300 dark:border-neutral-600 shadow-soft hover:shadow-medium transition-all duration-200 hover:scale-105 active:scale-95',
+    ghost: 'bg-transparent text-gray-600 dark:text-gray-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:ring-primary-500 border-2 border-transparent hover:border-neutral-300 dark:hover:border-neutral-600 shadow-soft hover:shadow-medium transition-all duration-200 hover:scale-105 active:scale-95',
+    danger: 'bg-error-600 text-white hover:bg-error-700 dark:bg-error-500 dark:hover:bg-error-400 focus:ring-red-500 border-2 border-error-600 dark:border-error-500 shadow-soft hover:shadow-medium transition-all duration-200 hover:scale-105 active:scale-95',
   }
 
   const sizeClasses = {
