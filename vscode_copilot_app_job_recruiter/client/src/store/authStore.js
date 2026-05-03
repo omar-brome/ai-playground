@@ -6,6 +6,7 @@ const useAuthStore = create(
     (set, get) => ({
       // State
       user: null,
+      token: null,
       isAuthenticated: false,
       isLoading: false,
       error: null,
@@ -32,6 +33,7 @@ const useAuthStore = create(
 
           set({
             user: userData.user,
+            token: userData.token,
             isAuthenticated: true,
             isLoading: false,
             error: null,
@@ -68,6 +70,7 @@ const useAuthStore = create(
 
           set({
             user: result.user,
+            token: result.token,
             isAuthenticated: true,
             isLoading: false,
             error: null,
@@ -86,6 +89,7 @@ const useAuthStore = create(
       logout: () => {
         set({
           user: null,
+          token: null,
           isAuthenticated: false,
           error: null,
         })
@@ -105,6 +109,7 @@ const useAuthStore = create(
       name: 'auth-storage',
       partialize: (state) => ({
         user: state.user,
+        token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
     }
