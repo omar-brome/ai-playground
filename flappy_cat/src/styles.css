@@ -1,0 +1,19 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #d6f0ff 0%, #d0f4ff 100%);
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+#game-root {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+canvas {
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(47, 95, 131, 0.25);
+}
