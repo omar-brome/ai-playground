@@ -3,3 +3,5 @@ client/node_modules/
 server/node_modules/
 .env
 *.code-workspace
+.DS_Store
+FETCH_HEAD
