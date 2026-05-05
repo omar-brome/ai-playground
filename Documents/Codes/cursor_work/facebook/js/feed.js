@@ -135,6 +135,8 @@ window.FeedPage = (() => {
   function postCard(p) {
     const u = StorageService.userById(p.userId);
     const totals = reactionTotals(p.reactions);
+    const sharedOrigin = p.sharedFrom ? StorageService.allPosts().find((x) => x.id === p.sharedFrom) : null;
+    const sharedOriginUser = sharedOrigin ? StorageService.userById(sharedOrigin.userId) : null;
     return `
       <article class="surface-card p-3 mb-3 post-card" data-post-id="${p.id}">
         <div class="d-flex justify-content-between">
@@ -155,6 +157,13 @@ window.FeedPage = (() => {
             </ul>
           </div>
         </div>
+        ${p.sharedFrom ? `
+          <div class="share-preview mb-3">
+            <div class="small text-secondary mb-2"><i class="fa-solid fa-share"></i> Shared from ${sharedOriginUser ? sharedOriginUser.name : "a post"}</div>
+            ${p.shareCaption ? `<p class="mb-2">${App.escapeHtml(p.shareCaption)}</p>` : ""}
+            ${sharedOrigin ? `<div class="shared-card p-2">${App.escapeHtml(sharedOrigin.text)}${sharedOrigin.image ? `<img src="${sharedOrigin.image}" class="post-media mt-2" alt="">` : ""}</div>` : ""}
+          </div>
+        ` : ""}
         <p class="my-2">${App.escapeHtml(p.text)}</p>
         ${p.image ? `<img src="${p.image}" class="post-media mb-2" alt="">` : ""}
         <div class="d-flex justify-content-between small text-secondary mb-2">
@@ -250,6 +259,28 @@ window.FeedPage = (() => {
     });
   }
 
+  function openShareModal(postId) {
+    const post = StorageService.allPosts().find((x) => x.id === postId);
+    const postUser = post ? StorageService.userById(post.userId) : null;
+    $("#composerModalContent").html(`
+      <div class="modal-header"><h5 class="modal-title">Share Post</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <strong>${postUser ? postUser.name : "Original post"}</strong>
+          <div class="small text-secondary">${post ? App.escapeHtml(post.text) : ""}</div>
+          ${post && post.image ? `<img src="${post.image}" class="post-media mt-2" alt="">` : ""}
+        </div>
+        <textarea id="shareDescription" class="form-control mb-3" rows="4" placeholder="Add a description..."></textarea>
+        <div class="row g-2">
+          <div class="col"><select id="shareAudience" class="form-select"><option value="public">Public</option><option value="friends">Friends</option><option value="onlyme">Only Me</option></select></div>
+          <div class="col"><select id="shareFeeling" class="form-select"><option value="">Feeling</option><option>Happy</option><option>Excited</option><option>Grateful</option></select></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary w-100" id="publishShare" data-post-id="${postId}">Share</button></div>
+    `);
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("composerModal")).show();
+  }
+
   function bindPostActions() {
     $(document).off("mouseenter", ".react-btn").on("mouseenter", ".react-btn", function () {
       $(this).closest(".post-card").find(".reaction-picker").removeClass("d-none");
@@ -288,11 +319,38 @@ window.FeedPage = (() => {
 
     $(document).off("click", ".share-post").on("click", ".share-post", function () {
       const postId = $(this).closest(".post-card").data("post-id");
+      openShareModal(postId);
+    });
+
+    $(document).off("click", "#publishShare").on("click", "#publishShare", function () {
+      const sourcePostId = $(this).data("post-id");
+      const caption = $("#shareDescription").val().trim();
+      const audience = $("#shareAudience").val();
+      const feeling = $("#shareFeeling").val();
       const posts = StorageService.allPosts();
-      const p = posts.find((x) => x.id === postId);
-      p.shares = (p.shares || 0) + 1;
+      const sourcePost = posts.find((x) => x.id === sourcePostId);
+      if (!sourcePost) return App.toast("Unable to share post", "danger");
+
+      posts.unshift({
+        id: StorageService.id("post"),
+        userId: StorageService.getCurrentUser().id,
+        text: caption,
+        image: "",
+        feeling,
+        audience,
+        timestamp: StorageService.now(),
+        reactions: {},
+        comments: [],
+        shares: 0,
+        sharedFrom: sourcePostId,
+        shareCaption: caption
+      });
+
+      sourcePost.shares = (sourcePost.shares || 0) + 1;
       StorageService.setPosts(posts);
+      bootstrap.Modal.getOrCreateInstance(document.getElementById("composerModal")).hide();
       renderPosts();
+      App.toast("Post shared", "success");
     });
 
     $(document).off("click", ".delete-post").on("click", ".delete-post", function () {

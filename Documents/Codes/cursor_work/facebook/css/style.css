@@ -171,6 +171,20 @@ body {
   padding: 0.55rem 0.7rem;
 }
 
+.share-preview {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.9rem;
+  background: var(--surface-2);
+}
+
+.shared-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.75rem;
+}
+
 .skeleton {
   background: linear-gradient(90deg, var(--surface-2) 25%, #dfe3e9 37%, var(--surface-2) 63%);
   background-size: 400% 100%;
