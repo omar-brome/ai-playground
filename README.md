@@ -15,14 +15,14 @@ A job recruiter web application built with GitHub Copilot assistance.
 
 ---
 
-### [`Documents/Codes/cursor_work`](./Documents/Codes/cursor_work)
-A collection of various apps and games built with Cursor AI assistance. Each project lives in its own subfolder, including:
+### `cursor_work` Projects
+A collection of various apps and games built with Cursor AI assistance. These now live at the repository root in separate folders, including:
 
-- 📘 Facebook-style social media app
-- ♟️ Chess game
-- ❌ Tic Tac Toe game
-- 🎱 Pool game
-- _...and more_
+- 📘 Facebook-style social media app (`./facebook`)
+- ♟️ Chess game (`./chess`)
+- ❌ Tic Tac Toe game (`./games`)
+- 🎱 Pool game (`./pool`)
+- _...and more (`./calculator`, `./web_app1`, etc.)_
 
 ---
 
