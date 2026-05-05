@@ -1,6 +1,6 @@
-# Flappy Cat (Phaser 3)
+# Flappy Cat
 
-A playful Flappy Bird-inspired game where a jumpy cat survives household chaos: swinging laundry, stacked furniture, and dog patrol hazards.
+A browser-based **Flappy Bird**–style game built with **Phaser 3**. You guide a cat through a scrolling world of **laundry lines**, **furniture stacks**, **patrolling dogs**, **yarn**, and **lasers**—while grabbing **fish** and **power-ups**, dodging the **floor rug**, and chasing a high score.
 
 ---
 
@@ -8,90 +8,173 @@ A playful Flappy Bird-inspired game where a jumpy cat survives household chaos: 
 
 | Layer | Choice | Role |
 |--------|--------|------|
-| **Game engine** | [Phaser 3](https://phaser.io/) (~3.90.x) | 2D rendering, Arcade physics, scenes, collisions, particles |
-| **Bundler / dev server** | [Vite](https://vitejs.dev/) (~5.4.x) | Fast dev server with HMR, production builds |
-| **Language** | **JavaScript** (ES modules, `"type": "module"`) | No TypeScript toolchain for quick iteration |
-| **Styling** | Plain **CSS** (`src/styles.css`) | Page/chrome around the canvas |
-| **Storage** | **localStorage** | Best score persistence (see below) |
+| **Game engine** | [Phaser 3](https://phaser.io/) (~3.90.x) | 2D canvas, Arcade physics, scenes, tweens, particles |
+| **Bundler** | [Vite](https://vitejs.dev/) (~5.4.x) | Dev server, HMR, production builds (`/public` → site root) |
+| **Language** | **JavaScript** (ES modules) | Game logic and scenes |
+| **Page chrome** | `src/styles.css` | Layout around the canvas |
+| **SFX** | **Web Audio** + optional **WAV** under `public/sounds/` | Jump, pass, hit, game-over samples; procedural fallbacks |
+| **Music** | **Web Audio** (`ThemeMusic.js`) | Looping procedural chiptune theme (no external music file required) |
+| **Voice UI** | **Web Speech API** (`speechSynthesis`) | Announces selected menu actions and “game over” (system voice varies by OS/browser) |
+| **Persistence** | **localStorage** | Best score, mute, graphics tier, progress, missions — see [Persistence](#persistence) |
 
-The game runs entirely in the **browser**—no Electron or native runtime required.
+The game is **static front-end only** (no backend). Deploy the contents of `dist/` after `npm run build`.
 
 ---
 
 ## Prerequisites
 
-You need a **Node.js** runtime with **npm** (Node 18+ is recommended; Vite 5 expects a recent Node).
+- **Node.js** 18+ and **npm** recommended for Vite 5.
 
-- Check versions:
-
-  ```bash
-  node -v
-  npm -v
-  ```
-
-If `npm` is missing, install [Node.js](https://nodejs.org/) (the LTS installer includes npm).
+```bash
+node -v
+npm -v
+```
 
 ---
 
 ## How to run
 
-From this directory (`flappy_cat`):
+From the `flappy_cat` directory:
 
-### Development (hot reload)
+### Development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Vite prints a local URL (usually `http://localhost:5173`). Open it in a browser. Edits to source files reload while the dev server runs.
+Open the URL Vite prints (usually `http://localhost:5173`).
 
 ### Production build
 
 ```bash
-npm install
 npm run build
 ```
 
-Output goes to `dist/`. Deploy `dist/` to any static host (GitHub Pages, Netlify, etc.).
+Static output: `dist/`.
 
-### Preview the production build locally
+### Preview production build locally
 
 ```bash
 npm run preview
 ```
 
-This serves `dist/` so you can verify the built game before deploying.
-
 ---
 
 ## Controls
 
+### In-game
+
 | Input | Action |
 |--------|--------|
-| **Space** | Jump / flap |
-| **Click or touch** anywhere | Jump / flap |
+| **Tap / click** anywhere | Flap (jump impulse) |
+| **Space** | Flap |
+| **P** | Pause / resume |
+| **Two-finger tap** (touch) | Pause / resume |
+| **M** | Toggle sound (SFX, theme, and voice follow the same mute) |
 
-On the menu and game-over screens, **Play / Restart** can also be triggered with Space or tap, depending on the scene.
+### Menus
 
----
-
-## Gameplay overview
-
-- **Gravity** pulls the cat down; each input applies an upward **jump impulse**.
-- Passing **score zones** (invisible triggers placed with obstacle sets) increments the score and briefly shows particle feedback.
-- **Colliding** with obstacle bodies or falling off-screen ends the run and opens the game-over scene.
-- **Difficulty** ramps over time (scroll speed increases, spawn pacing tightens somewhat).
+- **Menu:** Choose **Normal**, **Zen**, or **Daily** mode, then **Play**; **Options** opens settings. **Space** starts with the selected mode.
+- **Game over:** **Restart**, **Main Menu**, share buttons; **Space** restarts.
+- **Options:** Cycle **Graphics** quality, toggle **Sound**, **Back** (or **Esc**) to menu.
 
 ---
 
-## Obstacle themes (required set)
+## Gameplay summary
 
-1. **Laundry Chaos** — Hanging lines and shirt pieces that scroll with the stage; some pieces **bob vertically** via tweens for an “alive” feel.
-2. **Furniture Maze** — Sofas, chairs, and tables **stacked** above and below a central gap so the lane changes each spawn.
-3. **Dog Patrol Zones** — Dogs as hazards; optionally **moving** vertically for patrol-like motion.
+- **Gravity** pulls the cat; each flap applies an upward impulse (`CatController`).
+- **Score** goes up by **1** each time you pass an obstacle’s **score zone** (narrow vertical trigger between hazards).
+- **Orange fish** pickups add **+3** score (stack with gates).
+- **Power-up orbs** (spawn mix with fish):
+  - **Shield** — Absorbs **one** hazard hit (before your free “grace” warning).
+  - **Slow-mo** — ~**3 s** of slower world scroll.
+  - **Magnet** — Pulls **fish** toward the cat for a few seconds.
+- **The grass / floor rug** and **flying off the top or bottom** of the world end the run.
+- Hitting a **hazard body** normally kills you unless:
+  - **Grace** — Once per run, first hazard contact triggers a near-miss (red vignette, short invincibility) instead of death.
+  - **Shield** — If active, consumes the shield first.
 
-New obstacle families are wired through a small **registry API** so you rarely touch core scene logic beyond one `register(...)` line.
+**Difficulty** (Normal / Daily): increases over **time alive** and somewhat with **score** (faster scroll, tighter spawns). **Zen** keeps difficulty contribution at **0** and uses calmer baseline scroll/spawns in `ObstacleManager`.
+
+---
+
+## Game modes
+
+| Mode | Behavior |
+|------|-----------|
+| **Normal** | Full difficulty ramp; **best score** can update. |
+| **Zen** | Chill pace: difficulty input is **0** (no time/score ramp); **best score** does not update (relax / practice). |
+| **Daily** | Same **seeded** obstacle RNG for everyone **per calendar day** (`RandomDataGenerator` + `daily-YYYY-MM-DD`), so obstacle layouts match for that day. Best score behaves like Normal. |
+
+Selection is stored on `game.registry` as `gameMode` when you press **Play**.
+
+---
+
+## Obstacles
+
+Obstacles are registered in `ObstacleManager` with **weights** (spawn frequency). Each family implements `create(scene, x, difficulty, scrollSpeed)` and returns `{ group, scoreZone, ... }`.
+
+| ID | Description |
+|----|-------------|
+| **laundry** | Posts, hanging shirts; some shirts bob on tweens. |
+| **furniture** | Stacked sofas / tables / chairs above and below a gap. |
+| **dog** | Dog pair with optional vertical patrol motion. |
+| **yarn** | Yarn balls; optional moving ball. |
+| **laser** | Laser bar between mounts with vertical tween. |
+
+Collisions use **overlap** on physics bodies; the **score zone** is a separate physics **Zone** that scrolls with the set.
+
+---
+
+## Features (overview)
+
+### Menu & tutorial
+
+- **How to play** card (controls, fish, rug, grace, modes, power-ups).
+- **First-run overlay** — Short welcome; **Skip**, **Esc**, or auto-dismiss; stored so it doesn’t repeat (`GameSettings` / `flappy_cat_menu_tutorial_seen`).
+- **Cat color** — Tap the cat to cycle **unlocked** tints (saved locally).
+
+### Audio
+
+- **Theme** — Looping upbeat procedural **chiptune** (`ThemeMusic.js`) after the first user gesture; respects **mute**.
+- **SFX** — WAVs in `public/sounds/` when present (`jump`, `pass`, `hit`, `gameover`), with procedural fallbacks in `GameAudio.js`.
+- **Voice** — `VoiceOver.js` uses **speechSynthesis** for menu/game-over phrases when **not** muted.
+
+### Camera & juice
+
+- Camera **follows** the cat with vertical smoothing.
+- **Near-miss** red vignette and **shake** on death; milestone **confetti** / fireworks scaled by **graphics tier** (`PerformanceBudget.js`, pooled rects in `Effects.js`).
+
+### Meta progression (`GameProgress.js`)
+
+- **`flappy_cat_progress`** in localStorage: missions, total runs, synced best for unlock checks, trail unlock flag.
+- **Missions** (examples): pass **5 laundry** sets; reach **15** points **without** collecting fish (Normal/Daily).
+- **Unlocks** — Extra **cat tints** (Ash, Mint, Sunset) from runs / best score; **spark trail** after a strong run or enough total runs.
+
+### Game over
+
+- Shows **death cause** string when tagged (laundry, dog, laser, rug, etc.).
+- **Share** — Text via Web Share or clipboard; optional **screenshot** share/download.
+- **Voice** — “Game over” (short delay after the sting).
+
+### Settings (`OptionsScene` + `GameSettings.js`)
+
+- **Graphics** — `auto` / `low` / `medium` / `high` (confetti and firework counts).
+- **Sound** — Global mute for SFX, theme, and TTS.
+
+---
+
+## Persistence (localStorage)
+
+| Key / area | Purpose |
+|------------|---------|
+| `flappy_cat_best` | Best score (used by `ScoreSystem`). |
+| `flappy_cat_muted` | `1` = muted. |
+| `flappy_cat_graphics_quality` | `auto` \| `low` \| `medium` \| `high`. |
+| `flappy_cat_menu_tutorial_seen` | First-run menu overlay dismissed. |
+| `flappy_cat_progress` | Runs, missions, unlock-related flags, synced best snapshot. |
+| `flappy_cat_skin` | Selected cat tint id. |
 
 ---
 
@@ -99,75 +182,49 @@ New obstacle families are wired through a small **registry API** so you rarely t
 
 ```
 flappy_cat/
-├── index.html              # Canvas mount point
-├── package.json           # Scripts and dependencies
+├── index.html
+├── package.json
+├── public/
+│   └── sounds/              # Optional WAV samples (jump, pass, hit, gameover)
 ├── src/
-│   ├── main.js            # Phaser config + scene list
-│   ├── styles.css         # Layout / canvas chrome
+│   ├── main.js              # Phaser config, scene order
+│   ├── styles.css
 │   ├── scenes/
-│   │   ├── BootScene.js   # Procedural textures, then jump to menu
-│   │   ├── MenuScene.js  # Title + Play
-│   │   ├── GameScene.js  # Loop, spawning, HUD, collisions
+│   │   ├── BootScene.js     # Procedural textures (cat, hazards, fish, power-up icons)
+│   │   ├── MenuScene.js
+│   │   ├── OptionsScene.js
+│   │   ├── GameScene.js     # Run loop, pickups, modes, HUD
 │   │   └── GameOverScene.js
 │   └── game/
 │       ├── CatController.js
 │       ├── InputController.js
-│       ├── ObstacleManager.js   # Spawn timing + weighted registry + cleanup
+│       ├── ObstacleManager.js
 │       ├── ScoreSystem.js
-│       ├── Effects.js          # Shake, particles
-│       └── obstacles/          # One module per obstacle “family”
+│       ├── Effects.js
+│       ├── GameAudio.js
+│       ├── GameSettings.js
+│       ├── GameProgress.js
+│       ├── PerformanceBudget.js
+│       ├── ThemeMusic.js
+│       ├── VoiceOver.js
+│       ├── rngHelper.js     # Seeded RNG for Daily mode
+│       └── obstacles/
 │           ├── LaundryObstacle.js
 │           ├── FurnitureObstacle.js
-│           └── DogPatrolObstacle.js
-├── README.md
-└── prompt.md                # Original design brief (optional reference)
+│           ├── DogPatrolObstacle.js
+│           ├── YarnBallObstacle.js
+│           └── LaserObstacle.js
+└── README.md
 ```
 
-**Separation of concerns**
-
-- **Game loop / state** — Mostly `GameScene` (Phaser `update` tick).
-- **Physics** — Phaser Arcade bodies on sprites/zones; custom gravity/acceleration logic for the cat in `CatController`.
-- **Rendering** — Phaser Scene API (images, rects, particles); textures generated in `BootScene`.
-- **Input** — `InputController` (keyboard + pointer).
-
 ---
 
-## Scoring and persistence
+## Adding a new obstacle type
 
-- Current run score increments when the cat overlaps a spawn’s **score zone** once per obstacle.
-- **Best score** is stored under the key **`flappy_cat_best`** in `localStorage`.
-
-To reset the best score in devtools: Application → Local Storage → remove `flappy_cat_best`.
-
----
-
-## Extending the game
-
-### Add a new obstacle type
-
-1. Create `src/game/obstacles/YourObstacle.js` exporting a class with a static `create(scene, x, difficulty, scrollSpeed)` that returns:
-
-   `{ group, scoreZone }`
-
-   Where:
-
-   - `group` — a Phaser physics group containing all collidable sprites (_velocity X_ should match scroll).
-   - `scoreZone` — a physics body (usually a narrow vertical `Zone`) that moves with the same horizontal speed; when the cat passes it, the score increments.
-
-2. In `GameScene.js`, after constructing `ObstacleManager`, register it:
-
-   ```js
-   this.obstacles.register("your_name", YourObstacle.create, 1);
-   ```
-
-   The **weight** argument biases random selection (higher = more frequent).
-
-### Optional stretch ideas (not implemented by default)
-
-- Cat skins (swap texture key in `BootScene` + menu)
-- Day/night background tweens in `GameScene`
-- Web Audio or small OGG assets for jump / hit / score
-- Extra hazards: laser lines, yarn balls, vacuum sweeps—each as another `obstacles/*.js` module
+1. Add `src/game/obstacles/MyObstacle.js` with `static create(scene, x, difficulty, scrollSpeed)` returning at least `{ group, scoreZone }` (physics group + scrolling score zone).
+2. For **Daily** determinism, use helpers from `rngHelper.js` instead of raw `Math.random` / `Phaser.Math.Between` where the layout must match the seed.
+3. In `GameScene.js`, register: `this.obstacles.register("tag", MyObstacle.create, weight);`
+4. Add a **death message** in `GameScene` `DEATH_MESSAGES` if the tag should show custom copy on game over.
 
 ---
 
@@ -175,13 +232,15 @@ To reset the best score in devtools: Application → Local Storage → remove `f
 
 | Issue | What to try |
 |--------|-------------|
-| `npm: command not found` | Install Node.js LTS; ensure your terminal sees the same PATH as your IDE. |
-| Blank page / console errors | Run from project root `flappy_cat`; use `npm run dev` (not opening `index.html` as a `file://` URL unless you rely on other tooling). |
-| Wrong Node version errors from Vite | Upgrade to Node 18+ (`node -v`). |
-| Build works but physics feels off | Tune `jumpVelocity`, `gravity`, and `maxFall` in `CatController.js`; tune `scrollSpeed` / spawn interval ramp in `ObstacleManager.js` and difficulty in `GameScene.js`. |
+| No sound until click | Browsers require a **user gesture** before AudioContext runs; tap the menu or Play. |
+| No voice | **Web Speech** depends on the OS/browser; ensure sound is **not** muted; some mobile browsers limit TTS. |
+| `npm` / Vite errors | Node **18+**, run commands from the `flappy_cat` folder. |
+| Blank page on `file://` | Use **`npm run dev`** or **`npm run preview`** (or any static server for `dist/`). |
 
 ---
 
 ## License / assets
 
-Sprites are **generated in code** in `BootScene` (simple shapes)—no separate image packs to attribute. Swap in real sprites later by loading assets in `BootScene` or a dedicated preload scene.
+- **Sprites** are drawn in `BootScene` with Phaser Graphics (procedural textures)—no bundled raster art pack.
+- **Theme music** is **generated in code** (original loop, not a recording of third-party music).
+- Replace WAVs under `public/sounds/` with your own assets if you ship commercially and need a specific sound direction.

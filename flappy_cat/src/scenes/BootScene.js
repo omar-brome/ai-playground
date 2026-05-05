@@ -62,6 +62,67 @@ export class BootScene extends Phaser.Scene {
     g.fillStyle(0xffffff, 1);
     g.fillCircle(4, 4, 4);
     g.generateTexture("spark", 8, 8);
+    g.clear();
+
+    g.fillStyle(0xf5f5f5, 1);
+    g.fillCircle(22, 22, 20);
+    g.fillStyle(0xffb6c6, 1);
+    g.fillCircle(30, 14, 7);
+    g.lineStyle(3, 0xdddddd, 1);
+    g.beginPath();
+    g.arc(22, 22, 16, 0.2, 1.1);
+    g.strokePath();
+    g.generateTexture("yarn_ball", 44, 44);
+    g.clear();
+
+    g.fillStyle(0xff3355, 1);
+    g.fillRoundedRect(0, 0, 132, 12, 4);
+    g.fillStyle(0xffaac8, 0.55);
+    g.fillRoundedRect(8, 2, 116, 4, 2);
+    g.generateTexture("laser_beam", 132, 12);
+    g.clear();
+
+    g.fillStyle(0xff9a4a, 1);
+    g.fillEllipse(18, 12, 34, 20);
+    g.fillStyle(0xffc896, 1);
+    g.fillEllipse(12, 12, 18, 12);
+    g.fillStyle(0x2a2a2a, 1);
+    g.fillCircle(26, 10, 2);
+    g.fillStyle(0xff8a3c, 1);
+    g.fillRoundedRect(0, 8, 12, 10, 3);
+    g.generateTexture("fish", 36, 24);
+    g.clear();
+
+    g.fillStyle(0x7ecfff, 0.65);
+    g.fillCircle(20, 20, 17);
+    g.lineStyle(3, 0xffffff, 1);
+    g.strokeCircle(20, 20, 17);
+    g.fillStyle(0xffffff, 0.95);
+    g.fillRect(18, 10, 4, 14);
+    g.fillRect(12, 22, 16, 4);
+    g.generateTexture("pickup_shield", 40, 40);
+    g.clear();
+
+    g.fillStyle(0x223344, 1);
+    g.fillCircle(20, 20, 18);
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(20, 20, 11);
+    g.lineStyle(2, 0x4466aa, 1);
+    g.beginPath();
+    g.arc(20, 20, 9, -Math.PI / 2, 0, false);
+    g.strokePath();
+    g.lineStyle(3, 0xaa4466, 1);
+    g.lineBetween(20, 20, 26, 14);
+    g.generateTexture("pickup_slowmo", 40, 40);
+    g.clear();
+
+    g.fillStyle(0xff5566, 1);
+    g.fillCircle(22, 24, 5);
+    g.fillStyle(0xcc2233, 1);
+    g.fillRect(10, 10, 6, 18);
+    g.fillRect(22, 10, 6, 18);
+    g.fillRect(10, 8, 18, 8);
+    g.generateTexture("pickup_magnet", 44, 44);
     g.destroy();
   }
 }

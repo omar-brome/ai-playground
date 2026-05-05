@@ -1,14 +1,19 @@
 import Phaser from "phaser";
 
 export class CatController {
-  constructor(scene, x, y) {
+  constructor(scene, x, y, options = {}) {
     this.scene = scene;
-    this.jumpVelocity = -310;
-    this.gravity = 900;
+    this.onFlap = options.onFlap;
+    this.jumpVelocity = -292;
+    this.gravity = 780;
     this.maxFall = 420;
 
     this.sprite = scene.physics.add.image(x, y, "cat");
+    if (options.tint !== undefined && options.tint !== 0xffffff) {
+      this.sprite.setTint(options.tint);
+    }
     this.sprite.setScale(1.05);
+    this.sprite.setDepth(25);
     this.sprite.setCircle(20, 8, 2);
     this.sprite.setCollideWorldBounds(false);
     this.sprite.body.setAllowGravity(false);
@@ -31,6 +36,9 @@ export class CatController {
 
   flap() {
     this.sprite.body.velocity.y = this.jumpVelocity;
+    if (typeof this.onFlap === "function") {
+      this.onFlap();
+    }
     this.scene.tweens.add({
       targets: this.sprite,
       scaleX: 1.11,
