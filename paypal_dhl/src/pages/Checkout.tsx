@@ -5,12 +5,17 @@ import { useCart } from '../context/useCart'
 import { appendOrder } from '../lib/orders'
 import type { PayPalOnApproveData } from '../types/paypal'
 
+const DEMO_TRACKING = 'JD014600006251903756'
+
 export default function Checkout() {
   const navigate = useNavigate()
   const { items, subtotal, shipping, total, clearCart } = useCart()
 
-  const onApproved = useCallback(
-    (data: PayPalOnApproveData) => {
+  const finalizePaidOrder = useCallback(
+    (
+      data: PayPalOnApproveData,
+      next: 'order-confirmation' | 'tracking',
+    ) => {
       const orderId = `PAY-${Date.now()}`
       appendOrder({
         orderId,
@@ -19,14 +24,30 @@ export default function Checkout() {
         items: [...items],
         total,
         status: 'paid',
-        trackingNumber: 'JD014600006251903756',
+        trackingNumber: DEMO_TRACKING,
         createdAt: new Date().toISOString(),
       })
       clearCart()
-      navigate(`/order-confirmation/${encodeURIComponent(orderId)}`)
+      if (next === 'tracking') {
+        navigate(`/tracking/${encodeURIComponent(DEMO_TRACKING)}`)
+      } else {
+        navigate(`/order-confirmation/${encodeURIComponent(orderId)}`)
+      }
     },
     [clearCart, items, navigate, total],
   )
+
+  const onApproved = useCallback(
+    (data: PayPalOnApproveData) => finalizePaidOrder(data, 'order-confirmation'),
+    [finalizePaidOrder],
+  )
+
+  const skipPayPalDemoToDhl = useCallback(() => {
+    finalizePaidOrder(
+      { orderID: `DEMO-SKIP-PAYPAL-${Date.now()}`, payerID: 'DEMO-SKIP' },
+      'tracking',
+    )
+  }, [finalizePaidOrder])
 
   return (
     <div className="page-transition px-4 py-10 sm:px-6 lg:mx-auto lg:max-w-6xl lg:py-14">
@@ -86,6 +107,19 @@ export default function Checkout() {
             <p className="mt-2 font-sans text-sm text-cream-muted">
               Use a PayPal sandbox buyer account to complete this demo purchase.
             </p>
+            <div className="mt-6 rounded-xl border border-gold/20 bg-charcoal-deep/50 p-4">
+              <p className="font-sans text-xs leading-relaxed text-cream-muted">
+                Demo shortcut: skip the PayPal step, record the order as paid, and open DHL
+                tracking (same mock label as a real checkout).
+              </p>
+              <button
+                type="button"
+                onClick={skipPayPalDemoToDhl}
+                className="btn-glow mt-3 w-full rounded-full border border-gold/40 bg-gold/10 px-5 py-2.5 font-sans text-xs font-semibold uppercase tracking-widest text-cream transition hover:bg-gold/25 sm:w-auto"
+              >
+                Skip PayPal — assume paid (demo → DHL)
+              </button>
+            </div>
             <div className="mt-8">
               <PayPalButton amountUsd={total} onApproved={onApproved} />
             </div>
