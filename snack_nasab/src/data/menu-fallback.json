@@ -1,0 +1,115 @@
+{
+  "settings": {
+    "phone": "076665462",
+    "welcomeTextAr": "اهلا بكم في سناك نسب",
+    "welcomeTextEn": "Welcome to Snack Nasab"
+  },
+  "categories": [
+    {
+      "id": "french-bread",
+      "slug": "french-bread",
+      "nameAr": "خبز فرنسي",
+      "nameEn": "French Bread",
+      "sortOrder": 1,
+      "isActive": true,
+      "menuItems": [
+        { "id": "fb-1", "nameAr": "طاووق", "nameEn": "Tawook", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 1 },
+        { "id": "fb-2", "nameAr": "سودة", "nameEn": "Chicken Liver", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 2 },
+        { "id": "fb-3", "nameAr": "دجاج صيني", "nameEn": "Chinese Chicken", "descriptionAr": "", "descriptionEn": "", "price": 280000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 3 },
+        { "id": "fb-4", "nameAr": "مقانق", "nameEn": "Sausage", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 4 },
+        { "id": "fb-5", "nameAr": "سجق", "nameEn": "Sujuk", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 5 },
+        { "id": "fb-6", "nameAr": "شورما دجاج", "nameEn": "Chicken Shawarma", "descriptionAr": "", "descriptionEn": "", "price": 280000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 6 },
+        { "id": "fb-7", "nameAr": "كريسي", "nameEn": "Crispy", "descriptionAr": "", "descriptionEn": "", "price": 280000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 7 },
+        { "id": "fb-8", "nameAr": "كرسبي بر", "nameEn": "Crispy Wrap", "descriptionAr": "", "descriptionEn": "", "price": 280000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 8 },
+        { "id": "fb-9", "nameAr": "اسكالوب", "nameEn": "Escalope", "descriptionAr": "", "descriptionEn": "", "price": 280000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 9 },
+        { "id": "fb-10", "nameAr": "كفتة", "nameEn": "Kofta", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 10 },
+        { "id": "fb-11", "nameAr": "تشكن ساب", "nameEn": "Chicken Sub", "descriptionAr": "", "descriptionEn": "", "price": 280000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 11 },
+        { "id": "fb-12", "nameAr": "فاهيتا", "nameEn": "Fajita", "descriptionAr": "", "descriptionEn": "", "price": 300000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 12 },
+        { "id": "fb-13", "nameAr": "روستو لحمة", "nameEn": "Rosto Beef", "descriptionAr": "", "descriptionEn": "", "price": 300000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 13 },
+        { "id": "fb-14", "nameAr": "جيش", "nameEn": "Jeesh", "descriptionAr": "", "descriptionEn": "", "price": 300000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 14 },
+        { "id": "fb-15", "nameAr": "قورمه جبن", "nameEn": "Qorma Cheese", "descriptionAr": "", "descriptionEn": "", "price": 300000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 15 },
+        { "id": "fb-16", "nameAr": "قورمه مع بيض", "nameEn": "Qorma with Egg", "descriptionAr": "", "descriptionEn": "", "price": 350000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 16 },
+        { "id": "fb-17", "nameAr": "تشكن مشروم", "nameEn": "Chicken Mushroom", "descriptionAr": "", "descriptionEn": "", "price": 350000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 17 },
+        { "id": "fb-18", "nameAr": "فلافيا", "nameEn": "Flavia", "descriptionAr": "", "descriptionEn": "", "price": 350000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 18 },
+        { "id": "fb-19", "nameAr": "فرديس", "nameEn": "Fardees", "descriptionAr": "", "descriptionEn": "", "price": 400000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 19 }
+      ]
+    },
+    {
+      "id": "arabic-bread",
+      "slug": "arabic-bread",
+      "nameAr": "خبز عربي",
+      "nameEn": "Arabic Bread",
+      "sortOrder": 2,
+      "isActive": true,
+      "menuItems": [
+        { "id": "ab-1", "nameAr": "طاووق", "nameEn": "Tawook", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 1 },
+        { "id": "ab-2", "nameAr": "مقانق", "nameEn": "Sausage", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 2 },
+        { "id": "ab-3", "nameAr": "سجق", "nameEn": "Sujuk", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 3 },
+        { "id": "ab-4", "nameAr": "بطاطا", "nameEn": "Potato", "descriptionAr": "", "descriptionEn": "", "price": 150000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 4 },
+        { "id": "ab-5", "nameAr": "شورما و صوص", "nameEn": "Shawarma with Sauce", "descriptionAr": "", "descriptionEn": "", "price": 350000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 5 },
+        { "id": "ab-6", "nameAr": "شورما دجاج", "nameEn": "Chicken Shawarma", "descriptionAr": "", "descriptionEn": "", "price": 280000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 6 },
+        { "id": "ab-7", "nameAr": "كفتة", "nameEn": "Kofta", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 7 }
+      ]
+    },
+    {
+      "id": "meals",
+      "slug": "meals",
+      "nameAr": "وجبات",
+      "nameEn": "Meals",
+      "sortOrder": 3,
+      "isActive": true,
+      "menuItems": [
+        { "id": "meal-1", "nameAr": "طاووق", "nameEn": "Tawook Meal", "descriptionAr": "", "descriptionEn": "", "price": 550000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 1 },
+        { "id": "meal-2", "nameAr": "فاهيتا", "nameEn": "Fajita Meal", "descriptionAr": "", "descriptionEn": "", "price": 550000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 2 },
+        { "id": "meal-3", "nameAr": "تشكن ساب", "nameEn": "Chicken Sub Meal", "descriptionAr": "", "descriptionEn": "", "price": 550000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 3 },
+        { "id": "meal-4", "nameAr": "اسكالوب", "nameEn": "Escalope Meal", "descriptionAr": "", "descriptionEn": "", "price": 550000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 4 },
+        { "id": "meal-5", "nameAr": "كريسبي", "nameEn": "Crispy Meal", "descriptionAr": "", "descriptionEn": "", "price": 550000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 5 }
+      ]
+    },
+    {
+      "id": "burger",
+      "slug": "burger",
+      "nameAr": "برغر",
+      "nameEn": "Burger",
+      "sortOrder": 4,
+      "isActive": true,
+      "menuItems": [
+        { "id": "b-1", "nameAr": "برغر لحمة", "nameEn": "Beef Burger", "descriptionAr": "", "descriptionEn": "", "price": 280000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 1 },
+        { "id": "b-2", "nameAr": "برغر دجاج", "nameEn": "Chicken Burger", "descriptionAr": "", "descriptionEn": "", "price": 280000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 2 },
+        { "id": "b-3", "nameAr": "باربكيو برغر", "nameEn": "Barbecue Burger", "descriptionAr": "", "descriptionEn": "", "price": 280000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 3 },
+        { "id": "b-4", "nameAr": "ماشروم برغر", "nameEn": "Mushroom Burger", "descriptionAr": "", "descriptionEn": "", "price": 300000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 4 },
+        { "id": "b-5", "nameAr": "مكسيكان برغر", "nameEn": "Mexican Burger", "descriptionAr": "", "descriptionEn": "", "price": 300000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 5 },
+        { "id": "b-6", "nameAr": "زنجر برغر", "nameEn": "Zinger Burger", "descriptionAr": "", "descriptionEn": "", "price": 300000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 6 },
+        { "id": "b-7", "nameAr": "special برغر", "nameEn": "Special Burger", "descriptionAr": "", "descriptionEn": "", "price": 300000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 7 }
+      ]
+    },
+    {
+      "id": "fries",
+      "slug": "fries",
+      "nameAr": "بطاطا",
+      "nameEn": "Fries",
+      "sortOrder": 5,
+      "isActive": true,
+      "menuItems": [
+        { "id": "fr-1", "nameAr": "علبة بطاطا صغيرة", "nameEn": "Small Fries", "descriptionAr": "", "descriptionEn": "", "price": 150000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 1 },
+        { "id": "fr-2", "nameAr": "علبة بطاطا وسط", "nameEn": "Medium Fries", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 2 },
+        { "id": "fr-3", "nameAr": "علبة بطاطا كبيرة", "nameEn": "Large Fries", "descriptionAr": "", "descriptionEn": "", "price": 350000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 3 },
+        { "id": "fr-4", "nameAr": "بطاطا مع تشدر صغيرة", "nameEn": "Fries with Cheddar (Small)", "descriptionAr": "", "descriptionEn": "", "price": 250000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 4 },
+        { "id": "fr-5", "nameAr": "بطاطا مع تشدر كبيرة", "nameEn": "Fries with Cheddar (Large)", "descriptionAr": "", "descriptionEn": "", "price": 550000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 5 },
+        { "id": "fr-6", "nameAr": "بولنيس", "nameEn": "Bolognese", "descriptionAr": "", "descriptionEn": "", "price": 600000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 6 }
+      ]
+    },
+    {
+      "id": "toast",
+      "slug": "toast",
+      "nameAr": "خبز تويستر",
+      "nameEn": "Twister Bread",
+      "sortOrder": 6,
+      "isActive": true,
+      "menuItems": [
+        { "id": "t-1", "nameAr": "توستر", "nameEn": "Twister", "descriptionAr": "", "descriptionEn": "", "price": 350000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 1 },
+        { "id": "t-2", "nameAr": "توستر راب", "nameEn": "Twister Wrap", "descriptionAr": "", "descriptionEn": "", "price": 350000, "imageUrl": "", "isAvailable": true, "isFeatured": false, "sortOrder": 2 }
+      ]
+    }
+  ]
+}

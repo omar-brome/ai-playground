@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Category {
+  id        String     @id @default(cuid())
+  slug      String     @unique
+  nameAr    String
+  nameEn    String
+  sortOrder Int        @default(0)
+  isActive  Boolean    @default(true)
+  menuItems MenuItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model MenuItem {
+  id            String   @id @default(cuid())
+  categoryId    String
+  nameAr        String
+  nameEn        String
+  descriptionAr String?
+  descriptionEn String?
+  price         Decimal  @db.Decimal(10, 2)
+  currency      String   @default("LBP")
+  imageUrl      String?
+  isAvailable   Boolean  @default(true)
+  isFeatured    Boolean  @default(false)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+model SiteSetting {
+  id            String   @id @default(cuid())
+  phone         String?
+  welcomeTextAr String?
+  welcomeTextEn String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
