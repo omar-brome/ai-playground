@@ -1,0 +1,110 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-family-display: 'Playfair Display', ui-serif, Georgia, serif;
+  --font-family-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --color-charcoal: #1a1714;
+  --color-cream: #f5efe6;
+  --color-gold: #c9a96e;
+  --color-cream-muted: #d4c4b0;
+  --color-charcoal-deep: #0f0d0b;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply m-0 min-h-svh bg-charcoal font-sans text-cream antialiased;
+  }
+
+  #root {
+    @apply relative min-h-svh;
+  }
+
+  ::selection {
+    @apply bg-gold/35 text-charcoal;
+  }
+}
+
+/* Wax grain overlay */
+.grain-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Candlelight ambient glow behind content */
+.ambient-glow {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(
+      ellipse 80% 50% at 50% -10%,
+      rgba(201, 169, 110, 0.18),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 60% 45% at 100% 30%,
+      rgba(201, 169, 110, 0.08),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 0% 70%,
+      rgba(201, 169, 110, 0.06),
+      transparent 45%
+    );
+}
+
+@keyframes candle-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-candle-in {
+  animation: candle-fade-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-transition {
+  animation: page-fade-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.card-glow {
+  box-shadow:
+    0 0 0 1px rgba(201, 169, 110, 0.12),
+    0 20px 50px -20px rgba(0, 0, 0, 0.55),
+    0 0 60px -30px rgba(201, 169, 110, 0.25);
+}
+
+.btn-glow {
+  box-shadow:
+    0 0 28px -6px rgba(201, 169, 110, 0.55),
+    0 8px 24px -12px rgba(0, 0, 0, 0.6);
+}
