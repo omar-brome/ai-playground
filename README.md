@@ -54,12 +54,29 @@ npm run dev
 
 ---
 
+### [`football_hajez_app`](./football_hajez_app)
+**Malaab (ملاعب)** — mobile-first **5v5 mini-football** booking app for Lebanon: **Player** mode (book team + role on matches, Whish-style demo payment, Beirut-time display, venue maps) and **Pitch Host** mode (book a 90-minute field slot at `:00` / `:30`, creates joinable matches). **No backend** — `localStorage` only.
+
+**Stack:** React, Vite, TypeScript, Tailwind CSS v4, React Router v6
+
+**Quick start:**
+```bash
+cd football_hajez_app
+npm install
+npm run dev
+```
+
+Full feature list, storage keys, and architecture: [`football_hajez_app/README.md`](./football_hajez_app/README.md).
+
+---
+
 ### `cursor_work` Projects
 A collection of various apps and games built with Cursor AI assistance. These live at the repository root in separate folders, including:
 
 - 🐱 **Flappy Cat** (`./flappy_cat`) — Phaser 3 arcade game
 - 🍔 **Snack Nasab** (`./snack_nasab`) — bilingual fast-food menu + admin
 - 💳 **Lumière / PayPal + DHL** (`./paypal_dhl`) — storefront + sandbox checkout + tracking
+- ⚽ **Malaab / football_hajez_app** (`./football_hajez_app`) — 5v5 match booking + pitch host scheduler (localStorage)
 - 📘 Facebook-style social media app (`./facebook`)
 - ♟️ Chess game (`./chess`)
 - ❌ Tic Tac Toe game (`./games`)
@@ -88,7 +105,7 @@ cp .env.example .env
 node index.js
 ```
 
-### Flappy Cat, Snack Nasab, PayPal + DHL
+### Flappy Cat, Snack Nasab, PayPal + DHL, Malaab
 
 Use the **Quick start** blocks under each project above, or open that folder’s `README.md` for full setup (especially Snack Nasab’s database and auth).
 
