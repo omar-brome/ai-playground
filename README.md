@@ -55,9 +55,18 @@ npm run dev
 ---
 
 ### [`football_hajez_app`](./football_hajez_app)
-**Malaab (ملاعب)** — mobile-first **5v5 mini-football** booking app for Lebanon: **Player** mode (book team + role on matches, Whish-style demo payment, Beirut-time display, venue maps) and **Pitch Host** mode (book a 90-minute field slot at `:00` / `:30`, creates joinable matches). **No backend** — `localStorage` only.
+**Malaab (ملاعب)** — mobile-first **5v5 mini-football** booking app for Lebanon.
 
-**Stack:** React, Vite, TypeScript, Tailwind CSS v4, React Router v6
+- **Player**: pick team + role, deep-link invites (`/match/:id?team=&role=`), role waitlist when full, Whish payment proof flow, host approval lifecycle.
+- **Pitch Host**: schedule 90-minute sessions (`:00` / `:30`), manage hosted matches, verify/reject payment proofs.
+- **Preview sharing**: OG/Twitter tags in-app, optional Supabase Edge function for bot unfurls.
+- **Ops**: unit tests (Vitest), E2E smoke (Playwright), optional analytics events, optional Sentry monitoring.
+
+Supports dual persistence:
+- local demo mode (`localStorage`)
+- Supabase backend mode (Postgres + Auth + RLS + RPC + Storage)
+
+**Stack:** React, Vite, TypeScript, Tailwind CSS v4, React Router v6, Supabase
 
 **Quick start:**
 ```bash
@@ -66,7 +75,18 @@ npm install
 npm run dev
 ```
 
-Full feature list, storage keys, and architecture: [`football_hajez_app/README.md`](./football_hajez_app/README.md).
+**Quality commands:**
+```bash
+npm run test
+npm run test:e2e:install
+npm run test:e2e
+npm run lint
+npm run build
+```
+
+Full setup and architecture docs:
+- [`football_hajez_app/README.md`](./football_hajez_app/README.md)
+- [`football_hajez_app/docs/ops-env.md`](./football_hajez_app/docs/ops-env.md)
 
 ---
 
