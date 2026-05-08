@@ -1,104 +1,116 @@
-import { useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { venues } from '../data/mockData'
 import { useBooking } from '../context/BookingContext'
 import { useRole } from '../context/RoleContext'
+import { isSupabaseBackend } from '../config/env'
+import { useAuth } from '../context/AuthContext'
+import { useLocale } from '../context/LocaleContext'
+import { beirutWallToUtcIso } from '../utils/beirutTime'
 import { VenueCard } from '../components/VenueCard'
 import { getHostReservations, setHostReservations } from '../utils/localStorage'
 import type { HostReservation } from '../types/domain'
+import { HostDateTimePicker } from '../components/HostDateTimePicker'
+import { MatchFiltersBar } from '../components/MatchFiltersBar'
+import { SkeletonCard } from '../components/ui/Skeleton'
+import { usePersistedMatchFilters } from '../hooks/useMatchFilters'
+import {
+  HOST_MATCH_DURATION_MS,
+  hostReservationConflicts,
+  hostSlotConflictsWithWindows,
+  isHalfHourWallTime,
+  matchesToVenueWindows,
+} from '../utils/hostScheduling'
+import { toast } from '../utils/toast'
 
 export default function Home() {
-  const { matches, createHostMatch } = useBooking()
+  const { matches, createHostMatch, matchesLoading } = useBooking()
   const { role } = useRole()
+  const { user } = useAuth()
+  const { t } = useLocale()
+  const [searchParams] = useSearchParams()
+  const { filters, updateFilters } = usePersistedMatchFilters()
   const [venueSelection, setVenueSelection] = useState(venues[0]?.id ?? '4b')
   const [startDate, setStartDate] = useState('')
   const [startTime, setStartTime] = useState('')
   const [hostError, setHostError] = useState('')
   const [hostReservations, setHostReservationsState] = useState<HostReservation[]>(() => getHostReservations())
-  const dateInputRef = useRef<HTMLInputElement | null>(null)
-  const timeInputRef = useRef<HTMLInputElement | null>(null)
 
-  const openNativePicker = (ref: { current: HTMLInputElement | null }) => {
-    const input = ref.current
-    if (!input) return
-    if (typeof input.showPicker === 'function') {
-      input.showPicker()
-      return
+  useEffect(() => {
+    const vid = searchParams.get('venueId')
+    if (vid && venues.some((v) => v.id === vid)) {
+      queueMicrotask(() => setVenueSelection(vid))
     }
-    input.focus()
-    input.click()
-  }
+  }, [searchParams])
 
-  const matchIntervals = useMemo(
-    () =>
-      matches.map((match) => {
-        const [y, m, d] = match.date.split('-').map(Number)
-        const [hh, mm] = match.time.split(':').map(Number)
-        const startMs = new Date(y, m - 1, d, hh, mm).getTime()
-        return { venueId: match.venueId, startMs, endMs: startMs + 90 * 60 * 1000 }
-      }),
-    [matches],
-  )
+  const matchWindows = useMemo(() => matchesToVenueWindows(matches, HOST_MATCH_DURATION_MS), [matches])
 
   const createHostReservation = () => {
     setHostError('')
+    if (isSupabaseBackend() && !user) {
+      setHostError(t('home.hostErrorSignIn'))
+      return
+    }
     if (!startDate || !startTime) {
-      setHostError('Please pick date and time.')
+      setHostError(t('home.hostErrorDateTime'))
       return
     }
-    const startMs = new Date(`${startDate}T${startTime}`).getTime()
+    const startsAtIso = beirutWallToUtcIso(startDate, startTime)
+    const startMs = new Date(startsAtIso).getTime()
     if (Number.isNaN(startMs)) {
-      setHostError('Invalid date/time.')
+      setHostError(t('home.hostErrorInvalid'))
       return
     }
-    const minute = new Date(startMs).getMinutes()
-    if (minute !== 0 && minute !== 30) {
-      setHostError('Only :00 and :30 start times are allowed.')
+    if (!isHalfHourWallTime(startTime)) {
+      setHostError(t('home.hostErrorHalfHour'))
       return
     }
-    const endMs = startMs + 90 * 60 * 1000
+    const endMs = startMs + HOST_MATCH_DURATION_MS
 
-    const reservationOverlap = hostReservations.some((item) => {
-      if (item.venueId !== venueSelection) return false
-      const existingStart = new Date(item.startAt).getTime()
-      const existingEnd = new Date(item.endAt).getTime()
-      return startMs < existingEnd && existingStart < endMs
-    })
-
-    const matchOverlap = matchIntervals.some(
-      (item) => item.venueId === venueSelection && startMs < item.endMs && item.startMs < endMs,
-    )
+    const reservationOverlap = hostReservationConflicts(venueSelection, startMs, endMs, hostReservations)
+    const matchOverlap = hostSlotConflictsWithWindows(venueSelection, startMs, endMs, matchWindows)
 
     if (reservationOverlap || matchOverlap) {
-      setHostError('This venue already has a match in that time window.')
+      setHostError(t('home.hostErrorOverlap'))
       return
     }
 
-    try {
-      createHostMatch({ venueId: venueSelection, startMs })
-    } catch (error) {
-      setHostError(error instanceof Error ? error.message : 'Could not create hosted match.')
-      return
-    }
+    void (async () => {
+      try {
+        await createHostMatch({
+          venueId: venueSelection,
+          startMs,
+          startsAtIso,
+          startDate,
+          startTime,
+        })
+        toast.success(t('home.toastHostCreated'))
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : t('home.hostErrorGeneric')
+        setHostError(msg)
+        toast.error(msg)
+        return
+      }
 
-    const reservation: HostReservation = {
-      id: `HR-${Date.now()}`,
-      venueId: venueSelection,
-      startAt: new Date(startMs).toISOString(),
-      endAt: new Date(endMs).toISOString(),
-      createdAt: new Date().toISOString(),
-    }
-    const next = [reservation, ...hostReservations]
-    setHostReservationsState(next)
-    setHostReservations(next)
-    setStartDate('')
-    setStartTime('')
+      const reservation: HostReservation = {
+        id: `HR-${Date.now()}`,
+        venueId: venueSelection,
+        startAt: new Date(startMs).toISOString(),
+        endAt: new Date(endMs).toISOString(),
+        createdAt: new Date().toISOString(),
+      }
+      const next = [reservation, ...hostReservations]
+      setHostReservationsState(next)
+      setHostReservations(next)
+      setStartDate('')
+      setStartTime('')
+    })()
   }
 
   return (
     <div className="mx-auto max-w-md px-4 py-6 pb-24">
-      <p className="text-3xl font-black">Malaab</p>
-      <p className="text-sm text-white/70">{role === 'pitch_host' ? 'Your pitch. Your squad.' : 'Book your spot. Own the pitch.'}</p>
+      <p className="text-3xl font-black">{t('home.title')}</p>
+      <p className="text-sm text-white/70">{role === 'pitch_host' ? t('home.taglineHost') : t('home.taglinePlayer')}</p>
       <img
         src={role === 'pitch_host' ? '/images/home-host-hero.png' : '/images/home-hero.png'}
         alt={role === 'pitch_host' ? 'Pitch host coach' : 'Football hero'}
@@ -106,16 +118,16 @@ export default function Home() {
       />
       <div className="mt-3 flex items-center justify-between rounded-xl border border-white/15 bg-white/5 px-3 py-2">
         <p className="text-xs text-white/80">
-          Current mode: <span className="font-bold">{role === 'pitch_host' ? 'Pitch Host' : 'Player'}</span>
+          {t('home.mode')}: <span className="font-bold">{role === 'pitch_host' ? t('header.roleHost') : t('header.rolePlayer')}</span>
         </p>
         <Link to="/welcome" className="rounded-lg border border-white/20 px-2 py-1 text-xs font-bold">
-          Change
+          {t('home.change')}
         </Link>
       </div>
       {role === 'pitch_host' ? (
         <>
           <div className="mt-4 rounded-2xl border border-white/15 bg-white/5 p-4">
-            <p className="font-bold">Book field slot (1h 30m)</p>
+            <p className="font-bold">{t('home.hostPanelTitle')}</p>
             <div className="mt-3 space-y-2">
               <select
                 value={venueSelection}
@@ -128,58 +140,30 @@ export default function Home() {
                   </option>
                 ))}
               </select>
-              <div className="flex items-center gap-2">
-                <input
-                  ref={dateInputRef}
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full rounded-xl border border-white/20 bg-bg-navy p-2 text-sm"
-                />
-                <button
-                  type="button"
-                  onClick={() => openNativePicker(dateInputRef)}
-                  className="h-10 w-10 rounded-xl border border-white/25 bg-white/5 text-lg"
-                  aria-label="Open date picker"
-                  title="Open date picker"
-                >
-                  📅
-                </button>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  ref={timeInputRef}
-                  type="time"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  step={1800}
-                  className="w-full rounded-xl border border-white/20 bg-bg-navy p-2 text-sm"
-                />
-                <button
-                  type="button"
-                  onClick={() => openNativePicker(timeInputRef)}
-                  className="h-10 w-10 rounded-xl border border-white/25 bg-white/5 text-lg"
-                  aria-label="Open time picker"
-                  title="Open time picker"
-                >
-                  🕒
-                </button>
-              </div>
+              <HostDateTimePicker
+                date={startDate}
+                time={startTime}
+                timeLabel={t('picker.timeLabel')}
+                onChange={({ date, time: nextTime }) => {
+                  setStartDate(date)
+                  setStartTime(nextTime)
+                }}
+              />
               <button
                 type="button"
                 onClick={createHostReservation}
                 className="w-full rounded-xl bg-accent-green p-2 text-sm font-bold text-black"
               >
-                Book Venue for 1h30
+                {t('home.hostSubmit')}
               </button>
               {hostError ? <p className="text-xs text-red-300">{hostError}</p> : null}
             </div>
           </div>
           <div className="mt-3 rounded-2xl border border-white/15 bg-white/5 p-4">
-            <p className="font-bold">Hosted sessions</p>
+            <p className="font-bold">{t('home.hostedSessions')}</p>
             <div className="mt-2 space-y-2">
               {hostReservations.length === 0 ? (
-                <p className="text-sm text-white/70">No hosted sessions yet.</p>
+                <p className="text-sm text-white/70">{t('home.noHostedSessions')}</p>
               ) : (
                 hostReservations.map((item) => {
                   const venue = venues.find((v) => v.id === item.venueId)
@@ -202,14 +186,25 @@ export default function Home() {
           </div>
         </>
       ) : null}
+      <div className="mt-5">
+        <MatchFiltersBar filters={filters} onChange={updateFilters} />
+      </div>
       <div className="mt-5 space-y-3">
-        {venues.map((venue) => (
-          <VenueCard
-            key={venue.id}
-            venue={venue}
-            upcomingMatches={matches.filter((m) => m.venueId === venue.id).length}
-          />
-        ))}
+        {matchesLoading ? (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        ) : (
+          venues.map((venue) => (
+            <VenueCard
+              key={venue.id}
+              venue={venue}
+              upcomingMatches={matches.filter((m) => m.venueId === venue.id).length}
+            />
+          ))
+        )}
       </div>
     </div>
   )

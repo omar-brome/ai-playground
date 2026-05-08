@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
 import type { Match } from '../types/domain'
 import { formatDateTime, formatLbp } from '../utils/format'
+import { SessionStatusBadge } from './SessionStatusBadge'
 
-export function countSpotsLeft(match: Match) {
+function countSpotsLeft(match: Match) {
   return Object.values(match.spots).reduce((sum, s) => sum + (s.total - s.booked.length), 0)
 }
 
@@ -12,7 +13,10 @@ export function MatchCard({ match }: { match: Match }) {
 
   return (
     <div className="card-glow rounded-2xl border border-white/10 bg-white/5 p-4">
-      <p className="text-sm text-white/80">{formatDateTime(match.date, match.time)}</p>
+      <div className="flex items-start justify-between gap-2">
+        <p className="text-sm text-white/80">{formatDateTime(match.date, match.time)}</p>
+        {match.sessionStatus ? <SessionStatusBadge status={match.sessionStatus} /> : null}
+      </div>
       <p className="mt-1 text-lg font-bold">{match.type}</p>
       <p className="text-sm text-accent-green">{formatLbp(match.price)} / player</p>
       <p className="mt-2 text-sm">{left} players left</p>

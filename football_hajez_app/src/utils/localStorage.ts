@@ -1,5 +1,15 @@
+// When `VITE_USE_SUPABASE=true`, matches/bookings are authoritative on the server; these keys are
+// only used for the local demo and for non-authoritative prefs (role, host reservations, timers).
 import { initialMatches } from '../data/mockData'
-import type { AppRole, Booking, HostReservation, Match } from '../types/domain'
+import type {
+  AppRole,
+  Booking,
+  HostReservation,
+  Match,
+  MatchWaitlistEntry,
+  MiniPosition,
+  TeamSide,
+} from '../types/domain'
 
 export const LS_KEYS = {
   matches: 'malaab_matches',
@@ -7,7 +17,18 @@ export const LS_KEYS = {
   timers: 'malaab_timers',
   role: 'malaab_app_role',
   hostReservations: 'malaab_host_reservations',
+  waitlist: 'malaab_waitlist',
+  waitlistDevice: 'malaab_waitlist_device',
 } as const
+
+export type LocalWaitlistEntry = {
+  id: string
+  matchId: string
+  team: TeamSide
+  position: MiniPosition
+  joinedAt: string
+  deviceId: string
+}
 
 type TimerMap = Record<string, number>
 
@@ -60,7 +81,7 @@ export function getRole() {
 }
 
 export function setRole(role: AppRole) {
-  localStorage.setItem(LS_KEYS.role, role)
+  writeJson(LS_KEYS.role, role)
 }
 
 export function getHostReservations() {
@@ -69,4 +90,37 @@ export function getHostReservations() {
 
 export function setHostReservations(items: HostReservation[]) {
   writeJson(LS_KEYS.hostReservations, items)
+}
+
+export function getWaitlistDeviceId(): string {
+  let id = readJson<string | null>(LS_KEYS.waitlistDevice, null)
+  if (!id) {
+    id = crypto.randomUUID()
+    writeJson(LS_KEYS.waitlistDevice, id)
+  }
+  return id
+}
+
+export function getLocalWaitlist(): LocalWaitlistEntry[] {
+  return readJson<LocalWaitlistEntry[]>(LS_KEYS.waitlist, [])
+}
+
+export function setLocalWaitlist(entries: LocalWaitlistEntry[]) {
+  writeJson(LS_KEYS.waitlist, entries)
+}
+
+/** Queue positions for the current device on one match. */
+export function computeLocalWaitlistForMatch(
+  entries: LocalWaitlistEntry[],
+  matchId: string,
+  deviceId: string,
+): MatchWaitlistEntry[] {
+  const mine = entries.filter((e) => e.matchId === matchId && e.deviceId === deviceId)
+  return mine.map((m) => {
+    const sameSpot = entries
+      .filter((e) => e.matchId === matchId && e.team === m.team && e.position === m.position)
+      .sort((a, b) => a.joinedAt.localeCompare(b.joinedAt))
+    const queuePosition = sameSpot.findIndex((e) => e.id === m.id) + 1
+    return { team: m.team, position: m.position, queuePosition }
+  })
 }

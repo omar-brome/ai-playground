@@ -9,6 +9,10 @@ type Props = {
   selectedRole: MiniPosition | null
   onSelectTeam: (team: string) => void
   onSelectTeamRole: (team: TeamSide, role: MiniPosition) => void
+  /** When true, field is view-only (e.g. cancelled / finished session). */
+  readOnly?: boolean
+  /** If set, tapping a full role invokes this instead of only showing a toast. */
+  onFullRolePress?: (team: TeamSide, role: MiniPosition) => void
 }
 
 const labels: Record<string, string> = {
@@ -40,7 +44,15 @@ function roleShort(role: MiniPosition) {
   return 'ATT'
 }
 
-export function SoccerField({ match, selectedTeam, selectedRole, onSelectTeam, onSelectTeamRole }: Props) {
+export function SoccerField({
+  match,
+  selectedTeam,
+  selectedRole,
+  onSelectTeam,
+  onSelectTeamRole,
+  readOnly = false,
+  onFullRolePress,
+}: Props) {
   const layout = layoutMini
   const [toastMessage, setToastMessage] = useState('')
 
@@ -79,14 +91,21 @@ export function SoccerField({ match, selectedTeam, selectedRole, onSelectTeam, o
                   showToast(details)
                 }}
                 onClick={() => {
+                  if (readOnly) return
                   if (isFull) {
+                    if (onFullRolePress) {
+                      onFullRolePress(team, role)
+                      return
+                    }
                     const details = rolePlayers.map((p) => `${p.playerName} (${p.phone})`).join(' • ')
                     showToast(details || 'Role is fully booked.')
                     return
                   }
                   onSelectTeamRole(team, role)
                 }}
-                style={{ cursor: isFull ? 'not-allowed' : 'pointer' }}
+                style={{
+                  cursor: readOnly ? 'default' : isFull && !onFullRolePress ? 'not-allowed' : 'pointer',
+                }}
               >
                 <circle
                   cx={x}
@@ -121,7 +140,9 @@ export function SoccerField({ match, selectedTeam, selectedRole, onSelectTeam, o
               label={labels[position] ?? position}
               state={state}
               selected={selectedTeam === position}
-              onSelect={() => onSelectTeam(position)}
+              onSelect={() => {
+                if (!readOnly) onSelectTeam(position)
+              }}
               tooltip={tooltip}
               fillColor={state === 'booked' ? '#6b7280' : position === 'team1' ? '#2563eb' : '#ef4444'}
             />

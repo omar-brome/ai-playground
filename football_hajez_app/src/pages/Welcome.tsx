@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useRole } from '../context/RoleContext'
 import { RolePicker } from '../components/RolePicker'
+import { AuthPanel } from '../components/AuthPanel'
 
 export default function Welcome() {
   const { setRole } = useRole()
@@ -20,6 +21,7 @@ export default function Welcome() {
         alt="Football on grass"
         className="mt-4 h-44 w-full rounded-2xl object-cover"
       />
+      <AuthPanel />
       <RolePicker onPick={chooseRole} />
     </div>
   )

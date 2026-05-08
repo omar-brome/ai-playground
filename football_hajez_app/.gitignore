@@ -8,6 +8,9 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.pw-browsers
+playwright-report
+test-results
 dist
 dist-ssr
 *.local

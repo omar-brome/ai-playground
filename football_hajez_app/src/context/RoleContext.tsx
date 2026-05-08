@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components -- co-located hook + provider */
 import { createContext, useContext, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { AppRole } from '../types/domain'
