@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (GameStateManager.Instance != null && GameStateManager.Instance.IsLevelComplete)
+            return;
         if (GameStateManager.Instance != null && GameStateManager.Instance.IsPaused)
             return;
 

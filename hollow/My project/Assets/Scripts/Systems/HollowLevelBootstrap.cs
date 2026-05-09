@@ -127,9 +127,13 @@ public class HollowLevelBootstrap : MonoBehaviour
         CreateHidingLocker("HidingSpot_Locker_C", "Locker_Center", new Vector3(0f, 0f, southZ));
         CreateHidingLocker("HidingSpot_Locker_E", "Locker_East", new Vector3(9f, 0f, southZ));
 
+        CreateExitGate(root.transform);
+
         var systems = new GameObject("Systems");
         systems.AddComponent<NoiseSystem>();
         systems.AddComponent<GameStateManager>();
+        var levelObj = systems.AddComponent<HollowLevelObjective>();
+        levelObj.surviveWinSeconds = 150f;
         systems.AddComponent<PatternTracker>();
         var fmodGo = new GameObject("FMODManager");
         fmodGo.transform.SetParent(systems.transform);
@@ -153,6 +157,8 @@ public class HollowLevelBootstrap : MonoBehaviour
         camGo.tag = "MainCamera";
         camGo.AddComponent<Camera>();
         camGo.AddComponent<AudioListener>();
+        camGo.AddComponent<AudioLowPassFilter>();
+        camGo.AddComponent<HidingScreenFeedback>();
         camGo.AddComponent<HollowGameplayAudio>();
 
         var pc = player.AddComponent<PlayerController>();
@@ -208,6 +214,9 @@ public class HollowLevelBootstrap : MonoBehaviour
         ml.brain = brain;
         ml.enabled = false;
 
+        var telegraph = monster.AddComponent<MonsterTelegraph>();
+        telegraph.brain = brain;
+
         RenderSettings.fog = true;
         RenderSettings.fogMode = FogMode.ExponentialSquared;
         RenderSettings.fogColor = new Color(0.02f, 0.02f, 0.04f);
@@ -216,6 +225,47 @@ public class HollowLevelBootstrap : MonoBehaviour
         var uiRoot = new GameObject("UI_Runtime");
         uiRoot.AddComponent<HUDController>();
         uiRoot.AddComponent<SanityEffect>();
+    }
+
+    static void CreateExitGate(Transform parent)
+    {
+        var exit = new GameObject("Exit_Gate");
+        exit.transform.SetParent(parent);
+        exit.transform.position = new Vector3(0f, 0f, 15.5f);
+
+        var trig = exit.AddComponent<BoxCollider>();
+        trig.isTrigger = true;
+        trig.center = new Vector3(0f, 2f, 0f);
+        trig.size = new Vector3(7f, 4f, 2.5f);
+        exit.AddComponent<ExitTrigger>();
+
+        foreach (var sx in new[] { -2.35f, 2.35f })
+        {
+            var post = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            post.name = "ExitPost";
+            post.transform.SetParent(exit.transform);
+            post.transform.localPosition = new Vector3(sx, 1.5f, 0f);
+            post.transform.localScale = new Vector3(0.55f, 3f, 0.55f);
+            Destroy(post.GetComponent<Collider>());
+            ApplyExitCyan(post.GetComponent<Renderer>(), new Color(0.12f, 0.35f, 0.42f));
+        }
+
+        var beam = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        beam.name = "ExitBeam";
+        beam.transform.SetParent(exit.transform);
+        beam.transform.localPosition = new Vector3(0f, 3f, 0f);
+        beam.transform.localScale = new Vector3(5.2f, 0.4f, 0.4f);
+        Destroy(beam.GetComponent<Collider>());
+        ApplyExitCyan(beam.GetComponent<Renderer>(), new Color(0.25f, 0.9f, 1f));
+    }
+
+    static void ApplyExitCyan(Renderer r, Color c)
+    {
+        if (r == null)
+            return;
+        var m = r.material;
+        if (m.HasProperty("_BaseColor"))
+            m.SetColor("_BaseColor", c);
     }
 
     static void ApplyConcreteLook(Renderer r)

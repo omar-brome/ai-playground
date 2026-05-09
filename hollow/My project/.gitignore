@@ -20,3 +20,5 @@
 *.opendb
 *.VC.db
 .DS_Store
+# Native FMOD macOS plugin bundles (binary); use gitattributes for line-ending rules, not gitignore.
+Assets/Plugins/FMOD/**/*.bundle

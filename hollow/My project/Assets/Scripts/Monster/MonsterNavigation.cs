@@ -14,9 +14,9 @@ public class MonsterNavigation : MonoBehaviour
     public Transform[] patrolPoints;
 
     [Header("Speeds")]
-    public float creepSpeed = 1.2f;
-    public float walkSpeed = 2.5f;
-    public float runSpeed = 5.5f;
+    public float creepSpeed = 1.05f;
+    public float walkSpeed = 2.15f;
+    public float runSpeed = 4.45f;
     [Tooltip("Max yaw deg/s when updateRotation is off — lets the player break line-of-sight by circling.")]
     public float maxTurnDegreesPerSecond = 95f;
 
@@ -84,7 +84,7 @@ public class MonsterNavigation : MonoBehaviour
         SetSpeed(MonsterSpeed.Running);
         if (agent != null && agent.isOnNavMesh)
         {
-            agent.stoppingDistance = 1.35f;
+            agent.stoppingDistance = 1.05f;
             agent.SetDestination(playerPos);
         }
     }

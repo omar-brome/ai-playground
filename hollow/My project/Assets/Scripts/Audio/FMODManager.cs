@@ -1,6 +1,7 @@
 using UnityEngine;
 
 #if HOLLOW_FMOD
+using System;
 using FMOD.Studio;
 using FMODUnity;
 
@@ -16,6 +17,7 @@ public class FMODManager : MonoBehaviour
 
     EventInstance _ambienceInstance;
     EventInstance _heartbeatInstance;
+    bool _loopingEventsReady;
 
     void Awake()
     {
@@ -30,15 +32,60 @@ public class FMODManager : MonoBehaviour
 
     void Start()
     {
-        _ambienceInstance = RuntimeManager.CreateInstance(ambienceEvent);
-        _ambienceInstance.start();
+        if (ambienceEvent.IsNull || heartbeatEvent.IsNull)
+        {
+            Debug.LogWarning(
+                "[Hollow] FMODManager: assign ambienceEvent and heartbeatEvent in the Inspector (and export banks), or undefine HOLLOW_FMOD. Unity AudioSources still need an AudioListener on the camera.");
+            return;
+        }
 
-        _heartbeatInstance = RuntimeManager.CreateInstance(heartbeatEvent);
+        try
+        {
+            _ambienceInstance = RuntimeManager.CreateInstance(ambienceEvent);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"[Hollow] FMOD ambience CreateInstance failed: {ex.Message}");
+            return;
+        }
+
+        try
+        {
+            _heartbeatInstance = RuntimeManager.CreateInstance(heartbeatEvent);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"[Hollow] FMOD heartbeat CreateInstance failed: {ex.Message}");
+            ReleaseIfValid(ref _ambienceInstance);
+            return;
+        }
+
+        if (!_ambienceInstance.isValid() || !_heartbeatInstance.isValid())
+        {
+            Debug.LogWarning("[Hollow] FMODManager: event instances are invalid (missing bank or renamed event?).");
+            ReleaseIfValid(ref _ambienceInstance);
+            ReleaseIfValid(ref _heartbeatInstance);
+            return;
+        }
+
+        _ambienceInstance.start();
         _heartbeatInstance.start();
+        _loopingEventsReady = true;
+    }
+
+    static void ReleaseIfValid(ref EventInstance instance)
+    {
+        if (!instance.isValid())
+            return;
+        instance.stop(STOP_MODE.IMMEDIATE);
+        instance.release();
     }
 
     public void OnMonsterStateChange(MonsterState state)
     {
+        if (!_loopingEventsReady)
+            return;
+
         var tension = state switch
         {
             MonsterState.Patrolling => 0.1f,
@@ -52,32 +99,35 @@ public class FMODManager : MonoBehaviour
 
         _ambienceInstance.setParameterByName("tension", tension);
 
-        if (state == MonsterState.Hunting)
+        if (state == MonsterState.Hunting && !monsterStingerEvent.IsNull)
             RuntimeManager.PlayOneShot(monsterStingerEvent);
     }
 
     public void SetMonsterDistance(float normalizedDist)
     {
+        if (!_loopingEventsReady)
+            return;
         _ambienceInstance.setParameterByName("monsterDist", normalizedDist);
         _heartbeatInstance.setParameterByName("monsterDist", normalizedDist);
     }
 
     public void SetSanity(float sanity01)
     {
+        if (!_loopingEventsReady)
+            return;
         _ambienceInstance.setParameterByName("sanity", sanity01);
     }
 
     public void PlayJumpScare()
     {
-        RuntimeManager.PlayOneShot(jumpScareEvent);
+        if (!jumpScareEvent.IsNull)
+            RuntimeManager.PlayOneShot(jumpScareEvent);
     }
 
     void OnDestroy()
     {
-        _ambienceInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-        _ambienceInstance.release();
-        _heartbeatInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-        _heartbeatInstance.release();
+        ReleaseIfValid(ref _ambienceInstance);
+        ReleaseIfValid(ref _heartbeatInstance);
     }
 }
 #else

@@ -1,0 +1,2 @@
+# Line endings for FMOD plugin metadata (separate from .gitignore — see Unity/FMOD docs).
+Assets/Plugins/FMOD/**/Info.plist text eol=lf

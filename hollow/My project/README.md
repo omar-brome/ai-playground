@@ -13,6 +13,12 @@
 - **Threat:** A **monster** with **NavMesh** locomotion, a **state machine** (`MonsterBrain`), **sight** (cone + range + obstacle raycasts), **hearing** (via the global **`NoiseSystem`**), and **memory** (`MonsterMemory`) for suspicious hiding spots.
 - **You:** Move, look, **hide** in any south-wall locker (green strip markers), manage **noise**; the creature turns with a **capped yaw rate** so you can break line-of-sight by circling, and **hearing** uses a **strength threshold** so it does not snap back to a full chase on every residual footstep blip.
 
+### Win / lose
+
+- **Win (either):** reach the **cyan exit gate** at the **north** wall, **or** survive until the **timer** in the top-left hits zero (default **150 s**).
+- **Lose:** the creature **catches** you while **Hunting** (close planar distance, not while hidden in a locker).
+- End screen: **Restart** / **Main menu**. Hiding uses **vignette + low-pass audio** + quieter ambience; the monster **telegraphs** Investigating / Hunting with a **local light pulse** and **procedural sting**, and has a short **wind-up** at chase start before full run speed.
+
 ---
 
 ## Core mechanics
@@ -27,7 +33,11 @@
 | **MonsterMemory** | Records hiding spots when you’re **discovered** there; raises suspicion weights used when **CheckingSpots**. |
 | **PlayerHiding** | **E** to enter a nearby **`HidingSpot`**; discovery at close range teaches the monster that spot. |
 | **AdaptiveDifficulty** | Tracks hides / play patterns and nudges **aggression** / **intelligence** over time. |
-| **HollowGameplayAudio** | **Procedural** ambience + footstep thuds (no asset pack required). Optional **FMOD** replaces/extends this later. |
+| **HollowGameplayAudio** | **Procedural** ambience + footstep thuds; **muffles** while hiding. Optional **FMOD** replaces/extends this later. |
+| **HidingScreenFeedback** | Full-screen dim + edge vignette + **HIDDEN** prompt; **AudioLowPassFilter** on camera. |
+| **HollowLevelObjective** / **ExitTrigger** | Timer survival win + **exit** trigger win. |
+| **MonsterTelegraph** | Point light + sting SFX on **Investigating** / **Hunting** / **Searching** transitions. |
+| **GameStateManager** | **HollowLevelOutcome**: Ongoing / ReachedExit / SurvivedTimer / CaughtByMonster. |
 
 ---
 

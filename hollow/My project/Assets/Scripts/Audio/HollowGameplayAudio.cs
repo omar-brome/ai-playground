@@ -27,6 +27,8 @@ public class HollowGameplayAudio : MonoBehaviour
         _footClip = ProceduralAudio.ShortThud(0.07f, 44100);
     }
 
+    float _hiddenMuffle = 1f;
+
     void Update()
     {
         _footstepCd -= Time.deltaTime;
@@ -38,8 +40,12 @@ public class HollowGameplayAudio : MonoBehaviour
 
         var d = Vector3.Distance(monster.transform.position, player.transform.position);
         var tension = 1f - Mathf.Clamp01(d / 28f);
-        _ambience.pitch = Mathf.Lerp(0.92f, 1.08f, tension);
-        _ambience.volume = masterVolume * Mathf.Lerp(0.12f, 0.32f, tension);
+        var ph = player.GetComponent<PlayerHiding>();
+        var hide = ph != null && ph.IsHiding;
+        _hiddenMuffle = Mathf.MoveTowards(_hiddenMuffle, hide ? 0.38f : 1f, Time.deltaTime * 3f);
+
+        _ambience.pitch = Mathf.Lerp(0.92f, 1.08f, tension) * Mathf.Lerp(0.88f, 1f, _hiddenMuffle);
+        _ambience.volume = masterVolume * Mathf.Lerp(0.12f, 0.32f, tension) * _hiddenMuffle;
     }
 
     public void PlayFootstep()
@@ -84,6 +90,23 @@ static class ProceduralAudio
         }
 
         var clip = AudioClip.Create("hollow_step", n, 1, hz, false);
+        clip.SetData(samples, 0);
+        return clip;
+    }
+
+    public static AudioClip ShortSting(float duration, int sampleRate, float freqHz)
+    {
+        var n = Mathf.Max(16, Mathf.CeilToInt(duration * sampleRate));
+        var samples = new float[n];
+        for (var i = 0; i < n; i++)
+        {
+            var t = (float)i / sampleRate;
+            var e = 1f - (float)i / n;
+            var wobble = Mathf.Sin(t * Mathf.PI * 2f * (freqHz * 0.5f + 40f));
+            samples[i] = Mathf.Sin(t * Mathf.PI * 2f * freqHz) * e * e * (0.5f + 0.5f * wobble);
+        }
+
+        var clip = AudioClip.Create("hollow_sting", n, 1, sampleRate, false);
         clip.SetData(samples, 0);
         return clip;
     }

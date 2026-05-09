@@ -23,7 +23,14 @@ public class MonsterBrain : MonoBehaviour
     [Range(0f, 1f)] public float aggressionLevel = 0.5f;
     [Range(0f, 1f)] public float intelligenceLevel;
 
+    [Header("Combat feel")]
+    [Tooltip("Seconds after entering Hunting where the creature uses walk speed before full sprint.")]
+    public float huntWindupSeconds = 0.55f;
+    [Tooltip("Planar distance to player to register a catch (lose condition).")]
+    public float catchDistance = 1.5f;
+
     float _stateTimer;
+    float _huntWindupEnd = -1f;
     Transform _player;
 
     void Start()
@@ -36,6 +43,9 @@ public class MonsterBrain : MonoBehaviour
 
     void Update()
     {
+        if (GameStateManager.Instance != null && GameStateManager.Instance.IsLevelComplete)
+            return;
+
         if (_player == null)
         {
             var p = GameObject.FindGameObjectWithTag("Player");
@@ -114,7 +124,26 @@ public class MonsterBrain : MonoBehaviour
     void UpdateHunting()
     {
         navigation?.ChasePlayer(_player.position);
-        animator?.SetSpeed(MonsterSpeed.Running);
+        if (Time.time < _huntWindupEnd)
+        {
+            navigation?.SetSpeed(MonsterSpeed.Walking);
+            animator?.SetSpeed(MonsterSpeed.Walking);
+        }
+        else
+        {
+            animator?.SetSpeed(MonsterSpeed.Running);
+        }
+
+        var ph = _player.GetComponent<PlayerHiding>();
+        var hiding = ph != null && ph.IsHiding;
+        if (!hiding)
+        {
+            var a = transform.position;
+            var b = _player.position;
+            var planar = new Vector2(a.x - b.x, a.z - b.z).magnitude;
+            if (planar < catchDistance)
+                GameStateManager.Instance?.RegisterPlayerCaught();
+        }
 
         if (senses != null && !senses.CanSeePlayer())
         {
@@ -208,10 +237,14 @@ public class MonsterBrain : MonoBehaviour
     {
         currentState = newState;
         _stateTimer = 0f;
+        if (newState == MonsterState.Hunting)
+            _huntWindupEnd = Time.time + huntWindupSeconds;
+        else
+            _huntWindupEnd = -1f;
+
         animator?.OnStateChange(newState);
-        navigation?.SetSpeed(newState == MonsterState.Hunting
-            ? MonsterSpeed.Running
-            : MonsterSpeed.Walking);
+        if (newState != MonsterState.Hunting && newState != MonsterState.Stalking)
+            navigation?.SetSpeed(MonsterSpeed.Walking);
         FMODManager.Instance?.OnMonsterStateChange(newState);
     }
 

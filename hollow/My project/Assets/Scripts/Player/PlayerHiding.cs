@@ -24,6 +24,9 @@ public class PlayerHiding : MonoBehaviour
 
     void Update()
     {
+        if (GameStateManager.Instance != null && GameStateManager.Instance.IsLevelComplete)
+            return;
+
         RefreshNearbySpot();
 
         var kb = Keyboard.current;

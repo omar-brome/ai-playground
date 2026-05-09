@@ -16,6 +16,8 @@ public class PlayerNoise : MonoBehaviour
 
     void Update()
     {
+        if (GameStateManager.Instance != null && GameStateManager.Instance.IsLevelComplete)
+            return;
         var ph = GetComponent<PlayerHiding>();
         if (ph != null && ph.IsHiding)
             return;

@@ -1,11 +1,22 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum HollowLevelOutcome
+{
+    Ongoing,
+    ReachedExit,
+    SurvivedTimer,
+    CaughtByMonster
+}
+
 public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager Instance { get; private set; }
 
     public bool IsPaused { get; private set; }
+    public HollowLevelOutcome LevelOutcome { get; private set; } = HollowLevelOutcome.Ongoing;
+
+    public bool IsLevelComplete => LevelOutcome != HollowLevelOutcome.Ongoing;
 
     void Awake()
     {
@@ -20,8 +31,41 @@ public class GameStateManager : MonoBehaviour
 
     public void SetPaused(bool paused)
     {
+        if (IsLevelComplete)
+            return;
         IsPaused = paused;
         Time.timeScale = paused ? 0f : 1f;
+    }
+
+    public void RegisterExitReached()
+    {
+        if (LevelOutcome != HollowLevelOutcome.Ongoing)
+            return;
+        LevelOutcome = HollowLevelOutcome.ReachedExit;
+        Time.timeScale = 1f;
+        IsPaused = false;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void RegisterSurvivalWin()
+    {
+        if (LevelOutcome != HollowLevelOutcome.Ongoing)
+            return;
+        LevelOutcome = HollowLevelOutcome.SurvivedTimer;
+        Time.timeScale = 1f;
+        IsPaused = false;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void RegisterPlayerCaught()
+    {
+        if (LevelOutcome != HollowLevelOutcome.Ongoing)
+            return;
+        LevelOutcome = HollowLevelOutcome.CaughtByMonster;
+        Time.timeScale = 1f;
+        IsPaused = false;
+        Cursor.lockState = CursorLockMode.None;
+        FindFirstObjectByType<AdaptiveDifficulty>()?.OnPlayerCaught();
     }
 
     public void ReloadCurrent()

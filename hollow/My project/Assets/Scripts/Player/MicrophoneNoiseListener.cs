@@ -32,11 +32,19 @@ public class MicrophoneNoiseListener : MonoBehaviour
 
         MicrophoneAvailable = true;
         _micDevice = Microphone.devices[0];
-        _micClip = Microphone.Start(_micDevice, true, 1, 44100);
+        // Longer buffer reduces ring-buffer edge cases; GetData must not run until the buffer has samples.
+        _micClip = Microphone.Start(_micDevice, true, 2, 44100);
+        if (_micClip == null || _micClip.samples < _sampleWindow)
+        {
+            MicrophoneAvailable = false;
+            Debug.LogWarning("[Hollow] Microphone failed to start or clip has no samples.");
+        }
     }
 
     void Update()
     {
+        if (GameStateManager.Instance != null && GameStateManager.Instance.IsLevelComplete)
+            return;
         if (!MicrophoneAvailable || _micClip == null)
             return;
 
@@ -58,12 +66,42 @@ public class MicrophoneNoiseListener : MonoBehaviour
 
     float GetRmsLevel()
     {
-        var samples = new float[_sampleWindow];
-        var micPos = Microphone.GetPosition(_micDevice) - _sampleWindow;
-        if (micPos < 0)
+        if (_micClip == null || _micClip.samples < _sampleWindow)
             return 0f;
 
-        _micClip.GetData(samples, micPos);
+        if (!Microphone.IsRecording(_micDevice))
+            return 0f;
+
+        var pos = Microphone.GetPosition(_micDevice);
+        if (pos <= 0 || pos < _sampleWindow)
+            return 0f;
+
+        var micPos = pos - _sampleWindow;
+        var samples = new float[_sampleWindow];
+
+        if (micPos + _sampleWindow <= _micClip.samples)
+        {
+            if (!_micClip.GetData(samples, micPos))
+                return 0f;
+        }
+        else
+        {
+            var first = _micClip.samples - micPos;
+            if (first <= 0)
+                return 0f;
+            var tailLen = _sampleWindow - first;
+            var head = new float[first];
+            if (!_micClip.GetData(head, micPos))
+                return 0f;
+            System.Array.Copy(head, 0, samples, 0, first);
+            if (tailLen > 0)
+            {
+                var tail = new float[tailLen];
+                if (!_micClip.GetData(tail, 0))
+                    return 0f;
+                System.Array.Copy(tail, 0, samples, first, tailLen);
+            }
+        }
 
         var sum = 0f;
         foreach (var s in samples)
