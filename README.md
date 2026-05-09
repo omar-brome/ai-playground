@@ -25,8 +25,9 @@ python main.py
 ---
 
 ### [`pitch`](./pitch)
-**Pitch** — Desktop **football (soccer) video analysis**: run **YOLOv8** on match video or **webcam**, draw boxes/trails/**heatmap**, rough **team colors** (K-means), simplified **offside** hint, **possession** + stats, **JSON export**. Inference uses **PyTorch MPS** on Apple Silicon when available.
+**Pitch** — **AI-powered** desktop **football (soccer) video analysis**: deep-learning **YOLOv8** detects players and the ball on match video or **webcam**; overlays include boxes, trails, **heatmap**, rough **team colors** (ML clustering), a simplified **offside** hint, **possession** + stats, and **JSON export**. Inference runs locally via **PyTorch** (**MPS** on Apple Silicon when available).
 
+- **AI / ML:** Convolutional object detection (YOLOv8) + unsupervised jersey grouping (K-means); all on-device, no cloud APIs.
 - **Stack:** Python 3.11+ (3.14 OK), CustomTkinter + Tk root (macOS-friendly), OpenCV, Ultralytics YOLOv8, PyTorch, NumPy, Pillow, scikit-learn
 - **UX:** The UI opens right away; **weights load on first “Open Video” / Webcam** (first run may download `yolov8*.pt` — terminal shows progress).
 - **CLI:** `python main.py --model yolov8n.pt` · `python main.py --source /path/to/match.mp4`
