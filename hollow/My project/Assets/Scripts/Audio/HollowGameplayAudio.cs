@@ -14,6 +14,11 @@ public class HollowGameplayAudio : MonoBehaviour
 
     void Awake()
     {
+        if (GetComponent<AudioListener>() == null)
+            Debug.LogWarning(
+                "[Hollow] HollowGameplayAudio expects a Unity AudioListener on this camera. " +
+                "Procedural audio uses AudioSources; FMOD events need FMOD Studio Listener too (Level_Asylum bootstrap adds both).");
+
         _ambience = gameObject.AddComponent<AudioSource>();
         _ambience.loop = true;
         _ambience.spatialBlend = 0f;
@@ -33,7 +38,7 @@ public class HollowGameplayAudio : MonoBehaviour
     {
         _footstepCd -= Time.deltaTime;
 
-        var monster = FindFirstObjectByType<MonsterBrain>();
+        var monster = Object.FindAnyObjectByType<MonsterBrain>();
         var player = GameObject.FindGameObjectWithTag("Player");
         if (monster == null || player == null)
             return;
@@ -48,12 +53,13 @@ public class HollowGameplayAudio : MonoBehaviour
         _ambience.volume = masterVolume * Mathf.Lerp(0.12f, 0.32f, tension) * _hiddenMuffle;
     }
 
-    public void PlayFootstep()
+    public void PlayFootstep(float volumeMultiplier = 1f)
     {
         if (_footstepCd > 0f || _footClip == null)
             return;
         _footstepCd = 0.08f;
-        _fx.PlayOneShot(_footClip, masterVolume * 0.55f);
+        var v = masterVolume * 0.55f * Mathf.Clamp(volumeMultiplier, 0.05f, 3f);
+        _fx.PlayOneShot(_footClip, v);
     }
 }
 

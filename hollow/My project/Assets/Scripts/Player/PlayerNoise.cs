@@ -7,11 +7,13 @@ public class PlayerNoise : MonoBehaviour
     public float footstepRadius = 8f;
 
     CharacterController _cc;
+    PlayerController _pc;
     float _t;
 
     void Awake()
     {
         _cc = GetComponent<CharacterController>();
+        _pc = GetComponent<PlayerController>();
     }
 
     void Update()
@@ -29,12 +31,17 @@ public class PlayerNoise : MonoBehaviour
         if (!moving)
             return;
 
+        var interval = _pc != null ? _pc.FootstepInterval : footstepInterval;
+        var intensity = _pc != null ? _pc.FootstepNoiseIntensity : 1f;
+        var volMul = _pc != null ? _pc.FootstepVolumeMultiplier : 1f;
+        var radius = footstepRadius * Mathf.Lerp(0.48f, 1.55f, Mathf.InverseLerp(0.36f, 1.72f, intensity));
+
         _t += Time.deltaTime;
-        if (_t < footstepInterval)
+        if (_t < interval)
             return;
         _t = 0f;
 
-        NoiseSystem.Instance.EmitNoise(transform.position, footstepRadius, NoiseType.Footstep);
-        FindFirstObjectByType<HollowGameplayAudio>()?.PlayFootstep();
+        NoiseSystem.Instance.EmitNoise(transform.position, radius, NoiseType.Footstep, intensity);
+        Object.FindAnyObjectByType<HollowGameplayAudio>()?.PlayFootstep(volMul);
     }
 }

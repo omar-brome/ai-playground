@@ -47,6 +47,20 @@ public class HollowLevelBootstrap : MonoBehaviour
         Wall("Wall_E", new Vector3(18f, 1.5f, 0f), new Vector3(0.6f, 3f, 36f));
         Wall("Wall_W", new Vector3(-18f, 1.5f, 0f), new Vector3(0.6f, 3f, 36f));
 
+        // Interior corridors & doorways — occludes sightlines, narrows hearing context vs open yard.
+        Wall("Corridor_EW_0L", new Vector3(-10f, 1.5f, 0f), new Vector3(16f, 3f, 0.6f));
+        Wall("Corridor_EW_0R", new Vector3(10f, 1.5f, 0f), new Vector3(16f, 3f, 0.6f));
+        Wall("Corridor_EW_1L", new Vector3(-10f, 1.5f, 8f), new Vector3(16f, 3f, 0.6f));
+        Wall("Corridor_EW_1R", new Vector3(10f, 1.5f, 8f), new Vector3(16f, 3f, 0.6f));
+        Wall("Corridor_EW_2L", new Vector3(-10f, 1.5f, -8f), new Vector3(16f, 3f, 0.6f));
+        Wall("Corridor_EW_2R", new Vector3(10f, 1.5f, -8f), new Vector3(16f, 3f, 0.6f));
+        Wall("Corridor_NS_A", new Vector3(-8f, 1.5f, 4f), new Vector3(0.6f, 3f, 10f));
+        Wall("Corridor_NS_B", new Vector3(8f, 1.5f, 4f), new Vector3(0.6f, 3f, 10f));
+        Wall("Corridor_NS_C", new Vector3(-8f, 1.5f, -4f), new Vector3(0.6f, 3f, 9f));
+        Wall("Corridor_NS_D", new Vector3(8f, 1.5f, -4f), new Vector3(0.6f, 3f, 9f));
+        Wall("NearExit_L", new Vector3(-5.5f, 1.5f, 11f), new Vector3(8f, 3f, 0.6f));
+        Wall("NearExit_R", new Vector3(5.5f, 1.5f, 11f), new Vector3(8f, 3f, 0.6f));
+
         void CoverPillar(Vector3 xzCenter)
         {
             var p = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -157,9 +171,21 @@ public class HollowLevelBootstrap : MonoBehaviour
         camGo.tag = "MainCamera";
         camGo.AddComponent<Camera>();
         camGo.AddComponent<AudioListener>();
+#if HOLLOW_FMOD
+        camGo.AddComponent<FMODUnity.StudioListener>();
+#endif
         camGo.AddComponent<AudioLowPassFilter>();
         camGo.AddComponent<HidingScreenFeedback>();
         camGo.AddComponent<HollowGameplayAudio>();
+        var flash = camGo.AddComponent<Light>();
+        flash.type = LightType.Spot;
+        flash.enabled = false;
+        flash.range = 26f;
+        flash.spotAngle = 54f;
+        flash.innerSpotAngle = 28f;
+        flash.intensity = 1.4f;
+        flash.color = new Color(1f, 0.95f, 0.82f);
+        flash.shadows = LightShadows.Soft;
 
         var pc = player.AddComponent<PlayerController>();
         pc.cameraPivot = camArm.transform;

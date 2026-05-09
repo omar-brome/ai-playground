@@ -15,6 +15,8 @@ public struct NoiseEvent
     public float radius;
     public NoiseType type;
     public float timestamp;
+    /// <summary>1 = baseline loudness; crouch &lt; 1, sprint &gt; 1 for footsteps.</summary>
+    public float intensity;
 }
 
 public class NoiseSystem : MonoBehaviour
@@ -35,14 +37,15 @@ public class NoiseSystem : MonoBehaviour
         Instance = this;
     }
 
-    public void EmitNoise(Vector3 position, float radius, NoiseType type)
+    public void EmitNoise(Vector3 position, float radius, NoiseType type, float intensity = 1f)
     {
         _activeNoises.Add(new NoiseEvent
         {
             position = position,
             radius = radius,
             type = type,
-            timestamp = Time.time
+            timestamp = Time.time,
+            intensity = Mathf.Max(0f, intensity)
         });
     }
 
@@ -69,7 +72,7 @@ public class NoiseSystem : MonoBehaviour
             if (dist > maxRange)
                 continue;
 
-            var s = (1f - dist / maxRange) * (1f - age / noiseDecayTime);
+            var s = (1f - dist / maxRange) * (1f - age / noiseDecayTime) * noise.intensity;
             if (s > maxStrength)
             {
                 maxStrength = s;

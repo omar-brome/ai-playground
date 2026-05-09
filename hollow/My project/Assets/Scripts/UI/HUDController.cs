@@ -33,7 +33,7 @@ public class HUDController : MonoBehaviour
             GUI.Box(
                 new Rect(Screen.width / 2f - 300f, 52f, 600f, 72f),
                 "Goals: reach the cyan EXIT at the north wall, OR survive until the timer hits zero.\n" +
-                "South wall: dark lockers with green strip — E to hide. Creature starts far away; use pillars.",
+                "Lockers (south): E hide. Ctrl crouch (quiet), Shift sprint (loud). F flashlight (battery).",
                 hintStyle);
         }
 
@@ -74,7 +74,7 @@ public class HUDController : MonoBehaviour
 
     static void DrawObjectiveHud()
     {
-        var obj = FindFirstObjectByType<HollowLevelObjective>();
+        var obj = Object.FindAnyObjectByType<HollowLevelObjective>();
         if (obj == null)
             return;
 
@@ -90,6 +90,16 @@ public class HUDController : MonoBehaviour
         style.normal.textColor = new Color(0.88f, 0.9f, 0.93f);
         GUI.Label(new Rect(16f, 12f, 420f, 28f), $"Survive: {m:0}:{s:00}", style);
         GUI.Label(new Rect(16f, 34f, 420f, 24f), "Exit: north — cyan gate", new GUIStyle(style) { fontSize = 14, fontStyle = FontStyle.Normal });
+
+        var player = GameObject.FindGameObjectWithTag("Player");
+        var inv = player != null ? player.GetComponent<PlayerInventory>() : null;
+        if (inv != null)
+        {
+            var pct = Mathf.RoundToInt(inv.Battery01 * 100f);
+            var lamp = inv.FlashlightOn ? "on" : "off";
+            var small = new GUIStyle(style) { fontSize = 13, fontStyle = FontStyle.Normal };
+            GUI.Label(new Rect(16f, 54f, 420f, 22f), $"Flashlight: {lamp}  ·  Battery {pct}%", small);
+        }
     }
 
     static void DrawEndScreen(GameStateManager gsm)

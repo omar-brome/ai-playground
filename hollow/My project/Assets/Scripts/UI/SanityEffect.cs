@@ -10,7 +10,7 @@ public class SanityEffect : MonoBehaviour
     {
         if (GameStateManager.Instance != null && GameStateManager.Instance.IsLevelComplete)
             return;
-        var monster = FindFirstObjectByType<MonsterBrain>();
+        var monster = Object.FindAnyObjectByType<MonsterBrain>();
         var player = GameObject.FindGameObjectWithTag("Player");
         if (monster == null || player == null)
             return;

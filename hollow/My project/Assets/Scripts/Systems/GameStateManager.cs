@@ -65,7 +65,7 @@ public class GameStateManager : MonoBehaviour
         Time.timeScale = 1f;
         IsPaused = false;
         Cursor.lockState = CursorLockMode.None;
-        FindFirstObjectByType<AdaptiveDifficulty>()?.OnPlayerCaught();
+        Object.FindAnyObjectByType<AdaptiveDifficulty>()?.OnPlayerCaught();
     }
 
     public void ReloadCurrent()

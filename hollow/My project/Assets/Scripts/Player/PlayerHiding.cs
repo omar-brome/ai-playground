@@ -74,7 +74,7 @@ public class PlayerHiding : MonoBehaviour
         var hp = spot.hidePosition != null ? spot.hidePosition : spot.transform;
         transform.SetPositionAndRotation(hp.position, hp.rotation);
         spot.PlayerEntered();
-        FindFirstObjectByType<AdaptiveDifficulty>()?.OnPlayerHid();
+        Object.FindAnyObjectByType<AdaptiveDifficulty>()?.OnPlayerHid();
     }
 
     public void ExitHide()

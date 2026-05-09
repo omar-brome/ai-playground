@@ -9,14 +9,14 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        if (FindFirstObjectByType<EventSystem>() == null)
+        if (Object.FindAnyObjectByType<EventSystem>() == null)
         {
             var es = new GameObject("EventSystem");
             es.AddComponent<EventSystem>();
             es.AddComponent<StandaloneInputModule>();
         }
 
-        if (FindFirstObjectByType<Canvas>() != null)
+        if (Object.FindAnyObjectByType<Canvas>() != null)
             return;
 
         var canvasGo = new GameObject("Canvas");
