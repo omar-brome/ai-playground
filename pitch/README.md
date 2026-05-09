@@ -1,6 +1,14 @@
 # Pitch
 
-Desktop **football (soccer) video analysis** using Python, CustomTkinter, OpenCV, and YOLOv8. Analyzes match footage with AI overlays: detections, trails, heatmap, simplified offside line, and live stats. Optimized for **Apple Silicon** (PyTorch **MPS**).
+**AI-powered** desktop **football (soccer) video analysis**. **YOLOv8** (deep-learning object detection) finds players and the ball on video or webcam; **machine-learning** jersey clustering (K-means) splits rough **teams**; overlays add trails, heatmap, simplified offside hint, possession, and live stats. Everything runs **on your machine** via **PyTorch** — **no cloud APIs**. Optimized for **Apple Silicon** (**MPS** GPU acceleration when available).
+
+## AI / ML in Pitch
+
+| Piece | Role |
+|--------|------|
+| **YOLOv8** | Neural net trained on COCO — detects **people** and **sports ball** in each frame. |
+| **K-means** | Unsupervised clustering on jersey-color features — assigns **Team A / B** (and optional referee heuristic). |
+| **PyTorch** | Runs the detector on **CPU**, **CUDA**, or **Apple MPS**. |
 
 ## PREREQUISITES
 
@@ -54,11 +62,11 @@ Optional: `python main.py --model yolov8n.pt` or `--source /path/to/video.mp4`.
 ## Tech stack
 
 - Python 3.11+
+- **AI:** Ultralytics **YOLOv8** + **PyTorch** (local inference)
+- **ML:** **scikit-learn** K-means (team colors from image crops)
 - CustomTkinter — UI
 - OpenCV — video, drawing
-- Ultralytics YOLOv8 — detection (person, sports ball COCO classes)
-- PyTorch + MPS/CUDA/CPU
-- NumPy, Pillow, scikit-learn (K-means team colors)
+- NumPy, Pillow
 
 ## Sample footage
 
