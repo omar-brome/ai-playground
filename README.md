@@ -4,6 +4,26 @@ A collection of AI-powered app experiments built with various tools and framewor
 
 ## 📁 Projects
 
+### [`orion`](./orion)
+**Orion** — Desktop AI chat app that talks **only to your machine**: inference runs through **[Ollama](https://ollama.com)** locally. No cloud APIs, no keys.
+
+- **Stack:** Python 3.11+, Tkinter (default UI on macOS), optional CustomTkinter on Linux/Windows or with `ORION_UI=ctk`
+- **Features:** Streaming replies, multiple chats, model picker, system prompt + temperature, persistent history under `~/.orion/`, delete chats, settings JSON
+- **macOS note:** Use **[Python from python.org](https://www.python.org/downloads/)** (not only Xcode Command Line Tools Python) for a reliable Tcl/Tk GUI; the Orion README explains PATH, venv, and troubleshooting white/blank windows
+
+**Quick start:**
+
+```bash
+cd orion
+python3 -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+python -m pip install -r requirements.txt
+python main.py
+```
+
+**Documentation:** [`orion/README.md`](./orion/README.md)
+
+---
+
 ### [`vscode_copilot_app_job_recruiter`](./vscode_copilot_app_job_recruiter)
 A job recruiter web application built with GitHub Copilot assistance.
 
@@ -102,6 +122,7 @@ Full setup and architecture docs:
 ### `cursor_work` Projects
 A collection of various apps and games built with Cursor AI assistance. These live at the repository root in separate folders, including:
 
+- 💬 **Orion** (`./orion`) — Local Ollama desktop chat (Python, Tkinter / CustomTkinter)
 - 🐱 **Flappy Cat** (`./flappy_cat`) — Phaser 3 arcade game
 - 🍔 **Snack Nasab** (`./snack_nasab`) — bilingual fast-food menu + admin
 - 💳 **Lumière / PayPal + DHL** (`./paypal_dhl`) — storefront + sandbox checkout + tracking
@@ -134,6 +155,10 @@ npm install
 cp .env.example .env
 node index.js
 ```
+
+### Orion (local Ollama desktop chat)
+
+See **[`orion/README.md`](./orion/README.md)** — includes prerequisites (Ollama + models), venv setup, `ORION_UI`, and macOS Tk notes.
 
 ### Flappy Cat, Snack Nasab, PayPal + DHL, Malaab, Prayer iOS
 
