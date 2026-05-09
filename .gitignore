@@ -5,3 +5,7 @@ server/node_modules/
 *.code-workspace
 .DS_Store
 FETCH_HEAD
+
+# Xcode / Swift — user-specific and build noise
+**/xcuserdata/
+*.xcuserstate

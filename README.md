@@ -90,6 +90,15 @@ Full setup and architecture docs:
 
 ---
 
+### [`prayer_ios_app`](./prayer_ios_app)
+**أوقات الصلاة (Awqat Al-Salah)** — native **SwiftUI** iOS app for Lebanese prayer times: [AlAdhan](https://aladhan.com/prayer-times-api) (no API key), Qibla, monthly calendar, local notifications, adhan assets, offline cache. Open `PrayerTimesApp.xcodeproj` and run on iOS 17+.
+
+**Stack:** Swift 5.9+, SwiftUI, URLSession, UserNotifications, CoreLocation, AVFoundation
+
+**Docs:** [`prayer_ios_app/README.md`](./prayer_ios_app/README.md) · [`prayer_ios_app/XCODEPROJ_SETUP.md`](./prayer_ios_app/XCODEPROJ_SETUP.md)
+
+---
+
 ### `cursor_work` Projects
 A collection of various apps and games built with Cursor AI assistance. These live at the repository root in separate folders, including:
 
@@ -97,6 +106,7 @@ A collection of various apps and games built with Cursor AI assistance. These li
 - 🍔 **Snack Nasab** (`./snack_nasab`) — bilingual fast-food menu + admin
 - 💳 **Lumière / PayPal + DHL** (`./paypal_dhl`) — storefront + sandbox checkout + tracking
 - ⚽ **Malaab / football_hajez_app** (`./football_hajez_app`) — 5v5 match booking + pitch host scheduler (localStorage)
+- 🕌 **Awqat Al-Salah / prayer_ios_app** (`./prayer_ios_app`) — Lebanese prayer times (SwiftUI, AlAdhan API)
 - 📘 Facebook-style social media app (`./facebook`)
 - ♟️ Chess game (`./chess`)
 - ❌ Tic Tac Toe game (`./games`)
@@ -125,9 +135,9 @@ cp .env.example .env
 node index.js
 ```
 
-### Flappy Cat, Snack Nasab, PayPal + DHL, Malaab
+### Flappy Cat, Snack Nasab, PayPal + DHL, Malaab, Prayer iOS
 
-Use the **Quick start** blocks under each project above, or open that folder’s `README.md` for full setup (especially Snack Nasab’s database and auth).
+Use the **Quick start** blocks under each project above, or open that folder’s `README.md` for full setup (especially Snack Nasab’s database and auth). For the iOS prayer app, use Xcode with `prayer_ios_app/PrayerTimesApp.xcodeproj` — see [`prayer_ios_app/README.md`](./prayer_ios_app/README.md).
 
 ---
 
@@ -141,3 +151,4 @@ Use the **Quick start** blocks under each project above, or open that folder’s
 - [Express](https://expressjs.com/)
 - [Prisma](https://www.prisma.io/)
 - GitHub Copilot & Cursor AI
+- Swift / SwiftUI (iOS)

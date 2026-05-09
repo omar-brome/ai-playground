@@ -1,0 +1,484 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D2C819D92FAF3ABD00CF9DA9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819D02FAF3ABD00CF9DA9 /* MainView.swift */; };
+		D2C819DA2FAF3ABD00CF9DA9 /* QiblaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819D32FAF3ABD00CF9DA9 /* QiblaView.swift */; };
+		D2C819DB2FAF3ABD00CF9DA9 /* PrayerAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819C72FAF3ABD00CF9DA9 /* PrayerAPIService.swift */; };
+		D2C819DC2FAF3ABD00CF9DA9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819CE2FAF3ABD00CF9DA9 /* HomeView.swift */; };
+		D2C819DD2FAF3ABD00CF9DA9 /* PrayerTimesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819CA2FAF3ABD00CF9DA9 /* PrayerTimesViewModel.swift */; };
+		D2C819DE2FAF3ABD00CF9DA9 /* PrayerRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819D22FAF3ABD00CF9DA9 /* PrayerRowView.swift */; };
+		D2C819DF2FAF3ABD00CF9DA9 /* LebaneseCity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819BB2FAF3ABD00CF9DA9 /* LebaneseCity.swift */; };
+		D2C819E02FAF3ABD00CF9DA9 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819C92FAF3ABD00CF9DA9 /* CalendarViewModel.swift */; };
+		D2C819E12FAF3ABD00CF9DA9 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819B92FAF3ABD00CF9DA9 /* AppConstants.swift */; };
+		D2C819E22FAF3ABD00CF9DA9 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819CD2FAF3ABD00CF9DA9 /* CalendarView.swift */; };
+		D2C819E32FAF3ABD00CF9DA9 /* QiblaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819CB2FAF3ABD00CF9DA9 /* QiblaViewModel.swift */; };
+		D2C819E42FAF3ABD00CF9DA9 /* PrayerTimesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819D72FAF3ABD00CF9DA9 /* PrayerTimesApp.swift */; };
+		D2C819E52FAF3ABD00CF9DA9 /* NextPrayerHeroCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819D12FAF3ABD00CF9DA9 /* NextPrayerHeroCard.swift */; };
+		D2C819E62FAF3ABD00CF9DA9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819BF2FAF3ABD00CF9DA9 /* ContentView.swift */; };
+		D2C819E72FAF3ABD00CF9DA9 /* IslamicPatternBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819CF2FAF3ABD00CF9DA9 /* IslamicPatternBackground.swift */; };
+		D2C819E82FAF3ABD00CF9DA9 /* PrayerTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819BC2FAF3ABD00CF9DA9 /* PrayerTime.swift */; };
+		D2C819E92FAF3ABD00CF9DA9 /* DayPrayers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819BA2FAF3ABD00CF9DA9 /* DayPrayers.swift */; };
+		D2C819EA2FAF3ABD00CF9DA9 /* AdhanPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819C52FAF3ABD00CF9DA9 /* AdhanPlayer.swift */; };
+		D2C819EB2FAF3ABD00CF9DA9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819D42FAF3ABD00CF9DA9 /* SettingsView.swift */; };
+		D2C819EC2FAF3ABD00CF9DA9 /* PrayerTimesAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819C02FAF3ABD00CF9DA9 /* PrayerTimesAppApp.swift */; };
+		D2C819ED2FAF3ABD00CF9DA9 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C819C62FAF3ABD00CF9DA9 /* NotificationService.swift */; };
+		D2C819EF2FAF3ABD00CF9DA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2C819BE2FAF3ABD00CF9DA9 /* Assets.xcassets */; };
+		D2C819F02FAF3ABD00CF9DA9 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D2C819C32FAF3ABD00CF9DA9 /* README.md */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D2C819B92FAF3ABD00CF9DA9 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		D2C819BA2FAF3ABD00CF9DA9 /* DayPrayers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPrayers.swift; sourceTree = "<group>"; };
+		D2C819BB2FAF3ABD00CF9DA9 /* LebaneseCity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LebaneseCity.swift; sourceTree = "<group>"; };
+		D2C819BC2FAF3ABD00CF9DA9 /* PrayerTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTime.swift; sourceTree = "<group>"; };
+		D2C819BE2FAF3ABD00CF9DA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D2C819BF2FAF3ABD00CF9DA9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D2C819C02FAF3ABD00CF9DA9 /* PrayerTimesAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesAppApp.swift; sourceTree = "<group>"; };
+		D2C819C32FAF3ABD00CF9DA9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D2C819C52FAF3ABD00CF9DA9 /* AdhanPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhanPlayer.swift; sourceTree = "<group>"; };
+		D2C819C62FAF3ABD00CF9DA9 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		D2C819C72FAF3ABD00CF9DA9 /* PrayerAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerAPIService.swift; sourceTree = "<group>"; };
+		D2C819C92FAF3ABD00CF9DA9 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
+		D2C819CA2FAF3ABD00CF9DA9 /* PrayerTimesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesViewModel.swift; sourceTree = "<group>"; };
+		D2C819CB2FAF3ABD00CF9DA9 /* QiblaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaViewModel.swift; sourceTree = "<group>"; };
+		D2C819CD2FAF3ABD00CF9DA9 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		D2C819CE2FAF3ABD00CF9DA9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		D2C819CF2FAF3ABD00CF9DA9 /* IslamicPatternBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslamicPatternBackground.swift; sourceTree = "<group>"; };
+		D2C819D02FAF3ABD00CF9DA9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		D2C819D12FAF3ABD00CF9DA9 /* NextPrayerHeroCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextPrayerHeroCard.swift; sourceTree = "<group>"; };
+		D2C819D22FAF3ABD00CF9DA9 /* PrayerRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRowView.swift; sourceTree = "<group>"; };
+		D2C819D32FAF3ABD00CF9DA9 /* QiblaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaView.swift; sourceTree = "<group>"; };
+		D2C819D42FAF3ABD00CF9DA9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D2C819D62FAF3ABD00CF9DA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D2C819D72FAF3ABD00CF9DA9 /* PrayerTimesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesApp.swift; sourceTree = "<group>"; };
+		D2D044002FAF365300B41A87 /* PrayerTimesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrayerTimesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D2D043FD2FAF365300B41A87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D2C819BD2FAF3ABD00CF9DA9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D2C819B92FAF3ABD00CF9DA9 /* AppConstants.swift */,
+				D2C819BA2FAF3ABD00CF9DA9 /* DayPrayers.swift */,
+				D2C819BB2FAF3ABD00CF9DA9 /* LebaneseCity.swift */,
+				D2C819BC2FAF3ABD00CF9DA9 /* PrayerTime.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D2C819C12FAF3ABD00CF9DA9 /* PrayerTimesApp */ = {
+			isa = PBXGroup;
+			children = (
+				D2C819BE2FAF3ABD00CF9DA9 /* Assets.xcassets */,
+				D2C819BF2FAF3ABD00CF9DA9 /* ContentView.swift */,
+				D2C819C02FAF3ABD00CF9DA9 /* PrayerTimesAppApp.swift */,
+			);
+			path = PrayerTimesApp;
+			sourceTree = "<group>";
+		};
+		D2C819C22FAF3ABD00CF9DA9 /* PrayerTimesApp */ = {
+			isa = PBXGroup;
+			children = (
+				D2C819C12FAF3ABD00CF9DA9 /* PrayerTimesApp */,
+			);
+			path = PrayerTimesApp;
+			sourceTree = "<group>";
+		};
+		D2C819C42FAF3ABD00CF9DA9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D2C819C32FAF3ABD00CF9DA9 /* README.md */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D2C819C82FAF3ABD00CF9DA9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D2C819C52FAF3ABD00CF9DA9 /* AdhanPlayer.swift */,
+				D2C819C62FAF3ABD00CF9DA9 /* NotificationService.swift */,
+				D2C819C72FAF3ABD00CF9DA9 /* PrayerAPIService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		D2C819CC2FAF3ABD00CF9DA9 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D2C819C92FAF3ABD00CF9DA9 /* CalendarViewModel.swift */,
+				D2C819CA2FAF3ABD00CF9DA9 /* PrayerTimesViewModel.swift */,
+				D2C819CB2FAF3ABD00CF9DA9 /* QiblaViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D2C819D52FAF3ABD00CF9DA9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D2C819CD2FAF3ABD00CF9DA9 /* CalendarView.swift */,
+				D2C819CE2FAF3ABD00CF9DA9 /* HomeView.swift */,
+				D2C819CF2FAF3ABD00CF9DA9 /* IslamicPatternBackground.swift */,
+				D2C819D02FAF3ABD00CF9DA9 /* MainView.swift */,
+				D2C819D12FAF3ABD00CF9DA9 /* NextPrayerHeroCard.swift */,
+				D2C819D22FAF3ABD00CF9DA9 /* PrayerRowView.swift */,
+				D2C819D32FAF3ABD00CF9DA9 /* QiblaView.swift */,
+				D2C819D42FAF3ABD00CF9DA9 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D2C819D82FAF3ABD00CF9DA9 /* AppSource */ = {
+			isa = PBXGroup;
+			children = (
+				D2C819BD2FAF3ABD00CF9DA9 /* Models */,
+				D2C819C22FAF3ABD00CF9DA9 /* PrayerTimesApp */,
+				D2C819C42FAF3ABD00CF9DA9 /* Resources */,
+				D2C819C82FAF3ABD00CF9DA9 /* Services */,
+				D2C819CC2FAF3ABD00CF9DA9 /* ViewModels */,
+				D2C819D52FAF3ABD00CF9DA9 /* Views */,
+				D2C819D62FAF3ABD00CF9DA9 /* Info.plist */,
+				D2C819D72FAF3ABD00CF9DA9 /* PrayerTimesApp.swift */,
+			);
+			path = AppSource;
+			sourceTree = "<group>";
+		};
+		D2D043F72FAF365300B41A87 = {
+			isa = PBXGroup;
+			children = (
+				D2C819D82FAF3ABD00CF9DA9 /* AppSource */,
+				D2D044012FAF365300B41A87 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D2D044012FAF365300B41A87 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2D044002FAF365300B41A87 /* PrayerTimesApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D2D043FF2FAF365300B41A87 /* PrayerTimesApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D2D0440B2FAF365600B41A87 /* Build configuration list for PBXNativeTarget "PrayerTimesApp" */;
+			buildPhases = (
+				D2D043FC2FAF365300B41A87 /* Sources */,
+				D2D043FD2FAF365300B41A87 /* Frameworks */,
+				D2D043FE2FAF365300B41A87 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PrayerTimesApp;
+			packageProductDependencies = (
+			);
+			productName = PrayerTimesApp;
+			productReference = D2D044002FAF365300B41A87 /* PrayerTimesApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D2D043F82FAF365300B41A87 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2640;
+				LastUpgradeCheck = 2640;
+				TargetAttributes = {
+					D2D043FF2FAF365300B41A87 = {
+						CreatedOnToolsVersion = 26.4.1;
+					};
+				};
+			};
+			buildConfigurationList = D2D043FB2FAF365300B41A87 /* Build configuration list for PBXProject "PrayerTimesApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D2D043F72FAF365300B41A87;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D2D044012FAF365300B41A87 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2D043FF2FAF365300B41A87 /* PrayerTimesApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D2D043FE2FAF365300B41A87 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2C819EF2FAF3ABD00CF9DA9 /* Assets.xcassets in Resources */,
+				D2C819F02FAF3ABD00CF9DA9 /* README.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2D043FC2FAF365300B41A87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2C819D92FAF3ABD00CF9DA9 /* MainView.swift in Sources */,
+				D2C819DA2FAF3ABD00CF9DA9 /* QiblaView.swift in Sources */,
+				D2C819DB2FAF3ABD00CF9DA9 /* PrayerAPIService.swift in Sources */,
+				D2C819DC2FAF3ABD00CF9DA9 /* HomeView.swift in Sources */,
+				D2C819DD2FAF3ABD00CF9DA9 /* PrayerTimesViewModel.swift in Sources */,
+				D2C819DE2FAF3ABD00CF9DA9 /* PrayerRowView.swift in Sources */,
+				D2C819DF2FAF3ABD00CF9DA9 /* LebaneseCity.swift in Sources */,
+				D2C819E02FAF3ABD00CF9DA9 /* CalendarViewModel.swift in Sources */,
+				D2C819E12FAF3ABD00CF9DA9 /* AppConstants.swift in Sources */,
+				D2C819E22FAF3ABD00CF9DA9 /* CalendarView.swift in Sources */,
+				D2C819E32FAF3ABD00CF9DA9 /* QiblaViewModel.swift in Sources */,
+				D2C819E42FAF3ABD00CF9DA9 /* PrayerTimesApp.swift in Sources */,
+				D2C819E52FAF3ABD00CF9DA9 /* NextPrayerHeroCard.swift in Sources */,
+				D2C819E62FAF3ABD00CF9DA9 /* ContentView.swift in Sources */,
+				D2C819E72FAF3ABD00CF9DA9 /* IslamicPatternBackground.swift in Sources */,
+				D2C819E82FAF3ABD00CF9DA9 /* PrayerTime.swift in Sources */,
+				D2C819E92FAF3ABD00CF9DA9 /* DayPrayers.swift in Sources */,
+				D2C819EA2FAF3ABD00CF9DA9 /* AdhanPlayer.swift in Sources */,
+				D2C819EB2FAF3ABD00CF9DA9 /* SettingsView.swift in Sources */,
+				D2C819EC2FAF3ABD00CF9DA9 /* PrayerTimesAppApp.swift in Sources */,
+				D2C819ED2FAF3ABD00CF9DA9 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		D2D044092FAF365600B41A87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D2D0440A2FAF365600B41A87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D2D0440C2FAF365600B41A87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AppSource/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = omar.PrayerTimesApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D2D0440D2FAF365600B41A87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AppSource/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = omar.PrayerTimesApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D2D043FB2FAF365300B41A87 /* Build configuration list for PBXProject "PrayerTimesApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D2D044092FAF365600B41A87 /* Debug */,
+				D2D0440A2FAF365600B41A87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D2D0440B2FAF365600B41A87 /* Build configuration list for PBXNativeTarget "PrayerTimesApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D2D0440C2FAF365600B41A87 /* Debug */,
+				D2D0440D2FAF365600B41A87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D2D043F82FAF365300B41A87 /* Project object */;
+}
