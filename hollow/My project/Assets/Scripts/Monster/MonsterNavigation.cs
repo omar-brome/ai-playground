@@ -72,8 +72,12 @@ public class MonsterNavigation : MonoBehaviour
 
         if (!agent.pathPending && agent.remainingDistance < 1f)
         {
+            var prevIdx = _currentPatrolIndex;
             _currentPatrolIndex = (_currentPatrolIndex + 1) % patrolPoints.Length;
+            var prev = patrolPoints[prevIdx];
             var next = patrolPoints[_currentPatrolIndex];
+            if (prev != null && next != null)
+                PatternTracker.Instance?.RegisterPatrolLeg(prev.position, next.position);
             if (next != null)
                 agent.SetDestination(next.position);
         }

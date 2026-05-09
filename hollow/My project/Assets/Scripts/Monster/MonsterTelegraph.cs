@@ -19,7 +19,7 @@ public class MonsterTelegraph : MonoBehaviour
 
         var lightGo = new GameObject("TelegraphLight");
         lightGo.transform.SetParent(transform, false);
-        lightGo.transform.localPosition = new Vector3(0f, 1.8f, 0f);
+        lightGo.transform.localPosition = new Vector3(0f, 2.05f, 0.1f);
         _pulse = lightGo.AddComponent<Light>();
         _pulse.type = LightType.Point;
         _pulse.range = 22f;

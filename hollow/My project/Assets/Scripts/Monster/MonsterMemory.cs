@@ -74,6 +74,21 @@ public class MonsterMemory : MonoBehaviour
         return _hidingMemory.OrderByDescending(r => r.suspicionWeight).FirstOrDefault();
     }
 
+    /// <summary>Slight suspicion bump for lockers near a learned movement hotspot (pattern adaptation).</summary>
+    public void NudgeSuspicionNearWorld(Vector3 worldPos, float xzRadius, float deltaWeight)
+    {
+        if (deltaWeight <= 0f || _hidingMemory.Count == 0)
+            return;
+
+        var flat = new Vector2(worldPos.x, worldPos.z);
+        foreach (var record in _hidingMemory)
+        {
+            var q = new Vector2(record.position.x, record.position.z);
+            if (Vector2.Distance(flat, q) < xzRadius)
+                record.suspicionWeight = Mathf.Clamp01(record.suspicionWeight + deltaWeight);
+        }
+    }
+
     public Vector3? PredictPlayerPosition()
     {
         if (_playerPathHistory.Count < 10)

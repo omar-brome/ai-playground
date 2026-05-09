@@ -71,7 +71,10 @@ public class GameStateManager : MonoBehaviour
     public void ReloadCurrent()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        var scene = SceneManager.GetActiveScene();
+        if (scene.name == "Level_Asylum")
+            HollowLevelSession.BeginNewRun();
+        SceneManager.LoadScene(scene.buildIndex);
     }
 
     public void LoadSceneByName(string sceneName)

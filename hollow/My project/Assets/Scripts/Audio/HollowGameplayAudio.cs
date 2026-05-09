@@ -5,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class HollowGameplayAudio : MonoBehaviour
 {
-    public float masterVolume = 0.35f;
+    public float masterVolume = 0.52f;
 
     AudioSource _ambience;
     AudioSource _fx;
@@ -17,18 +17,22 @@ public class HollowGameplayAudio : MonoBehaviour
         if (GetComponent<AudioListener>() == null)
             Debug.LogWarning(
                 "[Hollow] HollowGameplayAudio expects a Unity AudioListener on this camera. " +
-                "Procedural audio uses AudioSources; FMOD events need FMOD Studio Listener too (Level_Asylum bootstrap adds both).");
+                "Procedural audio uses AudioSources.");
 
         _ambience = gameObject.AddComponent<AudioSource>();
         _ambience.loop = true;
         _ambience.spatialBlend = 0f;
-        _ambience.volume = masterVolume * 0.25f;
+        _ambience.priority = 0;
+        _ambience.volume = masterVolume * 0.42f;
+        _ambience.ignoreListenerPause = true;
         _ambience.clip = ProceduralAudio.AmbientHum(3f, 44100);
         _ambience.Play();
 
         _fx = gameObject.AddComponent<AudioSource>();
         _fx.loop = false;
         _fx.spatialBlend = 0f;
+        _fx.priority = 0;
+        _fx.ignoreListenerPause = true;
         _footClip = ProceduralAudio.ShortThud(0.07f, 44100);
     }
 
@@ -50,7 +54,7 @@ public class HollowGameplayAudio : MonoBehaviour
         _hiddenMuffle = Mathf.MoveTowards(_hiddenMuffle, hide ? 0.38f : 1f, Time.deltaTime * 3f);
 
         _ambience.pitch = Mathf.Lerp(0.92f, 1.08f, tension) * Mathf.Lerp(0.88f, 1f, _hiddenMuffle);
-        _ambience.volume = masterVolume * Mathf.Lerp(0.12f, 0.32f, tension) * _hiddenMuffle;
+        _ambience.volume = masterVolume * Mathf.Lerp(0.18f, 0.42f, tension) * _hiddenMuffle;
     }
 
     public void PlayFootstep(float volumeMultiplier = 1f)
@@ -58,62 +62,7 @@ public class HollowGameplayAudio : MonoBehaviour
         if (_footstepCd > 0f || _footClip == null)
             return;
         _footstepCd = 0.08f;
-        var v = masterVolume * 0.55f * Mathf.Clamp(volumeMultiplier, 0.05f, 3f);
+        var v = masterVolume * 0.62f * Mathf.Clamp(volumeMultiplier, 0.05f, 3f);
         _fx.PlayOneShot(_footClip, v);
-    }
-}
-
-static class ProceduralAudio
-{
-    public static AudioClip AmbientHum(float duration, int hz)
-    {
-        var n = Mathf.CeilToInt(duration * hz);
-        var samples = new float[n];
-        var rng = new System.Random(42);
-        for (var i = 0; i < n; i++)
-        {
-            var t = (float)i / hz;
-            var hum = Mathf.Sin(t * Mathf.PI * 2f * 55f) * 0.12f;
-            var hum2 = Mathf.Sin(t * Mathf.PI * 2f * 110f) * 0.06f;
-            var noise = (float)(rng.NextDouble() * 2.0 - 1.0) * 0.04f;
-            samples[i] = hum + hum2 + noise;
-        }
-
-        var clip = AudioClip.Create("hollow_amb", n, 1, hz, false);
-        clip.SetData(samples, 0);
-        return clip;
-    }
-
-    public static AudioClip ShortThud(float duration, int hz)
-    {
-        var n = Mathf.Max(8, Mathf.CeilToInt(duration * hz));
-        var samples = new float[n];
-        for (var i = 0; i < n; i++)
-        {
-            var e = 1f - (float)i / n;
-            var ping = Mathf.Sin((float)i / hz * Mathf.PI * 2f * 180f) * e * e;
-            samples[i] = ping * 0.35f;
-        }
-
-        var clip = AudioClip.Create("hollow_step", n, 1, hz, false);
-        clip.SetData(samples, 0);
-        return clip;
-    }
-
-    public static AudioClip ShortSting(float duration, int sampleRate, float freqHz)
-    {
-        var n = Mathf.Max(16, Mathf.CeilToInt(duration * sampleRate));
-        var samples = new float[n];
-        for (var i = 0; i < n; i++)
-        {
-            var t = (float)i / sampleRate;
-            var e = 1f - (float)i / n;
-            var wobble = Mathf.Sin(t * Mathf.PI * 2f * (freqHz * 0.5f + 40f));
-            samples[i] = Mathf.Sin(t * Mathf.PI * 2f * freqHz) * e * e * (0.5f + 0.5f * wobble);
-        }
-
-        var clip = AudioClip.Create("hollow_sting", n, 1, sampleRate, false);
-        clip.SetData(samples, 0);
-        return clip;
     }
 }

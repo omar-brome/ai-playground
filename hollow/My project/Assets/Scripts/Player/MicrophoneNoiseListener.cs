@@ -53,7 +53,7 @@ public class MicrophoneNoiseListener : MonoBehaviour
             return;
         _timer = 0f;
 
-        CurrentNoiseLevel = GetRmsLevel() * sensitivityMultiplier;
+        CurrentNoiseLevel = GetRmsLevel() * sensitivityMultiplier * HollowSettings.MicSensitivity;
 
         if (NoiseSystem.Instance != null && IsAudible)
         {

@@ -19,6 +19,7 @@ public class HUDController : MonoBehaviour
         }
 
         DrawObjectiveHud();
+        DrawAdaptationHud();
 
         if (Time.time < _levelHintUntil &&
             (gsm == null || !gsm.IsPaused))
@@ -42,7 +43,7 @@ public class HUDController : MonoBehaviour
 
         var cx = Screen.width / 2f;
         var cy = Screen.height / 2f;
-        GUI.Box(new Rect(cx - 150, cy - 90, 300, 180), "Paused");
+        GUI.Box(new Rect(cx - 150, cy - 90, 300, 224), "Paused");
 
         if (GUI.Button(new Rect(cx - 110, cy - 40, 220, 30), "Resume (R)"))
         {
@@ -55,6 +56,19 @@ public class HUDController : MonoBehaviour
 
         if (GUI.Button(new Rect(cx - 110, cy + 36, 220, 30), "Main menu"))
             gsm.LoadSceneByName("MainMenu");
+
+        var micVal = GUI.HorizontalSlider(new Rect(cx - 110, cy + 76, 220, 18),
+            HollowSettings.MicSensitivity, 0.05f, 2f);
+        if (Mathf.Abs(micVal - HollowSettings.MicSensitivity) > 0.0001f)
+            HollowSettings.MicSensitivity = micVal;
+        var small = new GUIStyle(GUI.skin.label)
+        {
+            fontSize = 12,
+            alignment = TextAnchor.MiddleCenter,
+            normal = { textColor = new Color(0.82f, 0.84f, 0.88f) }
+        };
+        GUI.Label(new Rect(cx - 110, cy + 96, 220, 20),
+            $"Mic sensitivity: {HollowSettings.MicSensitivity:0.00}", small);
 
         if (Event.current.type == EventType.KeyDown)
         {
@@ -100,6 +114,33 @@ public class HUDController : MonoBehaviour
             var small = new GUIStyle(style) { fontSize = 13, fontStyle = FontStyle.Normal };
             GUI.Label(new Rect(16f, 54f, 420f, 22f), $"Flashlight: {lamp}  ·  Battery {pct}%", small);
         }
+
+        var seedStyle = new GUIStyle(GUI.skin.label)
+        {
+            fontSize = 11,
+            alignment = TextAnchor.LowerRight,
+            normal = { textColor = new Color(0.55f, 0.56f, 0.6f, 0.85f) }
+        };
+        GUI.Label(new Rect(Screen.width - 200f - 16f, Screen.height - 26f, 200f, 22f),
+            $"Layout seed {HollowLevelSession.GenerationSeed}", seedStyle);
+    }
+
+    static void DrawAdaptationHud()
+    {
+        var pt = PatternTracker.Instance;
+        if (pt == null)
+            return;
+
+        var style = new GUIStyle(GUI.skin.label)
+        {
+            fontSize = 11,
+            alignment = TextAnchor.LowerLeft,
+            normal = { textColor = new Color(0.5f, 0.62f, 0.55f, 0.9f) }
+        };
+        var y = Screen.height - 72f;
+        GUI.Label(new Rect(16f, y, 520f, 18f),
+            $"Creature adaptation · noise {pt.noiseEventsHeard} · spotted {pt.timesSpotted} · investigate {pt.investigationEvents} · patrol legs {pt.patrolLegsLogged}",
+            style);
     }
 
     static void DrawEndScreen(GameStateManager gsm)

@@ -47,11 +47,12 @@ python main.py
 ---
 
 ### [`hollow`](./hollow)
-**Hollow** — first-person **psychological horror** prototype in **Unity 6 (URP)**: you’re hunted in a greybox asylum while an AI creature **patrols**, reacts to **footsteps and microphone noise**, **investigates** sound, **chases** on sight, **searches** when it loses you, and **remembers hiding spots** where it has caught you. Optional stack: **FMOD** adaptive audio, **ML-Agents** to modulate aggression / tactics, **Whisper** Python sidecar for voice transcription.
+**Hollow** — first-person **psychological horror** prototype in **Unity 6 (URP)**: you’re hunted in a **stylized night asylum** while an AI creature **patrols**, reacts to **footsteps and microphone noise** (with **`HollowSettings`** mic sensitivity + pause slider), **investigates** sound with **`PatternTracker`** bias, **chases** on sight, **searches** when it loses you, and **remembers hiding spots** where it has caught you. Optional stack: **FMOD** adaptive audio, **ML-Agents** (validated **`BehaviorParameters`** only; biases brain weights, not raw NavMesh), **Whisper** Python sidecar for voice transcription.
 
 - **Engine:** Unity **6000.x**, C#, **NavMesh** (AI Navigation package), **Input System**
-- **Feel:** Procedural **ambience + footsteps** out of the box; fog and URP post volume in template scenes; runtime **`HollowLevelBootstrap`** builds the playable blockout on **`Level_Asylum`**
-- **Flow:** **`MainMenu`** → **Play — Hollow** → **`Level_Asylum`** (do not stay on empty **SampleScene**)
+- **Presentation:** **`HollowRuntimeVisuals`** — procedural **night skybox**, moon + trilight-style readability, shared **URP Lit** environment materials, **monster** silhouette mesh; main menu is a spooky **Halloween-themed** runtime UI with developer credit.
+- **Feel:** Procedural **ambience + footsteps** out of the box; fog tuned for visibility; runtime **`HollowLevelBootstrap`** builds a **new procedural asylum layout** on **`Level_Asylum`** each run (seed from **`HollowLevelSession`**); HUD shows **adaptation** stats from **`PatternTracker`**.
+- **Flow:** **`MainMenu`** → **Enter the asylum** / **Grimoire (controls)** → **`Level_Asylum`** (do not stay on empty **SampleScene**)
 
 **Quick start:** Install Unity 6000.x → Unity Hub **Add** the project folder **`hollow/My project`** → open it → Play (or open **`Assets/Scenes/MainMenu.unity`** first).
 
@@ -163,7 +164,7 @@ A collection of various apps and games built with Cursor AI assistance. These li
 - 💳 **Lumière / PayPal + DHL** (`./paypal_dhl`) — storefront + sandbox checkout + tracking
 - ⚽ **Malaab / football_hajez_app** (`./football_hajez_app`) — 5v5 match booking + pitch host scheduler (localStorage)
 - 🕌 **Awqat Al-Salah / prayer_ios_app** (`./prayer_ios_app`) — Lebanese prayer times (SwiftUI, AlAdhan API)
-- 👁️ **Hollow** (`./hollow`) — Unity 6 horror prototype (NavMesh hunter, mic noise, hiding memory); project in `hollow/My project`
+- 👁️ **Hollow** (`./hollow`) — Unity 6 horror prototype (night visuals, pattern adaptation, ML-Agents bias, mic settings, spooky main menu); project in `hollow/My project`
 - 📘 Facebook-style social media app (`./facebook`)
 - ♟️ Chess game (`./chess`)
 - ❌ Tic Tac Toe game (`./games`)

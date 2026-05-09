@@ -32,10 +32,16 @@ public class FMODManager : MonoBehaviour
 
     void Start()
     {
+        if (!HollowAudioPreferences.UseFmodEngine)
+            return;
+
         if (ambienceEvent.IsNull || heartbeatEvent.IsNull)
         {
             Debug.LogWarning(
-                "[Hollow] FMODManager: assign ambienceEvent and heartbeatEvent in the Inspector (and export banks), or undefine HOLLOW_FMOD. Unity AudioSources still need an AudioListener on the camera.");
+                "[Hollow] FMOD: EventReferences are empty on this FMODManager. " +
+                "The level bootstrap spawns a blank manager unless you assign **Fmod Manager Prefab** on `_HollowLevel` → HollowLevelBootstrap (prefab root must have FMODManager + filled events). " +
+                "Also export banks into the project (see FMOD Settings → Bank path) so .bank files exist. " +
+                "Until then, turn **FMOD Studio audio** off on the main menu and use Unity procedural audio.");
             return;
         }
 

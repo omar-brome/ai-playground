@@ -90,7 +90,12 @@ public class MonsterBrain : MonoBehaviour
             NoiseSystem.Instance.TryGetLoudestNoiseNear(transform.position, 30f, out var noise, out var nStr) &&
             nStr > 0.055f)
         {
-            navigation?.SetInvestigateTarget(noise.position);
+            PatternTracker.Instance?.RegisterNoiseHeard();
+            PatternTracker.Instance?.RegisterInvestigation(noise.position);
+            var bias = PatternTracker.Instance != null
+                ? PatternTracker.Instance.GetNoiseInvestigationBias(noise.position)
+                : Vector3.zero;
+            navigation?.SetInvestigateTarget(noise.position + bias);
             TransitionTo(MonsterState.Investigating);
             return;
         }
@@ -109,7 +114,15 @@ public class MonsterBrain : MonoBehaviour
         }
 
         if (senses != null && senses.CanHearPlayer())
-            navigation?.SetInvestigateTarget(senses.LastHeardPosition);
+        {
+            PatternTracker.Instance?.RegisterNoiseHeard();
+            var heard = senses.LastHeardPosition;
+            PatternTracker.Instance?.RegisterInvestigation(heard);
+            var bias = PatternTracker.Instance != null
+                ? PatternTracker.Instance.GetNoiseInvestigationBias(heard)
+                : Vector3.zero;
+            navigation?.SetInvestigateTarget(heard + bias);
+        }
 
         var intel = Mathf.Clamp01(intelligenceLevel + mlIntelligenceDelta);
         if (navigation != null && (navigation.ReachedDestination() || _stateTimer > 8f))
@@ -155,9 +168,20 @@ public class MonsterBrain : MonoBehaviour
     void UpdateSearching()
     {
         var intel = Mathf.Clamp01(intelligenceLevel + mlIntelligenceDelta);
+        var hotspot = PatternTracker.Instance?.GetPlayerMovementHotspot();
+        if (hotspot.HasValue && intel > 0.22f)
+            memory?.NudgeSuspicionNearWorld(hotspot.Value, 12f, Time.deltaTime * 0.08f * intel);
+
         var predicted = memory?.PredictPlayerPosition();
         if (predicted.HasValue && intel > 0.3f)
-            navigation?.SetInvestigateTarget(predicted.Value);
+        {
+            var target = predicted.Value;
+            if (hotspot.HasValue && intel > 0.38f)
+                target = Vector3.Lerp(target, hotspot.Value, 0.35f);
+            navigation?.SetInvestigateTarget(target);
+        }
+        else if (hotspot.HasValue && intel > 0.42f)
+            navigation?.SetInvestigateTarget(hotspot.Value);
 
         if (senses != null && senses.CanSeePlayer())
         {
@@ -258,6 +282,7 @@ public class MonsterBrain : MonoBehaviour
     {
         if (senses == null || !senses.CanSeePlayer() || _player == null)
             return;
+        PatternTracker.Instance?.RegisterSpotted();
         var ph = _player.GetComponent<PlayerHiding>();
         if (ph != null && ph.IsHiding)
             ph.NotifyDiscoveredByMonster(this);
