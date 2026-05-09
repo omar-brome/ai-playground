@@ -46,6 +46,19 @@ python main.py
 
 ---
 
+### [`hollow`](./hollow)
+**Hollow** — first-person **psychological horror** prototype in **Unity 6 (URP)**: you’re hunted in a greybox asylum while an AI creature **patrols**, reacts to **footsteps and microphone noise**, **investigates** sound, **chases** on sight, **searches** when it loses you, and **remembers hiding spots** where it has caught you. Optional stack: **FMOD** adaptive audio, **ML-Agents** to modulate aggression / tactics, **Whisper** Python sidecar for voice transcription.
+
+- **Engine:** Unity **6000.x**, C#, **NavMesh** (AI Navigation package), **Input System**
+- **Feel:** Procedural **ambience + footsteps** out of the box; fog and URP post volume in template scenes; runtime **`HollowLevelBootstrap`** builds the playable blockout on **`Level_Asylum`**
+- **Flow:** **`MainMenu`** → **Play — Hollow** → **`Level_Asylum`** (do not stay on empty **SampleScene**)
+
+**Quick start:** Install Unity 6000.x → Unity Hub **Add** the project folder **`hollow/My project`** → open it → Play (or open **`Assets/Scenes/MainMenu.unity`** first).
+
+**Documentation:** [`hollow/README.md`](./hollow/README.md) (folder index) · **[`hollow/My project/README.md`](./hollow/My%20project/README.md)** (full game + systems + controls)
+
+---
+
 ### [`vscode_copilot_app_job_recruiter`](./vscode_copilot_app_job_recruiter)
 A job recruiter web application built with GitHub Copilot assistance.
 
@@ -150,6 +163,7 @@ A collection of various apps and games built with Cursor AI assistance. These li
 - 💳 **Lumière / PayPal + DHL** (`./paypal_dhl`) — storefront + sandbox checkout + tracking
 - ⚽ **Malaab / football_hajez_app** (`./football_hajez_app`) — 5v5 match booking + pitch host scheduler (localStorage)
 - 🕌 **Awqat Al-Salah / prayer_ios_app** (`./prayer_ios_app`) — Lebanese prayer times (SwiftUI, AlAdhan API)
+- 👁️ **Hollow** (`./hollow`) — Unity 6 horror prototype (NavMesh hunter, mic noise, hiding memory); project in `hollow/My project`
 - 📘 Facebook-style social media app (`./facebook`)
 - ♟️ Chess game (`./chess`)
 - ❌ Tic Tac Toe game (`./games`)
@@ -182,6 +196,10 @@ node index.js
 
 See **[`orion/README.md`](./orion/README.md)** — includes prerequisites (Ollama + models), venv setup, `ORION_UI`, and macOS Tk notes.
 
+### Hollow (Unity 6 horror prototype)
+
+Use **Unity Hub** to add **`hollow/My project`**, open with **Unity 6000.x**, then see **[`hollow/My project/README.md`](./hollow/My%20project/README.md)** for controls, scenes, FMOD / ML-Agents / Whisper, and design notes.
+
 ### Flappy Cat, Snack Nasab, PayPal + DHL, Malaab, Prayer iOS
 
 Use the **Quick start** blocks under each project above, or open that folder’s `README.md` for full setup (especially Snack Nasab’s database and auth). For the iOS prayer app, use Xcode with `prayer_ios_app/PrayerTimesApp.xcodeproj` — see [`prayer_ios_app/README.md`](./prayer_ios_app/README.md).
@@ -189,6 +207,7 @@ Use the **Quick start** blocks under each project above, or open that folder’s
 ---
 
 ## 🛠️ Built With
+- [Unity](https://unity.com/) / C# (Hollow)
 - [React](https://react.dev/)
 - [Next.js](https://nextjs.org/)
 - [Vite](https://vitejs.dev/)
