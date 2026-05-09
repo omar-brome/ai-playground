@@ -47,6 +47,23 @@ public class HollowLevelBootstrap : MonoBehaviour
         Wall("Wall_E", new Vector3(18f, 1.5f, 0f), new Vector3(0.6f, 3f, 36f));
         Wall("Wall_W", new Vector3(-18f, 1.5f, 0f), new Vector3(0.6f, 3f, 36f));
 
+        void CoverPillar(Vector3 xzCenter)
+        {
+            var p = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            p.name = "CoverPillar";
+            p.layer = LayerMask.NameToLayer("Obstacle");
+            p.transform.SetParent(navRoot.transform);
+            p.transform.position = xzCenter + Vector3.up * 1.5f;
+            p.transform.localScale = new Vector3(2.2f, 3f, 2.2f);
+            ApplyConcreteLook(p.GetComponent<Renderer>());
+        }
+
+        CoverPillar(new Vector3(0f, 0f, 2f));
+        CoverPillar(new Vector3(8f, 0f, -2f));
+        CoverPillar(new Vector3(-8f, 0f, -2f));
+        CoverPillar(new Vector3(5f, 0f, 8f));
+        CoverPillar(new Vector3(-5f, 0f, 8f));
+
         var surf = navRoot.AddComponent<NavMeshSurface>();
         surf.collectObjects = CollectObjects.Children;
         surf.BuildNavMesh();
@@ -56,10 +73,10 @@ public class HollowLevelBootstrap : MonoBehaviour
         var patrols = new Transform[4];
         var patrolPositions = new[]
         {
-            new Vector3(-8f, 0f, 8f),
-            new Vector3(8f, 0f, 8f),
-            new Vector3(8f, 0f, -8f),
-            new Vector3(-8f, 0f, -8f)
+            new Vector3(-13f, 0f, 13f),
+            new Vector3(13f, 0f, 13f),
+            new Vector3(13f, 0f, -11f),
+            new Vector3(-13f, 0f, -11f)
         };
         for (var i = 0; i < 4; i++)
         {
@@ -69,19 +86,46 @@ public class HollowLevelBootstrap : MonoBehaviour
             patrols[i] = p.transform;
         }
 
-        var hideGo = new GameObject("HidingSpot_Locker");
-        hideGo.transform.SetParent(root.transform);
-        hideGo.transform.position = new Vector3(-12f, 0f, 0f);
-        var hideCol = hideGo.AddComponent<BoxCollider>();
-        hideCol.isTrigger = true;
-        hideCol.size = new Vector3(1.8f, 2.2f, 1.8f);
-        hideCol.center = Vector3.up;
-        var hideSpot = hideGo.AddComponent<HidingSpot>();
-        hideSpot.spotName = "Locker_A";
-        var hideAnchor = new GameObject("HideAnchor").transform;
-        hideAnchor.SetParent(hideGo.transform);
-        hideAnchor.SetLocalPositionAndRotation(new Vector3(0f, 1f, 0f), Quaternion.identity);
-        hideSpot.hidePosition = hideAnchor;
+        void CreateHidingLocker(string objectName, string spotId, Vector3 worldCenter)
+        {
+            var go = new GameObject(objectName);
+            go.transform.SetParent(root.transform);
+            go.transform.position = worldCenter;
+
+            var col = go.AddComponent<BoxCollider>();
+            col.isTrigger = true;
+            col.center = new Vector3(0f, 1.15f, 0f);
+            col.size = new Vector3(3.2f, 2.8f, 3.2f);
+
+            var hs = go.AddComponent<HidingSpot>();
+            hs.spotName = spotId;
+
+            var anchor = new GameObject("HideAnchor").transform;
+            anchor.SetParent(go.transform);
+            anchor.position = worldCenter + new Vector3(0f, 0.95f, 0.35f);
+            hs.hidePosition = anchor;
+
+            var shell = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            shell.name = "LockerBody";
+            shell.transform.SetParent(go.transform);
+            shell.transform.position = worldCenter + new Vector3(0f, 1.25f, 0f);
+            shell.transform.localScale = new Vector3(1.35f, 2.5f, 0.85f);
+            Destroy(shell.GetComponent<BoxCollider>());
+            ApplyLockerBodyLook(shell.GetComponent<Renderer>());
+
+            var strip = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            strip.name = "LockerMarkerLight";
+            strip.transform.SetParent(go.transform);
+            strip.transform.position = worldCenter + new Vector3(0f, 2.35f, 0.42f);
+            strip.transform.localScale = new Vector3(0.9f, 0.12f, 0.08f);
+            Destroy(strip.GetComponent<BoxCollider>());
+            ApplyLockerStripLook(strip.GetComponent<Renderer>());
+        }
+
+        const float southZ = -14.5f;
+        CreateHidingLocker("HidingSpot_Locker_W", "Locker_West", new Vector3(-9f, 0f, southZ));
+        CreateHidingLocker("HidingSpot_Locker_C", "Locker_Center", new Vector3(0f, 0f, southZ));
+        CreateHidingLocker("HidingSpot_Locker_E", "Locker_East", new Vector3(9f, 0f, southZ));
 
         var systems = new GameObject("Systems");
         systems.AddComponent<NoiseSystem>();
@@ -99,7 +143,7 @@ public class HollowLevelBootstrap : MonoBehaviour
         pcc.height = 1.8f;
         pcc.radius = 0.35f;
         pcc.center = new Vector3(0f, 0.9f, 0f);
-        player.transform.position = new Vector3(0f, 0f, 6f);
+        player.transform.SetPositionAndRotation(new Vector3(0f, 0f, -11.5f), Quaternion.identity);
 
         var camArm = new GameObject("CameraArm");
         camArm.transform.SetParent(player.transform, false);
@@ -126,7 +170,7 @@ public class HollowLevelBootstrap : MonoBehaviour
         mCol.height = 2f;
         mCol.radius = 0.4f;
         mCol.center = new Vector3(0f, 1f, 0f);
-        monster.transform.position = new Vector3(6f, 1f, -6f);
+        monster.transform.position = new Vector3(15f, 1f, 15f);
 
         var agent = monster.AddComponent<NavMeshAgent>();
         agent.height = 2f;
@@ -172,5 +216,32 @@ public class HollowLevelBootstrap : MonoBehaviour
         var uiRoot = new GameObject("UI_Runtime");
         uiRoot.AddComponent<HUDController>();
         uiRoot.AddComponent<SanityEffect>();
+    }
+
+    static void ApplyConcreteLook(Renderer r)
+    {
+        if (r == null)
+            return;
+        var m = r.material;
+        if (m.HasProperty("_BaseColor"))
+            m.SetColor("_BaseColor", new Color(0.18f, 0.17f, 0.16f));
+    }
+
+    static void ApplyLockerBodyLook(Renderer r)
+    {
+        if (r == null)
+            return;
+        var m = r.material;
+        if (m.HasProperty("_BaseColor"))
+            m.SetColor("_BaseColor", new Color(0.06f, 0.07f, 0.09f));
+    }
+
+    static void ApplyLockerStripLook(Renderer r)
+    {
+        if (r == null)
+            return;
+        var m = r.material;
+        if (m.HasProperty("_BaseColor"))
+            m.SetColor("_BaseColor", new Color(0.25f, 0.45f, 0.28f));
     }
 }

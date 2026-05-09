@@ -9,9 +9,9 @@
 ## What you’re playing
 
 - **Genre:** First-person horror / stealth prototype (not a shipped game — a vertical slice for systems).
-- **Setting:** A greybox **asylum yard** (floor, perimeter walls, fog, one **locker** hiding volume) spawned at runtime by **`HollowLevelBootstrap`** on scene `Level_Asylum`.
+- **Setting:** A greybox **asylum yard** (floor, perimeter walls, fog, **five cover pillars**, **three visible lockers** along the south wall) spawned at runtime by **`HollowLevelBootstrap`** on scene `Level_Asylum`. You start near the south wall; the creature spawns in the **far northeast** corner.
 - **Threat:** A **monster** with **NavMesh** locomotion, a **state machine** (`MonsterBrain`), **sight** (cone + range + obstacle raycasts), **hearing** (via the global **`NoiseSystem`**), and **memory** (`MonsterMemory`) for suspicious hiding spots.
-- **You:** Move, look, **hide** near the locker, manage **noise**; the creature turns with a **capped yaw rate** so you can break line-of-sight by circling, and **hearing** uses a **strength threshold** so it does not snap back to a full chase on every residual footstep blip.
+- **You:** Move, look, **hide** in any south-wall locker (green strip markers), manage **noise**; the creature turns with a **capped yaw rate** so you can break line-of-sight by circling, and **hearing** uses a **strength threshold** so it does not snap back to a full chase on every residual footstep blip.
 
 ---
 
@@ -134,5 +134,5 @@ Unity **`WhisperClient`** POSTs WAV data to **`http://localhost:5000/transcribe`
 1. Confirm **patrol** between the four empty patrol points.
 2. **Walk** — footsteps emit noise; monster **investigates** then **hunts** if it sees you.
 3. **Circle** behind the monster to break **LOS**; **pause movement** briefly so **hearing** does not instantly re-aggro.
-4. **Hide** at the locker; let it **discover** you once and watch **memory** bias later **spot checks**.
+4. **Hide** in a locker; let it **discover** you once and watch **memory** bias later **spot checks**.
 5. Layer **FMOD**, then **ML-Agents**, then **Whisper** when you are ready.

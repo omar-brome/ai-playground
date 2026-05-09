@@ -2,8 +2,32 @@ using UnityEngine;
 
 public class HUDController : MonoBehaviour
 {
+    float _levelHintUntil;
+
+    void Start()
+    {
+        _levelHintUntil = Time.time + 16f;
+    }
+
     void OnGUI()
     {
+        if (Time.time < _levelHintUntil &&
+            (GameStateManager.Instance == null || !GameStateManager.Instance.IsPaused))
+        {
+            var hintStyle = new GUIStyle(GUI.skin.box)
+            {
+                fontSize = 15,
+                alignment = TextAnchor.MiddleCenter,
+                wordWrap = true,
+                normal = { textColor = new Color(0.9f, 0.92f, 0.95f) }
+            };
+            GUI.Box(
+                new Rect(Screen.width / 2f - 300f, 12f, 600f, 62f),
+                "South wall: three dark lockers with a green strip — walk into the volume, then press E to hide.\n" +
+                "The creature starts in the far corner; use pillars for cover.",
+                hintStyle);
+        }
+
         if (GameStateManager.Instance == null || !GameStateManager.Instance.IsPaused)
             return;
 
