@@ -1,0 +1,1 @@
+"""Pitch desktop application package."""

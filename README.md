@@ -24,6 +24,27 @@ python main.py
 
 ---
 
+### [`pitch`](./pitch)
+**Pitch** — Desktop **football (soccer) video analysis**: run **YOLOv8** on match video or **webcam**, draw boxes/trails/**heatmap**, rough **team colors** (K-means), simplified **offside** hint, **possession** + stats, **JSON export**. Inference uses **PyTorch MPS** on Apple Silicon when available.
+
+- **Stack:** Python 3.11+ (3.14 OK), CustomTkinter + Tk root (macOS-friendly), OpenCV, Ultralytics YOLOv8, PyTorch, NumPy, Pillow, scikit-learn
+- **UX:** The UI opens right away; **weights load on first “Open Video” / Webcam** (first run may download `yolov8*.pt` — terminal shows progress).
+- **CLI:** `python main.py --model yolov8n.pt` · `python main.py --source /path/to/match.mp4`
+- **macOS:** Prefer **[Python from python.org](https://www.python.org/downloads/)** for a solid Tcl/Tk + GUI stack (same idea as Orion).
+
+**Quick start:**
+
+```bash
+cd pitch
+python3 -m venv venv && source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
+```
+
+**Documentation:** [`pitch/README.md`](./pitch/README.md)
+
+---
+
 ### [`vscode_copilot_app_job_recruiter`](./vscode_copilot_app_job_recruiter)
 A job recruiter web application built with GitHub Copilot assistance.
 
