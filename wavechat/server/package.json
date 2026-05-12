@@ -1,0 +1,17 @@
+{
+  "name": "wavechat-server",
+  "version": "1.0.0",
+  "description": "Socket.io backend for the Wavechat learning project.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
+}
