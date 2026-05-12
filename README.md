@@ -85,6 +85,35 @@ npm run dev
 
 ---
 
+### [`shadow_runner`](./shadow_runner)
+**Shadow Runner** — a browser-playable **2D neon platformer** portfolio demo built with **Phaser 3**, **Vite**, and **TypeScript**. Escape a city security system, collect memory shards, unlock movement abilities, build custom challenge rooms, and defeat the final Sentinel boss.
+
+- **Gameplay:** polished platformer movement with acceleration, friction, coyote time, jump buffering, variable jump height, dash, double jump, phase, checkpoints, hazards, enemies, moving platforms, and collectibles.
+- **Campaign:** three handmade levels — **Rooftop Wake**, **Glass Factory**, **Signal Tower** — plus **The Sentinel** boss encounter.
+- **Editor:** grid-based level editor with tile, hazard, shard, enemy, checkpoint, spawn, exit, erase, drag-painting, right-click erase, playtest, save, export, and import.
+- **Persistence:** browser `localStorage` under `shadow_runner_save_v1` for completed levels, best times, collected shards, unlocked abilities, sound setting, and custom levels.
+- **Presentation:** procedural neon visuals, procedural Web Audio SFX, HUD, camera shake, particles, floating feedback, level select, about screen, and shareable game-over result.
+
+**Stack:** Phaser 3, Vite, TypeScript, Arcade Physics, Web Audio, localStorage, Vitest, ESLint
+
+**Quick start:**
+```bash
+cd shadow_runner
+npm install
+npm run dev
+```
+
+**Quality commands:**
+```bash
+npm run build
+npm run lint
+npm run test
+```
+
+**Documentation:** [`shadow_runner/README.md`](./shadow_runner/README.md)
+
+---
+
 ### [`snack_nasab`](./snack_nasab)
 **Snack Nasab** — a mobile-first, bilingual (**Arabic / English**) fast-food menu web app with public browsing (`/ar`, `/en`), RTL/LTR switching, and an **admin dashboard** for categories and items (CRUD). Uses NextAuth for admin login and Prisma + PostgreSQL for data.
 
@@ -160,6 +189,7 @@ A collection of various apps and games built with Cursor AI assistance. These li
 
 - 💬 **Orion** (`./orion`) — Local Ollama desktop chat (Python, Tkinter / CustomTkinter)
 - 🐱 **Flappy Cat** (`./flappy_cat`) — Phaser 3 arcade game
+- 🏃 **Shadow Runner** (`./shadow_runner`) — Phaser 3 neon platformer with campaign levels, boss fight, progression, and level editor
 - 🍔 **Snack Nasab** (`./snack_nasab`) — bilingual fast-food menu + admin
 - 💳 **Lumière / PayPal + DHL** (`./paypal_dhl`) — storefront + sandbox checkout + tracking
 - ⚽ **Malaab / football_hajez_app** (`./football_hajez_app`) — 5v5 match booking + pitch host scheduler (localStorage)
@@ -201,7 +231,7 @@ See **[`orion/README.md`](./orion/README.md)** — includes prerequisites (Ollam
 
 Use **Unity Hub** to add **`hollow/My project`**, open with **Unity 6000.x**, then see **[`hollow/My project/README.md`](./hollow/My%20project/README.md)** for controls, scenes, FMOD / ML-Agents / Whisper, and design notes.
 
-### Flappy Cat, Snack Nasab, PayPal + DHL, Malaab, Prayer iOS
+### Flappy Cat, Shadow Runner, Snack Nasab, PayPal + DHL, Malaab, Prayer iOS
 
 Use the **Quick start** blocks under each project above, or open that folder’s `README.md` for full setup (especially Snack Nasab’s database and auth). For the iOS prayer app, use Xcode with `prayer_ios_app/PrayerTimesApp.xcodeproj` — see [`prayer_ios_app/README.md`](./prayer_ios_app/README.md).
 
