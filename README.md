@@ -159,6 +159,25 @@ npm run dev
 
 ---
 
+### [`swiftkeys`](./swiftkeys)
+**Swiftkeys** — a Monkeytype-inspired **typing speed test** app with live raw/net WPM, accuracy tracking, difficulty modes, punctuation/number toggles, animated results, WPM charting, username-only auth, and a leaderboard that works in local demo mode or with PostgreSQL persistence.
+
+- **Frontend:** React, Vite, Tailwind CSS, Framer Motion, Recharts
+- **Backend:** Node.js, Express, PostgreSQL via `pg`
+- **Typing engine:** first-keystroke timer start, Escape reset, per-character correctness, WPM history, timed and word-count modes
+- **Leaderboard:** local fallback by default; global PostgreSQL leaderboard when `DATABASE_URL` is configured
+
+**Quick start:**
+```bash
+cd swiftkeys/client
+npm install
+npm run dev
+```
+
+**Documentation:** [`swiftkeys/README.md`](./swiftkeys/README.md)
+
+---
+
 ### [`snack_nasab`](./snack_nasab)
 **Snack Nasab** — a mobile-first, bilingual (**Arabic / English**) fast-food menu web app with public browsing (`/ar`, `/en`), RTL/LTR switching, and an **admin dashboard** for categories and items (CRUD). Uses NextAuth for admin login and Prisma + PostgreSQL for data.
 
@@ -237,6 +256,7 @@ A collection of various apps and games built with Cursor AI assistance. These li
 - 🏃 **Shadow Runner** (`./shadow_runner`) — Phaser 3 neon platformer with campaign levels, boss fight, progression, and level editor
 - 💬 **Wavechat** (`./wavechat`) — real-time Socket.io chat with rooms, presence, typing indicators, and in-memory history
 - 🧑‍💻 **Omar Brome Portfolio** (`./portfolio`) — animated React/Vite portfolio and CV site
+- ⌨️ **Swiftkeys** (`./swiftkeys`) — Monkeytype-style typing speed test with WPM, charts, and leaderboard
 - 🍔 **Snack Nasab** (`./snack_nasab`) — bilingual fast-food menu + admin
 - 💳 **Lumière / PayPal + DHL** (`./paypal_dhl`) — storefront + sandbox checkout + tracking
 - ⚽ **Malaab / football_hajez_app** (`./football_hajez_app`) — 5v5 match booking + pitch host scheduler (localStorage)
@@ -278,9 +298,9 @@ See **[`orion/README.md`](./orion/README.md)** — includes prerequisites (Ollam
 
 Use **Unity Hub** to add **`hollow/My project`**, open with **Unity 6000.x**, then see **[`hollow/My project/README.md`](./hollow/My%20project/README.md)** for controls, scenes, FMOD / ML-Agents / Whisper, and design notes.
 
-### Flappy Cat, Shadow Runner, Wavechat, Portfolio, Snack Nasab, PayPal + DHL, Malaab, Prayer iOS
+### Flappy Cat, Shadow Runner, Wavechat, Portfolio, Swiftkeys, Snack Nasab, PayPal + DHL, Malaab, Prayer iOS
 
-Use the **Quick start** blocks under each project above, or open that folder’s `README.md` for full setup (especially Snack Nasab’s database and auth, Wavechat’s two-terminal client/server setup, and Portfolio’s static CV assets). For the iOS prayer app, use Xcode with `prayer_ios_app/PrayerTimesApp.xcodeproj` — see [`prayer_ios_app/README.md`](./prayer_ios_app/README.md).
+Use the **Quick start** blocks under each project above, or open that folder’s `README.md` for full setup (especially Snack Nasab’s database and auth, Wavechat’s two-terminal client/server setup, Portfolio’s static CV assets, and Swiftkeys’ optional PostgreSQL leaderboard). For the iOS prayer app, use Xcode with `prayer_ios_app/PrayerTimesApp.xcodeproj` — see [`prayer_ios_app/README.md`](./prayer_ios_app/README.md).
 
 ---
 
@@ -291,10 +311,11 @@ Use the **Quick start** blocks under each project above, or open that folder’s
 - [Vite](https://vitejs.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Framer Motion](https://www.framer.com/motion/)
-- [Phaser](https://phaser.io/)
+g- [Phaser](https://phaser.io/)
 - [Node.js](https://nodejs.org/)
 - [Express](https://expressjs.com/)
 - [Socket.io](https://socket.io/)
+- [PostgreSQL](https://www.postgresql.org/)
 - [Prisma](https://www.prisma.io/)
 - GitHub Copilot & Cursor AI
 - Swift / SwiftUI (iOS)
