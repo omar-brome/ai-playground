@@ -114,6 +114,51 @@ npm run test
 
 ---
 
+### [`wavechat`](./wavechat)
+**Wavechat** — a full-stack **real-time chat** learning project with a Discord-lite dark UI. It demonstrates Socket.io rooms, live messaging, online presence, room-scoped typing indicators, sign out, system join/leave messages, and last-50 in-memory chat history per room.
+
+- **Frontend:** React 19, Vite 8, Tailwind CSS 4, Socket.io Client
+- **Backend:** Node.js ES modules, Express, Socket.io
+- **Realtime concepts:** `join_room`, `leave_room`, `send_message`, `typing`, `stop_typing`, `room_users`, `room_typing`
+- **State model:** no database; usernames, rooms, presence, typing users, and recent messages are held in server memory
+
+**Quick start:**
+```bash
+cd wavechat/server
+npm install
+node server.js
+```
+
+```bash
+cd wavechat/client
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173` in two browser tabs with different usernames to test messaging, presence, and the `user is typing...` indicator.
+
+**Documentation:** [`wavechat/README.md`](./wavechat/README.md)
+
+---
+
+### [`portfolio`](./portfolio)
+**Omar Brome Portfolio** — a modern single-page portfolio and CV website with a dark Linear/Vercel-inspired aesthetic, animated hero, typewriter roles, active smooth-scroll navigation, skills cards, experience timeline, project grid, competitive programming links, contact cards, downloadable CV, and custom `OB` favicon.
+
+- **Stack:** React 19, Vite 8, Tailwind CSS 4, Framer Motion, React Icons
+- **Content:** C++/Qt desktop experience, Linux tooling, full-stack web background, AI-assisted development, selected `ai-playground` projects, LCPC/ACPC achievements
+- **Assets:** bundled CV PDF at `public/Omar_Brome_CV.pdf` and custom SVG favicon
+
+**Quick start:**
+```bash
+cd portfolio
+npm install
+npm run dev
+```
+
+**Documentation:** [`portfolio/README.md`](./portfolio/README.md)
+
+---
+
 ### [`snack_nasab`](./snack_nasab)
 **Snack Nasab** — a mobile-first, bilingual (**Arabic / English**) fast-food menu web app with public browsing (`/ar`, `/en`), RTL/LTR switching, and an **admin dashboard** for categories and items (CRUD). Uses NextAuth for admin login and Prisma + PostgreSQL for data.
 
@@ -190,6 +235,8 @@ A collection of various apps and games built with Cursor AI assistance. These li
 - 💬 **Orion** (`./orion`) — Local Ollama desktop chat (Python, Tkinter / CustomTkinter)
 - 🐱 **Flappy Cat** (`./flappy_cat`) — Phaser 3 arcade game
 - 🏃 **Shadow Runner** (`./shadow_runner`) — Phaser 3 neon platformer with campaign levels, boss fight, progression, and level editor
+- 💬 **Wavechat** (`./wavechat`) — real-time Socket.io chat with rooms, presence, typing indicators, and in-memory history
+- 🧑‍💻 **Omar Brome Portfolio** (`./portfolio`) — animated React/Vite portfolio and CV site
 - 🍔 **Snack Nasab** (`./snack_nasab`) — bilingual fast-food menu + admin
 - 💳 **Lumière / PayPal + DHL** (`./paypal_dhl`) — storefront + sandbox checkout + tracking
 - ⚽ **Malaab / football_hajez_app** (`./football_hajez_app`) — 5v5 match booking + pitch host scheduler (localStorage)
@@ -231,9 +278,9 @@ See **[`orion/README.md`](./orion/README.md)** — includes prerequisites (Ollam
 
 Use **Unity Hub** to add **`hollow/My project`**, open with **Unity 6000.x**, then see **[`hollow/My project/README.md`](./hollow/My%20project/README.md)** for controls, scenes, FMOD / ML-Agents / Whisper, and design notes.
 
-### Flappy Cat, Shadow Runner, Snack Nasab, PayPal + DHL, Malaab, Prayer iOS
+### Flappy Cat, Shadow Runner, Wavechat, Portfolio, Snack Nasab, PayPal + DHL, Malaab, Prayer iOS
 
-Use the **Quick start** blocks under each project above, or open that folder’s `README.md` for full setup (especially Snack Nasab’s database and auth). For the iOS prayer app, use Xcode with `prayer_ios_app/PrayerTimesApp.xcodeproj` — see [`prayer_ios_app/README.md`](./prayer_ios_app/README.md).
+Use the **Quick start** blocks under each project above, or open that folder’s `README.md` for full setup (especially Snack Nasab’s database and auth, Wavechat’s two-terminal client/server setup, and Portfolio’s static CV assets). For the iOS prayer app, use Xcode with `prayer_ios_app/PrayerTimesApp.xcodeproj` — see [`prayer_ios_app/README.md`](./prayer_ios_app/README.md).
 
 ---
 
@@ -243,9 +290,11 @@ Use the **Quick start** blocks under each project above, or open that folder’s
 - [Next.js](https://nextjs.org/)
 - [Vite](https://vitejs.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/)
 - [Phaser](https://phaser.io/)
 - [Node.js](https://nodejs.org/)
 - [Express](https://expressjs.com/)
+- [Socket.io](https://socket.io/)
 - [Prisma](https://www.prisma.io/)
 - GitHub Copilot & Cursor AI
 - Swift / SwiftUI (iOS)
