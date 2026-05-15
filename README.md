@@ -28,7 +28,7 @@ python main.py
 **Lyra** — Desktop AI chat app for **local Ollama**, same on-disk format as Orion (`~/.orion` by default), with a **PySide6 / Qt 6** interface instead of Tkinter.
 
 - **Stack:** Python 3.11+, PySide6, `ollama` Python client, `requests`
-- **Features:** Streaming replies, sidebar history (grouped by date), model combo, system prompt, temperature slider, settings (fonts, pull/delete models, clear history), optional **`LYRA_DATA_DIR`** to isolate data
+- **Features:** Live token streaming, markdown/code styling in the transcript after each reply, sidebar history (grouped by date), model combo, system prompt, temperature, settings (fonts, **Ollama host** / `OLLAMA_HOST`, pull/delete models, clear history), optional **`LYRA_DATA_DIR`**, optional **`assets/icon.png`**, PyInstaller notes in the project README
 
 **Quick start:**
 

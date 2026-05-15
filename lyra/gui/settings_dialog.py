@@ -97,6 +97,14 @@ class SettingsDialog(QDialog):
         self._send_enter.setChecked(bool(self._settings.get("send_on_enter", True)))
         g_form.addRow(self._send_enter)
 
+        self._ollama_host = QLineEdit()
+        self._ollama_host.setText(str(self._settings.get("ollama_host", "")))
+        self._ollama_host.setPlaceholderText("http://localhost:11434 (or LAN host)")
+        hint_host = QLabel("Ollama API URL. Env OLLAMA_HOST overrides this when set.")
+        hint_host.setStyleSheet(f"color: {MUTED}; font-size: 11px;")
+        g_form.addRow("Ollama host", self._ollama_host)
+        g_form.addRow("", hint_host)
+
         theme_note = QLabel("Lyra uses a fixed dark theme (Qt Fusion).")
         theme_note.setStyleSheet(f"color: {MUTED};")
         g_form.addRow(theme_note)
@@ -157,6 +165,7 @@ class SettingsDialog(QDialog):
         a_layout.addWidget(title)
         ver = ollama_service.get_ollama_version()
         a_layout.addWidget(QLabel(f"Ollama: {ver}"))
+        a_layout.addWidget(QLabel(f"API base: {ollama_service.get_ollama_base()}"))
         a_layout.addWidget(QLabel("Local inference only — no cloud APIs."))
         a_layout.addStretch(1)
         tabs.addTab(a, "About")
@@ -200,6 +209,7 @@ class SettingsDialog(QDialog):
         self._settings["default_system_prompt"] = self._def_prompt.toPlainText().strip() or DEFAULT_SYSTEM_PROMPT
         self._settings["auto_title_chats"] = self._auto_title.isChecked()
         self._settings["save_chat_history"] = self._save_hist.isChecked()
+        self._settings["ollama_host"] = self._ollama_host.text().strip()
         return self._settings
 
     def _accept(self) -> None:

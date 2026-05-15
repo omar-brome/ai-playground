@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import sys
+from pathlib import Path
 
-from PySide6.QtGui import QColor, QPalette
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor, QIcon, QPalette
 from PySide6.QtWidgets import QApplication
 
 from app.theme import BG, CHAT_BG, SIDEBAR_BG, TEXT
@@ -12,6 +14,9 @@ from gui.main_window import MainWindow
 
 
 def main() -> None:
+    QApplication.setHighDpiScaleFactorRoundingPolicy(
+        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+    )
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
     pal = QPalette()
@@ -25,6 +30,11 @@ def main() -> None:
     app.setPalette(pal)
 
     w = MainWindow()
+    icon_path = Path(__file__).resolve().parent / "assets" / "icon.png"
+    if icon_path.is_file():
+        ic = QIcon(str(icon_path))
+        app.setWindowIcon(ic)
+        w.setWindowIcon(ic)
     w.show()
     raise SystemExit(app.exec())
 

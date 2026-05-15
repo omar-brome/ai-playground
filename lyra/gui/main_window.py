@@ -37,7 +37,7 @@ from app.theme import (
     label_font_point,
 )
 from app.theme import FontSize
-from gui.chat_widget import ChatTranscript, format_timestamp
+from gui.chat_widget import ChatTranscript
 from gui.settings_dialog import SettingsDialog
 from gui.sidebar_widget import LyraSidebar
 from services import chat_storage
@@ -76,6 +76,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self._state = AppState()
         self._settings: dict[str, Any] = load_settings(self._state.settings_path())
+        ollama_service.set_ollama_base_from_settings(str(self._settings.get("ollama_host", "")))
         self._font_size: FontSize = validate_font_size(self._settings.get("font_size"))
         self._state.font_size = self._font_size
         self._state.temperature = float(self._settings.get("temperature", 0.7))
@@ -175,7 +176,7 @@ class MainWindow(QMainWindow):
 
         self._chat = ChatTranscript()
         self._chat.setStyleSheet(
-            f"QPlainTextEdit {{ background-color: {CHAT_BG}; color: #f3f4f6; border: none; padding: 12px; }}"
+            f"QTextEdit {{ background-color: {CHAT_BG}; color: #f3f4f6; border: none; padding: 12px; }}"
         )
         self._apply_chat_font()
         right_col.addWidget(self._chat, 1)
@@ -391,10 +392,8 @@ class MainWindow(QMainWindow):
             if role == "user":
                 self._chat.add_user(str(content), str(ts))
             elif role == "assistant":
-                ts_disp = format_timestamp(str(ts)) if ts else ""
-                hdr = f"Assistant ({ts_disp})\n" if ts_disp else "Assistant\n"
-                self._chat.move_cursor_end()
-                self._chat.insertPlainText(hdr + str(content) + "\n\n")
+                self._chat.begin_assistant(str(ts))
+                self._chat.finalize_assistant(str(content))
         self._payload = {
             "id": data["id"],
             "title": data.get("title", "Chat"),
@@ -439,6 +438,14 @@ class MainWindow(QMainWindow):
         self._sidebar.refresh(self._state.current_chat_id)
 
     def _delete_chat(self, chat_id: str) -> None:
+        r = QMessageBox.question(
+            self,
+            "Delete chat",
+            "Delete this conversation?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        )
+        if r != QMessageBox.StandardButton.Yes:
+            return
         chat_storage.delete_chat(self._state.chats_dir(), chat_id)
         if chat_id == self._state.current_chat_id:
             self._new_chat()
@@ -536,6 +543,7 @@ class MainWindow(QMainWindow):
         thread = QThread()
         worker.moveToThread(thread)
         thread.started.connect(worker.run_stream)
+        worker.token_received.connect(self._chat.append_token, Qt.ConnectionType.QueuedConnection)
         worker.finished_ok.connect(on_ok)
         worker.finished_error.connect(on_err)
         worker.done.connect(thread.quit)
@@ -574,6 +582,7 @@ class MainWindow(QMainWindow):
         def on_apply(new_settings: dict[str, Any]) -> None:
             self._settings.update(new_settings)
             save_settings(self._state.settings_path(), self._settings)
+            ollama_service.set_ollama_base_from_settings(str(self._settings.get("ollama_host", "")))
             self._font_size = validate_font_size(self._settings.get("font_size"))
             self._state.font_size = self._font_size
             self._apply_chat_font()
@@ -586,6 +595,7 @@ class MainWindow(QMainWindow):
             self._sidebar.set_font_size(self._font_size)
             self._sidebar.refresh(self._state.current_chat_id)
             self._set_temperature_ui(float(self._settings.get("temperature", self._state.temperature)))
+            self._update_ollama_banner()
 
         def on_cleared() -> None:
             self._new_chat()

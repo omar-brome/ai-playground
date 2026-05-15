@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 import subprocess
 import threading
@@ -11,21 +12,54 @@ from typing import Any
 import ollama
 import requests
 
-OLLAMA_BASE = "http://localhost:11434"
+_host = "http://localhost:11434"
+_client: ollama.Client | None = None
 
-_client = ollama.Client(host=OLLAMA_BASE)
+
+def _normalize_base(url: str) -> str:
+    u = (url or "").strip()
+    if not u:
+        return "http://localhost:11434"
+    if not u.startswith(("http://", "https://")):
+        u = "http://" + u
+    return u.rstrip("/")
+
+
+def get_ollama_base() -> str:
+    return _host
+
+
+def set_ollama_base_from_settings(settings_host: str) -> str:
+    """Resolve Ollama API base: ``OLLAMA_HOST`` env overrides ``settings_host``."""
+    global _host, _client
+    env = os.environ.get("OLLAMA_HOST", "").strip()
+    if env:
+        base = _normalize_base(env)
+    else:
+        base = _normalize_base(settings_host) if (settings_host or "").strip() else "http://localhost:11434"
+    _host = base
+    _client = ollama.Client(host=_host)
+    return _host
+
+
+def _ensure_client() -> ollama.Client:
+    global _client
+    if _client is None:
+        set_ollama_base_from_settings("")
+    assert _client is not None
+    return _client
 
 
 def is_ollama_running(timeout: float = 2.0) -> bool:
     try:
-        requests.get(f"{OLLAMA_BASE}/api/tags", timeout=timeout)
+        requests.get(f"{_host}/api/tags", timeout=timeout)
         return True
     except requests.RequestException:
         return False
 
 
 def get_installed_models() -> list[dict[str, Any]]:
-    response = requests.get(f"{OLLAMA_BASE}/api/tags", timeout=10)
+    response = requests.get(f"{_host}/api/tags", timeout=10)
     response.raise_for_status()
     data = response.json()
     return list(data.get("models") or [])
@@ -33,7 +67,7 @@ def get_installed_models() -> list[dict[str, Any]]:
 
 def get_ollama_version() -> str:
     try:
-        r = requests.get(f"{OLLAMA_BASE}/api/version", timeout=5)
+        r = requests.get(f"{_host}/api/version", timeout=5)
         r.raise_for_status()
         j = r.json()
         return str(j.get("version", "unknown"))
@@ -61,7 +95,8 @@ def stream_chat(
     temperature: float = 0.7,
     cancel_event: threading.Event | None = None,
 ) -> Generator[str, None, None]:
-    stream = _client.chat(
+    client = _ensure_client()
+    stream = client.chat(
         model=model,
         messages=messages,
         stream=True,
@@ -77,7 +112,7 @@ def stream_chat(
 
 
 def delete_model_remote(model_name: str) -> None:
-    requests.delete(f"{OLLAMA_BASE}/api/delete", json={"name": model_name}, timeout=120)
+    requests.delete(f"{_host}/api/delete", json={"name": model_name}, timeout=120)
 
 
 def pull_model(
@@ -107,3 +142,7 @@ def pull_model(
             percent_callback(None)
     process.wait()
     return process.returncode or 0
+
+
+# Initial client for default host
+set_ollama_base_from_settings("")

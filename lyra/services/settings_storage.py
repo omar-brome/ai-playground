@@ -18,6 +18,7 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     "save_chat_history": True,
     "window_geometry": "1200x800+100+100",
     "temperature": 0.7,
+    "ollama_host": "",
 }
 
 
