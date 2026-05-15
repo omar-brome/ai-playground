@@ -43,15 +43,31 @@ body {
   color: #cbd5e1;
 }
 
-.reset-btn {
+.panel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.reset-btn,
+.secondary-btn {
   width: 100%;
   border: none;
   border-radius: 8px;
   padding: 0.6rem 0.8rem;
   cursor: pointer;
   font-weight: 700;
+}
+
+.reset-btn {
   color: #172554;
   background: linear-gradient(180deg, #dbeafe, #93c5fd);
+}
+
+.secondary-btn {
+  color: #e2e8f0;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.35);
 }
 
 .board-wrap {
@@ -60,6 +76,109 @@ body {
   border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: 16px;
   padding: 1rem;
+}
+
+.board-layout {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.35rem 0.5rem;
+  align-items: stretch;
+  justify-items: center;
+}
+
+.board-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+  width: fit-content;
+}
+
+.coord-files {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(40px, 72px));
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #cbd5f5;
+}
+
+.coord-ranks {
+  display: grid;
+  grid-template-rows: repeat(8, minmax(40px, 72px));
+  align-items: center;
+  justify-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #cbd5f5;
+  min-width: 1rem;
+}
+
+.coord-label {
+  display: block;
+}
+
+/* Must not set display on the base rule: it overrides the HTML hidden attribute (same specificity). */
+.promotion-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(15, 23, 42, 0.65);
+}
+
+.promotion-backdrop[hidden] {
+  display: none !important;
+}
+
+.promotion-backdrop:not([hidden]) {
+  display: grid;
+  place-items: center;
+}
+
+.promotion-dialog {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(199, 210, 254, 0.35);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  max-width: min(420px, 92vw);
+}
+
+.promotion-title {
+  margin: 0 0 0.75rem;
+  font-weight: 800;
+  color: #e2e8f0;
+}
+
+.promotion-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.promotion-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 0.45rem;
+  font-size: clamp(1.6rem, 4vw, 2.25rem);
+  cursor: pointer;
+  background: linear-gradient(180deg, #f8fafc, #cbd5e1);
+  color: #0f172a;
+}
+
+.promotion-cancel {
+  margin-top: 0.75rem;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  padding: 0.45rem 0.65rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: #e2e8f0;
+  background: rgba(30, 41, 59, 0.95);
 }
 
 .game-over-banner {
@@ -122,6 +241,11 @@ body {
 .selected {
   outline: 3px solid #22d3ee;
   outline-offset: -3px;
+}
+
+.square.focused:not(.selected) {
+  outline: 2px dashed rgba(244, 244, 245, 0.85);
+  outline-offset: -2px;
 }
 
 .checked-king {

@@ -11,15 +11,36 @@
     <section class="panel">
       <h1>Chess</h1>
       <p id="turnText" class="turn-text">White to move</p>
-      <button id="resetBtn" class="reset-btn">New Game</button>
-      <p class="hint">Click a piece, then click a highlighted square.</p>
+      <div class="panel-actions">
+        <button id="resetBtn" type="button" class="reset-btn">New Game</button>
+        <button id="undoBtn" type="button" class="secondary-btn">Undo</button>
+        <button id="flipBtn" type="button" class="secondary-btn">Flip Board</button>
+      </div>
+      <p class="hint">Click a piece, then a highlighted square. Arrow keys move focus; Enter or Space activates.</p>
     </section>
 
     <section class="board-wrap">
       <div id="gameOverBanner" class="game-over-banner" aria-live="polite" hidden></div>
-      <div id="board" class="board" aria-label="Chess Board"></div>
+
+      <div class="board-layout">
+        <div id="rankLabelsLeft" class="coord-ranks" aria-hidden="true"></div>
+        <div class="board-stack">
+          <div id="fileLabelsTop" class="coord-files" aria-hidden="true"></div>
+          <div id="board" class="board" aria-label="Chess board"></div>
+          <div id="fileLabelsBottom" class="coord-files" aria-hidden="true"></div>
+        </div>
+        <div id="rankLabelsRight" class="coord-ranks" aria-hidden="true"></div>
+      </div>
     </section>
   </main>
+
+  <div id="promotionBackdrop" class="promotion-backdrop" hidden>
+    <div id="promotionDialog" class="promotion-dialog" role="dialog" aria-modal="true" aria-labelledby="promotionTitle">
+      <p id="promotionTitle" class="promotion-title">Choose promotion piece</p>
+      <div id="promotionOptions" class="promotion-options"></div>
+      <button type="button" id="promotionCancelBtn" class="promotion-cancel">Cancel</button>
+    </div>
+  </div>
 
   <script src="chess.js"></script>
 </body>
