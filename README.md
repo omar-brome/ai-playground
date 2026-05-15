@@ -43,6 +43,25 @@ python main.py
 
 ---
 
+### [`brushwork`](./brushwork)
+**Brushwork** — lightweight **Paint-style** bitmap editor: pencil, brush, airbrush, eraser, lines/shapes (incl. rounded rect, polygon, quadratic curve), flood fill with tolerance, eyedropper, text, rectangular selection (move/delete/crop), clipboard image paste, resize/rotate/flip/invert/clear, wheel zoom + middle pan + fit-to-window, recent files, JPEG save quality, print, shortcuts/about. **PySide6 / Qt 6**.
+
+- **Stack:** Python 3.11+, PySide6
+- **Features:** Raster canvas, `QSettings` recent files, `QPrintDialog`, dirty-document prompts, toolbar zoom %
+
+**Quick start:**
+
+```bash
+cd brushwork
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python main.py
+```
+
+**Documentation:** [`brushwork/README.md`](./brushwork/README.md)
+
+---
+
 ### [`pitch`](./pitch)
 **Pitch** — **AI-powered** desktop **football (soccer) video analysis**: deep-learning **YOLOv8** detects players and the ball on match video or **webcam**; overlays include boxes, trails, **heatmap**, rough **team colors** (ML clustering), a simplified **offside** hint, **possession** + stats, and **JSON export**. Inference runs locally via **PyTorch** (**MPS** on Apple Silicon when available).
 
