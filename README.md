@@ -24,6 +24,25 @@ python main.py
 
 ---
 
+### [`lyra`](./lyra)
+**Lyra** — Desktop AI chat app for **local Ollama**, same on-disk format as Orion (`~/.orion` by default), with a **PySide6 / Qt 6** interface instead of Tkinter.
+
+- **Stack:** Python 3.11+, PySide6, `ollama` Python client, `requests`
+- **Features:** Streaming replies, sidebar history (grouped by date), model combo, system prompt, temperature slider, settings (fonts, pull/delete models, clear history), optional **`LYRA_DATA_DIR`** to isolate data
+
+**Quick start:**
+
+```bash
+cd lyra
+python3 -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
+```
+
+**Documentation:** [`lyra/README.md`](./lyra/README.md)
+
+---
+
 ### [`pitch`](./pitch)
 **Pitch** — **AI-powered** desktop **football (soccer) video analysis**: deep-learning **YOLOv8** detects players and the ball on match video or **webcam**; overlays include boxes, trails, **heatmap**, rough **team colors** (ML clustering), a simplified **offside** hint, **possession** + stats, and **JSON export**. Inference runs locally via **PyTorch** (**MPS** on Apple Silicon when available).
 

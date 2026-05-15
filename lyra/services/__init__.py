@@ -1,0 +1,1 @@
+"""Lyra services (Ollama, persistence)."""
