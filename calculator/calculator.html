@@ -13,60 +13,80 @@
   <main class="app-wrap">
     <section class="calculator">
       <header class="calc-header">
-        <h1>SciCalc Pro</h1>
-        <p>Precision in every tap</p>
+        <div class="calc-title-row">
+          <div>
+            <h1>SciCalc Pro</h1>
+            <p>Precision in every tap</p>
+          </div>
+          <div class="toolbar-btns">
+            <button type="button" id="percentBtn" class="btn-toolbar" aria-label="Insert remainder operator">%</button>
+            <button type="button" id="copyBtn" class="btn-toolbar" aria-label="Copy current value to clipboard">Copy</button>
+          </div>
+        </div>
       </header>
 
       <div class="display-wrap">
-        <div id="miniDisplay" class="mini-display"></div>
-        <input id="display" class="display" type="text" readonly value="0">
+        <div id="miniDisplay" class="mini-display" aria-live="polite"></div>
+        <input id="display" class="display" type="text" readonly aria-readonly="true" aria-live="polite" aria-label="Calculation result" value="0">
       </div>
 
       <div class="keypad">
-        <button class="btn fn" data-action="deg">DEG</button>
-        <button class="btn fn" data-fn="sin(">sin</button>
-        <button class="btn fn" data-fn="cos(">cos</button>
-        <button class="btn fn" data-fn="tan(">tan</button>
-        <button class="btn op" data-action="back">⌫</button>
+        <button type="button" class="btn fn" data-action="deg" aria-pressed="true" aria-label="Angle mode degrees, press for radians">DEG</button>
+        <button type="button" class="btn fn" data-fn="sin(" aria-label="Sine">sin</button>
+        <button type="button" class="btn fn" data-fn="cos(" aria-label="Cosine">cos</button>
+        <button type="button" class="btn fn" data-fn="tan(" aria-label="Tangent">tan</button>
+        <button type="button" class="btn op" data-action="back" aria-label="Backspace">⌫</button>
 
-        <button class="btn fn" data-fn="log10(">log</button>
-        <button class="btn fn" data-fn="ln(">ln</button>
-        <button class="btn fn" data-fn="sqrt(">√</button>
-        <button class="btn fn" data-fn="pow2">x²</button>
-        <button class="btn danger" data-action="clear">AC</button>
+        <button type="button" class="btn fn" data-fn="asin(" aria-label="Inverse sine">asin</button>
+        <button type="button" class="btn fn" data-fn="acos(" aria-label="Inverse cosine">acos</button>
+        <button type="button" class="btn fn" data-fn="atan(" aria-label="Inverse tangent">atan</button>
+        <button type="button" class="btn fn" data-fn="exp(" aria-label="E to the power x">exp</button>
+        <button type="button" class="btn fn" data-fn="pow10" aria-label="10 to the power x, insert pow base">10ˣ</button>
 
-        <button class="btn fn" data-fn="pow(">xʸ</button>
-        <button class="btn fn" data-fn="(">(</button>
-        <button class="btn fn" data-fn=")">)</button>
-        <button class="btn fn" data-fn="factorial(">n!</button>
-        <button class="btn op" data-fn="/">÷</button>
+        <button type="button" class="btn fn" data-fn="log10(" aria-label="Logarithm base 10">log</button>
+        <button type="button" class="btn fn" data-fn="ln(" aria-label="Natural logarithm">ln</button>
+        <button type="button" class="btn fn" data-fn="sqrt(" aria-label="Square root">√</button>
+        <button type="button" class="btn fn" data-fn="pow2" aria-label="Square">x²</button>
+        <button type="button" class="btn danger" data-action="clear" aria-label="Clear all">AC</button>
 
-        <button class="btn num" data-fn="7">7</button>
-        <button class="btn num" data-fn="8">8</button>
-        <button class="btn num" data-fn="9">9</button>
-        <button class="btn fn" data-fn="pi">π</button>
-        <button class="btn op" data-fn="*">×</button>
+        <button type="button" class="btn fn" data-fn="pow(" aria-label="Power">xʸ</button>
+        <button type="button" class="btn fn" data-fn="(" aria-label="Open parenthesis">(</button>
+        <button type="button" class="btn fn" data-fn=")" aria-label="Close parenthesis">)</button>
+        <button type="button" class="btn fn" data-fn="factorial(" aria-label="Factorial">n!</button>
+        <button type="button" class="btn op" data-fn="/" aria-label="Divide">÷</button>
 
-        <button class="btn num" data-fn="4">4</button>
-        <button class="btn num" data-fn="5">5</button>
-        <button class="btn num" data-fn="6">6</button>
-        <button class="btn fn" data-fn="e">e</button>
-        <button class="btn op" data-fn="-">−</button>
+        <button type="button" class="btn num" data-fn="7">7</button>
+        <button type="button" class="btn num" data-fn="8">8</button>
+        <button type="button" class="btn num" data-fn="9">9</button>
+        <button type="button" class="btn fn" data-fn="pi" aria-label="Pi">π</button>
+        <button type="button" class="btn op" data-fn="*" aria-label="Multiply">×</button>
 
-        <button class="btn num" data-fn="1">1</button>
-        <button class="btn num" data-fn="2">2</button>
-        <button class="btn num" data-fn="3">3</button>
-        <button class="btn fn" data-fn="ans">Ans</button>
-        <button class="btn op" data-fn="+">+</button>
+        <button type="button" class="btn num" data-fn="4">4</button>
+        <button type="button" class="btn num" data-fn="5">5</button>
+        <button type="button" class="btn num" data-fn="6">6</button>
+        <button type="button" class="btn fn" data-fn="e" aria-label="Euler’s number">e</button>
+        <button type="button" class="btn op" data-fn="-" aria-label="Subtract">−</button>
 
-        <button class="btn num span-2" data-fn="0">0</button>
-        <button class="btn num" data-fn=".">.</button>
-        <button class="btn fn" data-action="sign">±</button>
-        <button class="btn equal" data-action="equals">=</button>
+        <button type="button" class="btn num" data-fn="1">1</button>
+        <button type="button" class="btn num" data-fn="2">2</button>
+        <button type="button" class="btn num" data-fn="3">3</button>
+        <button type="button" class="btn fn" data-fn="ans" aria-label="Previous answer">Ans</button>
+        <button type="button" class="btn op" data-fn="+" aria-label="Add">+</button>
+
+        <button type="button" class="btn num span-2" data-fn="0">0</button>
+        <button type="button" class="btn num" data-fn=".">.</button>
+        <button type="button" class="btn fn" data-action="sign" aria-label="Toggle sign plus minus">±</button>
+        <button type="button" class="btn equal" data-action="equals" aria-label="Equals">=</button>
+      </div>
+
+      <div class="history-section">
+        <h2 class="history-heading">History</h2>
+        <div id="historyTape" class="history-tape" role="list" aria-label="Calculation history"></div>
       </div>
     </section>
   </main>
 
+  <script src="calculator-evaluator.js"></script>
   <script src="calculator.js"></script>
 </body>
 </html>

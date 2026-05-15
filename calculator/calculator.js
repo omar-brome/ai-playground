@@ -1,61 +1,61 @@
 const display = document.getElementById("display");
 const miniDisplay = document.getElementById("miniDisplay");
-const buttons = document.querySelectorAll(".btn");
+const historyTape = document.getElementById("historyTape");
+const copyBtn = document.getElementById("copyBtn");
+const percentBtn = document.getElementById("percentBtn");
+const buttons = document.querySelectorAll(".keypad .btn");
 
 let expression = "";
 let lastAnswer = 0;
 let inDegrees = true;
+/** When set, mini shows last equation until user edits */
+let miniEquationLine = "";
+
+const HISTORY_LIMIT = 12;
+/** @type {{ expr: string, result: string }[]} */
+let historyEntries = [];
 
 function updateDisplay() {
   display.value = expression || "0";
-  miniDisplay.textContent = inDegrees ? "Mode: DEG" : "Mode: RAD";
+  miniDisplay.textContent =
+    miniEquationLine || (inDegrees ? "Mode: DEG" : "Mode: RAD");
 }
 
-function factorial(n) {
-  if (n < 0 || !Number.isInteger(n)) {
-    throw new Error("Factorial only supports non-negative integers");
+function pushHistory(expr, result) {
+  historyEntries.unshift({ expr, result });
+  if (historyEntries.length > HISTORY_LIMIT) {
+    historyEntries.pop();
   }
-  if (n > 170) {
-    throw new Error("Value too large");
-  }
-  let result = 1;
-  for (let i = 2; i <= n; i += 1) {
-    result *= i;
-  }
-  return result;
+  renderHistory();
 }
 
-function sin(x) {
-  return Math.sin(inDegrees ? (x * Math.PI) / 180 : x);
-}
-
-function cos(x) {
-  return Math.cos(inDegrees ? (x * Math.PI) / 180 : x);
-}
-
-function tan(x) {
-  return Math.tan(inDegrees ? (x * Math.PI) / 180 : x);
-}
-
-function ln(x) {
-  return Math.log(x);
-}
-
-function log10(x) {
-  return Math.log10(x);
-}
-
-function sqrt(x) {
-  return Math.sqrt(x);
-}
-
-function pow(a, b) {
-  return Math.pow(a, b);
+function renderHistory() {
+  historyTape.innerHTML = "";
+  historyEntries.forEach((entry) => {
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = "history-entry";
+    row.setAttribute("role", "listitem");
+    row.setAttribute(
+      "aria-label",
+      `Use result ${entry.result} from ${entry.expr}`
+    );
+    row.textContent = `${entry.expr} = ${entry.result}`;
+    row.addEventListener("click", () => {
+      expression = entry.result;
+      miniEquationLine = "";
+      updateDisplay();
+    });
+    historyTape.appendChild(row);
+  });
 }
 
 function appendToken(token) {
+  miniEquationLine = "";
   if (token === "pow2") {
     expression += "**2";
+  } else if (token === "pow10") {
+    expression += "pow(10,";
   } else if (token === "pi") {
     expression += "Math.PI";
   } else if (token === "e") {
@@ -70,20 +70,19 @@ function appendToken(token) {
 
 function clearAll() {
   expression = "";
-  display.value = "0";
+  miniEquationLine = "";
+  updateDisplay();
 }
 
 function backspace() {
   expression = expression.slice(0, -1);
+  miniEquationLine = "";
   updateDisplay();
 }
 
 function toggleSign() {
-  if (!expression) {
-    expression = "-";
-  } else {
-    expression = `(-1)*(${expression})`;
-  }
+  expression = CalculatorEval.toggleSignExpression(expression);
+  miniEquationLine = "";
   updateDisplay();
 }
 
@@ -92,26 +91,30 @@ function evaluateExpression() {
     return;
   }
 
+  const snapshot = expression;
+
   try {
-    const safeExpr = expression.replace(/\^/g, "**");
-    const result = Function(
-      '"use strict"; return (' +
-        safeExpr +
-        ");"
-    )();
+    const result = CalculatorEval.evaluateMathExpression(expression, inDegrees);
 
     if (!Number.isFinite(result)) {
       throw new Error("Invalid result");
     }
 
-    miniDisplay.textContent = `${expression} =`;
+    miniEquationLine = `${snapshot} =`;
     expression = String(Number(result.toFixed(12)));
     lastAnswer = Number(expression);
     display.value = expression;
-  } catch (error) {
+    miniDisplay.textContent = miniEquationLine;
+    pushHistory(snapshot, expression);
+  } catch {
+    miniEquationLine = "";
+    miniDisplay.textContent = "Error";
     display.value = "Error";
     expression = "";
-    window.setTimeout(updateDisplay, 850);
+    window.setTimeout(() => {
+      miniDisplay.textContent = inDegrees ? "Mode: DEG" : "Mode: RAD";
+      updateDisplay();
+    }, 850);
   }
 }
 
@@ -139,6 +142,12 @@ buttons.forEach((button) => {
     if (action === "deg") {
       inDegrees = !inDegrees;
       button.textContent = inDegrees ? "DEG" : "RAD";
+      button.setAttribute("aria-pressed", String(inDegrees));
+      button.setAttribute(
+        "aria-label",
+        inDegrees ? "Angle mode degrees, press for radians" : "Angle mode radians, press for degrees"
+      );
+      miniEquationLine = "";
       updateDisplay();
       return;
     }
@@ -148,9 +157,21 @@ buttons.forEach((button) => {
 });
 
 document.addEventListener("keydown", (event) => {
-  const allowed = "0123456789+-*/().";
+  if (event.defaultPrevented) return;
+  const t = event.target;
+  if (t && (t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+  if (t && t.tagName === "INPUT" && t !== display) return;
+
+  const allowed = "0123456789+-*/().%^";
   if (allowed.includes(event.key)) {
+    event.preventDefault();
     appendToken(event.key);
+    return;
+  }
+
+  if (event.key === "." || event.code === "NumpadDecimal") {
+    event.preventDefault();
+    appendToken(".");
     return;
   }
 
@@ -161,7 +182,14 @@ document.addEventListener("keydown", (event) => {
   }
 
   if (event.key === "Backspace") {
+    event.preventDefault();
     backspace();
+    return;
+  }
+
+  if (event.key === "Delete") {
+    event.preventDefault();
+    clearAll();
     return;
   }
 
@@ -170,4 +198,41 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+display.addEventListener("paste", (e) => {
+  e.preventDefault();
+  let text = e.clipboardData.getData("text/plain");
+  text = text.replace(/×/g, "*").replace(/÷/g, "/").replace(/\s+/g, "");
+  const ok = /^[0-9+\-*/().%^a-zA-Z_,]+$/;
+  if (!text || !ok.test(text)) return;
+  miniEquationLine = "";
+  expression += text;
+  updateDisplay();
+});
+
+copyBtn.addEventListener("click", async () => {
+  const text = display.value === "Error" ? "" : expression || display.value;
+  if (!text || text === "0") return;
+  try {
+    await navigator.clipboard.writeText(text);
+    const prev = copyBtn.textContent;
+    copyBtn.textContent = "Copied!";
+    window.setTimeout(() => {
+      copyBtn.textContent = prev;
+    }, 1400);
+  } catch {
+    copyBtn.textContent = "Copy failed";
+    window.setTimeout(() => {
+      copyBtn.textContent = "Copy";
+    }, 1400);
+  }
+});
+
+percentBtn.addEventListener("click", () => appendToken("%"));
+
+const degBtn = document.querySelector('[data-action="deg"]');
+if (degBtn) {
+  degBtn.setAttribute("aria-pressed", "true");
+}
+
 updateDisplay();
+renderHistory();
