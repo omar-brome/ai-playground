@@ -7,9 +7,9 @@ import { PreloadScene } from './scenes/PreloadScene'
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game',
-  width: 800,
+  width: 960,
   height: 640,
-  backgroundColor: '#0e0714',
+  backgroundColor: '#080510',
   pixelArt: false,
   roundPixels: true,
   scale: {

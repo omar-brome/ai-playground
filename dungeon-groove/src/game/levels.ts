@@ -1,19 +1,6 @@
-import type { EnemyKind, Entity, LevelDef, TileKind, Vec2 } from './types'
+import type { EnemyKind, LevelDef, TileKind, Vec2 } from './types'
 
-/** Single-room dungeon; row-major strings → tiles[y][x]. */
-const ASCII = [
-  '###########',
-  '#.........#',
-  '#.##...##.#',
-  '#....s....#',
-  '#...##....#',
-  '#..k....s.#',
-  '#.........#',
-  '#....@....#',
-  '###########',
-]
-
-function parseAscii(rows: string[]): LevelDef {
+function parseAscii(rows: string[], title?: string): LevelDef {
   const height = rows.length
   const width = rows[0]?.length ?? 0
   const tiles: TileKind[][] = []
@@ -22,6 +9,9 @@ function parseAscii(rows: string[]): LevelDef {
 
   for (let y = 0; y < height; y++) {
     const line = rows[y]
+    if (line.length !== width) {
+      throw new Error(`Level row ${y} length ${line.length} !== width ${width}`)
+    }
     const row: TileKind[] = []
     for (let x = 0; x < width; x++) {
       const ch = line[x]
@@ -45,7 +35,61 @@ function parseAscii(rows: string[]): LevelDef {
     tiles.push(row)
   }
 
-  return { width, height, tiles, playerStart, enemies }
+  const def: LevelDef = { width, height, tiles, playerStart, enemies }
+  if (title !== undefined) def.title = title
+  return def
 }
 
-export const LEVEL_01: LevelDef = parseAscii(ASCII)
+const VAULT_I = [
+  '###########',
+  '#.........#',
+  '#.##...##.#',
+  '#....s....#',
+  '#...##....#',
+  '#..k....s.#',
+  '#.........#',
+  '#....@....#',
+  '###########',
+]
+
+const VAULT_II = [
+  '###############',
+  '#.............#',
+  '#.###.....###.#',
+  '#...s.....s...#',
+  '###.........###',
+  '#....k...k....#',
+  '#.....@.......#',
+  '###############',
+]
+
+const VAULT_III = [
+  '#################',
+  '#s..............#',
+  '#.######.######.#',
+  '#.......@.......#',
+  '#..k......k.....#',
+  '#...............#',
+  '#################',
+]
+
+const VAULT_IV = [
+  '#############',
+  '#k..........#',
+  '#.#.#.#.#.#.#',
+  '#...s...s...#',
+  '#.#.#.#.#.#.#',
+  '#....@......#',
+  '#############',
+]
+
+/** Ordered campaign floors (ASCII: @ player, s slime, k skeleton, # wall, . floor). */
+export const DUNGEON_LEVELS: LevelDef[] = [
+  parseAscii(VAULT_I, 'I · Echo Hall'),
+  parseAscii(VAULT_II, 'II · Twin Slime Gallery'),
+  parseAscii(VAULT_III, 'III · Split Corridors'),
+  parseAscii(VAULT_IV, 'IV · Rattle Grid'),
+]
+
+/** @deprecated Use DUNGEON_LEVELS[0] */
+export const LEVEL_01 = DUNGEON_LEVELS[0]

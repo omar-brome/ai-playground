@@ -21,4 +21,6 @@ export interface LevelDef {
   tiles: TileKind[][]
   playerStart: Vec2
   enemies: Array<{ kind: EnemyKind; x: number; y: number }>
+  /** Short label for HUD / overlays. */
+  title?: string
 }

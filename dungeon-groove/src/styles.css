@@ -28,7 +28,7 @@ body {
 
 .page-shell {
   display: grid;
-  grid-template-columns: minmax(240px, 340px) minmax(320px, 720px);
+  grid-template-columns: minmax(240px, 340px) minmax(320px, 980px);
   gap: clamp(1rem, 3vw, 2rem);
   align-items: center;
   min-height: 100vh;
