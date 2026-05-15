@@ -5,6 +5,48 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0.75rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  color: #0f172a;
+  background: #e0f2fe;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 0.75rem;
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+.main-nav .menu-btn {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.nav-panel-placeholder {
+  padding: 2rem 0;
+  min-height: 40vh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-btn,
+  .company-filters .form-check,
+  .employee-card {
+    transition: none !important;
+  }
+
+  .employee-card:hover {
+    transform: none;
+  }
+}
+
 .dashboard-header {
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.95), rgba(14, 116, 144, 0.95));
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -58,6 +100,17 @@ body {
   color: #bfdbfe;
   border: 1px solid rgba(147, 197, 253, 0.5);
   font-size: 0.9rem;
+}
+
+#employeeSearch,
+#employeeSort {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(148, 163, 184, 0.35);
+  color: #e2e8f0;
+}
+
+#employeeSearch::placeholder {
+  color: #94a3b8;
 }
 
 .employee-card {
